@@ -44,7 +44,7 @@ namespace util {
 	 * @param ptr Pointer to allocated memory block
 	 * @param size Number of bytes to read
 	 */
-	void anyRead (std::istream *stream, const void *ptr, std::streamsize size);
+	void anyRead (std::istream *stream, void *ptr, std::streamsize size);
 
 	/**
 	 * Return 2-byte input value with reversed byte order

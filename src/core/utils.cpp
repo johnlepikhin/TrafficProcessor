@@ -45,7 +45,7 @@ namespace util {
 		return (r);
 	}
 
-	void anyRead (std::istream *stream, const void *ptr, std::streamsize size) {
+	void anyRead (std::istream *stream, void *ptr, std::streamsize size) {
 		if (NULL == stream) {
 			throw -10;
 		}

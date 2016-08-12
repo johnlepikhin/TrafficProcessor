@@ -10,9 +10,7 @@
 
 #include <iostream>
 
-#include "../Data.h"
-
-class Data;
+#include "Data.h"
 
 /**
  * MAC address container and reader
@@ -31,7 +29,7 @@ public:
 	 * Human readable representation
 	 * @return Human readable representation
 	 */
-	std::string asString();
+	std::string asString() const;
 
 	/**
 	 * Compare with other MAC address
@@ -39,13 +37,13 @@ public:
 	 * @return Returns an integer < 0 if this MAC is ordered before 'other'
 	 *  0 if their values are equivalent, or > 0 if this MAC is ordered after 'other'
 	 */
-	int compare(MAC *other);
+	int compare(const MAC *other) const;
 
 	/**
 	 * Binary representation
 	 * @return Binary representation
 	 */
-	std::string asBinary();
+	std::string asBinary() const;
 
 private:
 	const char *ptr;

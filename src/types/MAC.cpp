@@ -1,12 +1,5 @@
-/*
- * MAC.cpp
- *
- *  Created on: 06 июня 2016 г.
- *      Author: eugene
- */
 
 #include "MAC.h"
-#include "../core/utils.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -15,7 +8,7 @@ MAC::MAC(Data *data)
 {
 }
 
-std::string MAC::asString() {
+std::string MAC::asString() const {
 	char r[18];
 	snprintf(r, sizeof(r), "%02hhx:%02hhx:%02hhx:%02hhx:%02hhx:%02hhx",
 			ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5]);
@@ -23,10 +16,10 @@ std::string MAC::asString() {
 
 }
 
-std::string MAC::asBinary() {
+std::string MAC::asBinary() const {
 	return (std::string(ptr, 6));
 }
 
-int MAC::compare(MAC *other) {
+int MAC::compare(const MAC *other) const {
 	return (asBinary().compare(other->asBinary()));
 }

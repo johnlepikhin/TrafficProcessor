@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <pcap/pcap.h>
 
-#include "../Data.h"
+#include "../types/Data.h"
 #include "utils.h"
 
 using namespace std;
@@ -13,24 +13,25 @@ using namespace std;
  * @struct pkthdr
  * @brief Pcap binary packet header format
  */
-struct pkthdr {
-	const char data[8];			/**< data Magic number, version major/minor */
-    const bpf_u_int32 caplen;	/**< length of portion present */
-    const bpf_u_int32 len;		/**< length this packet (off wire) */
-};
+//struct pkthdr {
+//	const char data[8];			/**< data Magic number, version major/minor */
+//    const bpf_u_int32 caplen;	/**< length of portion present */
+//    const bpf_u_int32 len;		/**< length this packet (off wire) */
+//};
 
-void packetsReader () {
-	try {
-		while (1) {
+static void packetsReader () {
+	bool done = false;
+	while (!done) {
+		try {
 			Data *p = new Data(&cin);
 			delete p;
+		} catch (...) {
+			done = true;
 		}
-	} catch (...) {
-
 	}
 }
 
-int main (int argc, char **argv) {
+int main () {
 	pcap_file_header *hdr = (pcap_file_header *)util::mallocRead(&cin, sizeof (pcap_file_header));
 	free (hdr);
 	packetsReader();

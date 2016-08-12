@@ -11,8 +11,7 @@
 #include <sstream>
 #include <stdlib.h>
 #include <stdio.h>
-#include "core/utils.h"
-#include "types/MAC.h"
+#include "../core/utils.h"
 
 Data::Data(std::istream *stream) :
 	Size(0),

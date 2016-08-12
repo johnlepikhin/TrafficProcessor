@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <iostream>
 
-
 namespace util {
 
 	void exitFatal (const char *msg) {
@@ -32,6 +31,11 @@ namespace util {
 
 	void *mallocRead (std::istream *stream, std::streamsize size) {
 		void *r = (void *)mallocOrFatal((size_t)size);
+
+		if (NULL == stream) {
+			return (NULL);
+		}
+
 		stream->read((char *)r, size);
 		if (stream->fail ()) {
 			free (r);
@@ -42,7 +46,12 @@ namespace util {
 	}
 
 	void anyRead (std::istream *stream, const void *ptr, std::streamsize size) {
+		if (NULL == stream) {
+			throw -10;
+		}
+
 		stream->read((char *)ptr, size);
+
 		if (stream->fail ()) {
 			throw -1;
 		}

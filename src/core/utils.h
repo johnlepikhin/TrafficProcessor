@@ -10,6 +10,9 @@
 
 #include <istream>
 
+/**
+ * Uncategorized functions
+ */
 namespace util {
 
 	/**

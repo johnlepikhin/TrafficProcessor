@@ -2,9 +2,18 @@
 #include "MAC.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdexcept>
 
 MAC::MAC(Data *data)
-	: ptr(data->getPtrWithSize(6))
+{
+	if (NULL == data) {
+		throw std::invalid_argument("Data is NULL in MAC constructor");
+	}
+
+	ptr = data->getPtrWithSize(6);
+}
+
+MAC::~MAC()
 {
 }
 

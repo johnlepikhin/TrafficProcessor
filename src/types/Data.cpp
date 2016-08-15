@@ -13,6 +13,10 @@ Data::Data(std::istream *stream) :
 	Captured (0),
 	Position(0)
 {
+	if (NULL == stream) {
+		throw std::invalid_argument("Input stream is NULL");
+	}
+
 	stream->ignore(8);
 	util::anyRead (stream, &Captured, sizeof (Captured));
 	util::anyRead (stream, &Size, sizeof (Size));
@@ -20,8 +24,14 @@ Data::Data(std::istream *stream) :
 	IS.resize(Captured, '\0');
 	char *begin = &*IS.begin();
 	stream->read(begin, (long)Captured);
-	if (stream->gcount() < Captured) {
-		throw std::underflow_error("Cannot read announced number of bytes");
+	unsigned long read = (unsigned long)stream->gcount();
+	if (read < Captured) {
+		std::stringstream msg;
+		msg << "Cannot read announced number of captured bytes: "
+			<< Captured
+			<< ", was read only "
+			<< read;
+		throw std::underflow_error(msg.str());
 	}
 }
 
@@ -29,7 +39,7 @@ Data::~Data() {
 }
 
 const char *Data::getPtrWithSize(std::streamsize size) {
-	if (Position+size > IS.length()) {
+	if (Position+(unsigned long)size > IS.length()) {
 		throw std::underflow_error("Data is underflow");
 	}
 
@@ -39,11 +49,19 @@ const char *Data::getPtrWithSize(std::streamsize size) {
 }
 
 const char *Data::getPtrAtOffset(std::streamoff offset) const {
+	if (Position+(unsigned long)offset > IS.length()) {
+		throw std::underflow_error("Data is underflow");
+	}
+
 	const char *ptr = IS.c_str()+Position+offset;
 	return (ptr);
 }
 
 const void *Data::readAlloc(std::streamsize size) {
+	if (Position+(unsigned long)size > IS.length()) {
+		throw std::underflow_error("Data is underflow");
+	}
+
 	const char *r = IS.substr(Position, (unsigned long)size).c_str();
 	Position+=(unsigned long)size;
 
@@ -51,22 +69,39 @@ const void *Data::readAlloc(std::streamsize size) {
 }
 
 const void *Data::readAllocAhead(std::streamsize size, std::streamoff startpos = 0) const {
+	if (Position+(unsigned long)startpos+(unsigned long)size > IS.length()) {
+		throw std::underflow_error("Data is underflow");
+	}
+
 	const char *r = IS.substr(Position+(unsigned long)startpos, (unsigned long)size).c_str();
 
 	return ((const void *)r);
 }
 
 void Data::read(void *buffer, std::streamsize size) {
+	if (Position+(unsigned long)size > IS.length()) {
+		throw std::underflow_error("Data is underflow");
+	}
+
 	IS.copy((char *)buffer, (unsigned long)size, Position);
 	Position+=(unsigned long)size;
 }
 
 void Data::readAhead(void *buffer, std::streamsize size, std::streamoff offset = 0) const {
+	if (Position+(unsigned long)offset+(unsigned long)size > IS.length()) {
+		throw std::underflow_error("Data is underflow");
+	}
+
 	IS.copy((char *)buffer, (unsigned long)size, Position+(unsigned long)offset);
 }
 
 unsigned short Data::read2() {
 	unsigned short int r = 0;
+
+	if (Position+2 > IS.length()) {
+		throw std::underflow_error("Data is underflow");
+	}
+
 	read(&r, 2);
 
 	return (r);
@@ -75,15 +110,28 @@ unsigned short Data::read2() {
 unsigned short Data::read2Reverse() {
 	unsigned short r = read2 ();
 
+	if (Position+2 > IS.length()) {
+		throw std::underflow_error("Data is underflow");
+	}
+
 	return (util::reverse2 (r));
 }
 
 void Data::ignore(std::streamsize size) {
+	if (Position+(unsigned long)size > IS.length()) {
+		throw std::underflow_error("Data is underflow");
+	}
+
 	Position+=(unsigned long)size;
 }
 
 bool Data::compare(std::string orig_string, std::streamsize offset) const {
 	long strLen = (long)orig_string.length();
+
+	if (Position+(unsigned long)offset+(unsigned long)strLen > IS.length()) {
+		throw std::underflow_error("Data is underflow");
+	}
+
 	std::string rdstr((const char *)readAllocAhead(strLen, offset));
 	return (0 == orig_string.compare(rdstr));
 }

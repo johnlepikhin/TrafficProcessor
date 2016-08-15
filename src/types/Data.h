@@ -89,7 +89,7 @@ public:
 	 * Compare string with buffer at specified position.
 	 * @param orig_string String to compare with
 	 * @param offset Offset in buffer (relative to current position) to compare with
-	 * @return
+	 * @return Negative int / 0 / positive int
 	 */
 	bool compare (std::string orig_string, std::streamoff offset) const;
 
@@ -102,12 +102,12 @@ public:
 	/**
 	 * Total size of captured packet.
 	 */
-	unsigned short Size;
+	unsigned int Size;
 
 	/**
 	 * Number of captured bytes.
 	 */
-	unsigned short Captured;
+	unsigned int Captured;
 
 	/**
 	 * Input buffer

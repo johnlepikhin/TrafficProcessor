@@ -1,9 +1,3 @@
-/*
- * Pkt.cpp
- *
- *  Created on: 06 июня 2016 г.
- *      Author: eugene
- */
 
 #include "Data.h"
 
@@ -11,6 +5,7 @@
 #include <sstream>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdexcept>
 #include "../core/utils.h"
 
 Data::Data(std::istream *stream) :
@@ -22,16 +17,22 @@ Data::Data(std::istream *stream) :
 	util::anyRead (stream, &Captured, sizeof (Captured));
 	util::anyRead (stream, &Size, sizeof (Size));
 
-	size_t dataLength = Captured;
-	IS.resize(dataLength, '\0');
+	IS.resize(Captured, '\0');
 	char *begin = &*IS.begin();
-	stream->read(begin, (long)dataLength);
+	stream->read(begin, (long)Captured);
+	if (stream->gcount() < Captured) {
+		throw std::underflow_error("Cannot read announced number of bytes");
+	}
 }
 
 Data::~Data() {
 }
 
 const char *Data::getPtrWithSize(std::streamsize size) {
+	if (Position+size > IS.length()) {
+		throw std::underflow_error("Data is underflow");
+	}
+
 	const char *ptr = IS.c_str()+Position;
 	Position+=(unsigned long)size;
 	return (ptr);

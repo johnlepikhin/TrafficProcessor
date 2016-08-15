@@ -15,6 +15,7 @@ MAC::MAC(Data *data)
 
 MAC::~MAC()
 {
+	ptr = NULL;
 }
 
 std::string MAC::asString() const {

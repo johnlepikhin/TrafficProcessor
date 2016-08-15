@@ -24,13 +24,13 @@ Data::Data(std::istream *stream) :
 	IS.resize(Captured, '\0');
 	char *begin = &*IS.begin();
 	stream->read(begin, (long)Captured);
-	unsigned long read = (unsigned long)stream->gcount();
-	if (read < Captured) {
+	unsigned long rd = (unsigned long)stream->gcount();
+	if (rd < Captured) {
 		std::stringstream msg;
 		msg << "Cannot read announced number of captured bytes: "
 			<< Captured
 			<< ", was read only "
-			<< read;
+			<< rd;
 		throw std::underflow_error(msg.str());
 	}
 }

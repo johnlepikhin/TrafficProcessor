@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <iostream>
 #include "../../src/core/utils.h"
+#include <stdexcept>
+
 
 TEST(utils_mallocRead, HandlesSimpleReading) {
 	std::stringstream *input = new std::stringstream("1234567890");
@@ -20,19 +22,25 @@ TEST(utils_mallocRead, HandlesSimpleReading) {
 	delete input;
 }
 
-TEST(utils_mallocRead, HandlesReadingFromEmptyBuffer) {
+void handlesReadingFromEmptyBuffer() {
 	std::stringstream *input = new std::stringstream("");
 	char *read_string = (char *)util::mallocRead(input, 5);
-
-	EXPECT_TRUE(read_string==NULL);
-
+	free (read_string);
 	delete input;
 }
 
-TEST(utils_mallocRead, HandlesReadingFromUnitialized) {
-	char *read_string = (char *)util::mallocRead(NULL, 5);
+TEST(utils_mallocRead, HandlesReadingFromEmptyBuffer) {
+	EXPECT_THROW(handlesReadingFromEmptyBuffer(), std::underflow_error);
+}
 
-	EXPECT_TRUE(read_string==NULL);
+void handlesReadingFromNULL() {
+	char *read_string = (char *)util::mallocRead(NULL, 5);
+	free (read_string);
+}
+
+
+TEST(utils_mallocRead, HandlesReadingFromUnitialized) {
+	EXPECT_THROW(handlesReadingFromNULL(), std::invalid_argument);
 }
 
 TEST(utils_anyRead, HandlesSimpeReading) {
@@ -47,13 +55,13 @@ TEST(utils_anyRead, HandlesReadingFromEmptyBuffer) {
 	std::stringstream *input = new std::stringstream("");
 	unsigned short r;
 
-	EXPECT_THROW(util::anyRead(input, &r, 2), int);
+	EXPECT_THROW(util::anyRead(input, &r, 2), std::underflow_error);
 }
 
 TEST(utils_anyRead, HandlesReadingFromUninitialized) {
 	unsigned short r;
 
-	EXPECT_THROW(util::anyRead(NULL, &r, 2), int);
+	EXPECT_THROW(util::anyRead(NULL, &r, 2), std::invalid_argument);
 }
 
 TEST(utils_reverse2, HandlesReverse) {

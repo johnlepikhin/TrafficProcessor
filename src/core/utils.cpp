@@ -8,9 +8,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <stdexcept>
 
 namespace util {
-
 	void exitFatal (const char *msg) {
 		fprintf (stderr, "Fatal error: %s\n", msg);
 		exit (1);
@@ -33,13 +33,14 @@ namespace util {
 		void *r = (void *)mallocOrFatal((size_t)size);
 
 		if (NULL == stream) {
-			return (NULL);
+			throw std::invalid_argument("Stream is NULL in mallocRead");
 		}
 
 		stream->read((char *)r, size);
 		if (stream->fail ()) {
 			free (r);
-			return (NULL);
+
+			throw std::underflow_error("Stream is empty in mallocRead");
 		}
 
 		return (r);
@@ -47,13 +48,13 @@ namespace util {
 
 	void anyRead (std::istream *stream, void *ptr, std::streamsize size) {
 		if (NULL == stream) {
-			throw -10;
+			throw std::invalid_argument("Stream is NULL in anyRead");
 		}
 
 		stream->read((char *)ptr, size);
 
 		if (stream->fail ()) {
-			throw -1;
+			throw std::underflow_error("Stream is empty in anyRead");
 		}
 	}
 

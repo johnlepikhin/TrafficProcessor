@@ -23,7 +23,12 @@ Parser::Parser ()
 
 Parser::~Parser()
 {
-	delete Followers;
+	if (Followers)
+		try {
+			delete Followers;
+		} catch (...) {
+
+		}
 }
 
 Chunk *Parser::DoParse(Data *data, Chunk *parent)

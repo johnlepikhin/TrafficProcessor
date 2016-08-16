@@ -8,3 +8,8 @@
 #include "ParsersCollection.h"
 
 ParsersCollection *ParsersCollection::p_instance = 0;
+
+std::vector<Parser *> ParsersCollection::AsVector()
+{
+	return (collection);
+}

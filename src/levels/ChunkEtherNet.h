@@ -19,6 +19,8 @@ public:
 			const MAC * const sourceMAC,
 			const unsigned short ethernetType);
 
+	~ChunkEtherNet();
+
 	const MAC * const DestinationMAC;
 	const MAC * const SourceMAC;
 	const unsigned short EtherNetType;

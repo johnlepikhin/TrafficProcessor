@@ -17,3 +17,9 @@ ChunkEtherNet::ChunkEtherNet(Data *data,
 	, EtherNetType(ethernetType)
 {
 }
+
+ChunkEtherNet::~ChunkEtherNet()
+{
+	delete SourceMAC;
+	delete DestinationMAC;
+}

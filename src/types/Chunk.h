@@ -40,19 +40,53 @@ public:
 	const Chunk *Parent;
 };
 
+/**
+ * Base class for parsers of all types
+ */
 class Parser {
 private:
 	std::vector<Parser> *Followers;
 public:
+	/**
+	 * Template for constructor of new parsers
+	 */
 	Parser();
+
+	/**
+	 * Base destructor for all parsers
+	 */
 	virtual ~Parser();
 
+	/**
+	 * Parser of chunk. Must return NULL if it was unable to detect format
+	 * @param data Reference to Data
+	 * @param parent Optional reference to parent Chunk
+	 * @return NULL or Chunk
+	 */
 	virtual Chunk *DoParse(Data *data, Chunk *parent);
 
+	/**
+	 * Returns unique ID for this Parser
+	 * @return ID
+	 */
 	virtual std::string ID();
+
+	/**
+	 * Returns description for the Parser
+	 * @return Description
+	 */
 	virtual std::string Description();
 
+	/**
+	 * Returns reference to the vector of following parsers
+	 * @return Vector of followers
+	 */
 	std::vector<Parser> *GetFollowers();
+
+	/**
+	 * Sets new value for vector of followers. Old vector is deleted.
+	 * @param followers Reference to new vector
+	 */
 	void SetFollowers(std::vector<Parser> *followers);
 };
 

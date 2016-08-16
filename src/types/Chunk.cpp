@@ -17,11 +17,13 @@ Chunk::Chunk(const Data *data)
 }
 
 Parser::Parser ()
+	: Followers(new std::vector<Parser>())
 {
 }
 
 Parser::~Parser()
 {
+	delete Followers;
 }
 
 Chunk *Parser::DoParse(Data *data, Chunk *parent)
@@ -40,5 +42,11 @@ std::string Parser::Description () {
 
 std::vector<Parser> *Parser::GetFollowers ()
 {
-	return (&Followers);
+	return (Followers);
+}
+
+void Parser::SetFollowers(std::vector<Parser> *followers)
+{
+	delete Followers;
+	Followers = followers;
 }

@@ -42,7 +42,7 @@ public:
 
 class Parser {
 private:
-	std::vector<Parser> Followers;
+	std::vector<Parser> *Followers;
 public:
 	Parser();
 	virtual ~Parser();

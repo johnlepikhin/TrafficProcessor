@@ -2,10 +2,13 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 #include <pcap/pcap.h>
 
-#include "../types/Data.h"
 #include "utils.h"
+#include "../types/Data.h"
+#include "ParsersCollection.h"
+#include "../levels/ChunkEtherNet.h"
 
 using namespace std;
 
@@ -31,7 +34,23 @@ static void packetsReader () {
 	}
 }
 
+void registerParsers () {
+	ParsersCollection::getInstance()->Register((Parser *)new ParserEtherNet());
+
+}
+
+void printParsers () {
+	std::cout << "List of registered parsers:\n";
+	std::vector<Parser *> collection = ParsersCollection::getInstance()->AsVector();
+	for (std::vector<Parser *>::iterator i = collection.begin(); i != collection.end(); ++i) {
+		std::cout << (*i)->ID() << "\n";
+	}
+}
+
 int main () {
+	registerParsers();
+	printParsers();
+
 	pcap_file_header *hdr = (pcap_file_header *)util::mallocRead(&cin, sizeof (pcap_file_header));
 	free (hdr);
 	packetsReader();

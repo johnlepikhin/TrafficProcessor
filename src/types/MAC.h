@@ -1,9 +1,3 @@
-/*
- * MAC.h
- *
- *  Created on: 06 июня 2016 г.
- *      Author: eugene
- */
 
 #ifndef MAC_H_
 #define MAC_H_

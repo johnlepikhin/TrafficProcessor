@@ -24,7 +24,7 @@ Parser::~Parser()
 {
 }
 
-void *Parser::DoParse(Parser *data)
+Chunk *Parser::DoParse(Data *data, Chunk *parent)
 {
 	return (0);
 }

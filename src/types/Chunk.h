@@ -24,8 +24,6 @@ public:
 	 */
 	Chunk(const Data *data);
 
-//	virtual ~Chunk();
-
 	/**
 	 * Reference to original Pcap
 	 */
@@ -49,7 +47,7 @@ public:
 	Parser();
 	virtual ~Parser();
 
-	virtual void *DoParse(Parser *data);
+	virtual Chunk *DoParse(Data *data, Chunk *parent);
 
 	virtual std::string ID();
 	virtual std::string Description();

@@ -8,7 +8,8 @@
 #include "utils.h"
 #include "../types/Data.h"
 #include "ParsersCollection.h"
-#include "../levels/ChunkEtherNet.h"
+#include "../levels/ParserEtherNet.h"
+#include "../levels/ParserEtherNetDIX.h"
 
 using namespace std;
 
@@ -35,7 +36,9 @@ static void packetsReader () {
 }
 
 void registerParsers () {
-	ParsersCollection::getInstance()->Register((Parser *)new ParserEtherNet());
+	ParsersCollection *collection = ParsersCollection::getInstance();
+	collection->Register((Parser *)new ParserEtherNet());
+	collection->Register((Parser *)new ParserEtherNetDIX());
 
 }
 

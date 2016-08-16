@@ -1,5 +1,6 @@
 
 #include "Chunk.h"
+#include "../core/ParsersCollection.h"
 
 Chunk::Chunk(const Data * const data, Chunk *parent)
 	: DataPtr(data)
@@ -13,6 +14,7 @@ Chunk::Chunk(const Data *data)
 	, DataPosition(data->Position)
 	, Parent(NULL)
 {
+	ParsersCollection().Register((Parser<void,void>)this);
 }
 
 template <class PARENT, class RETURN>

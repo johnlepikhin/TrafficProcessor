@@ -25,6 +25,9 @@ public:
 		}
 		return (p_instance);
 	}
+	void Register(const Parser<void, void> parser) {
+		collection.push_back(parser);
+	}
 };
 
 #endif /* SRC_CORE_PARSERSCOLLECTION_H_ */

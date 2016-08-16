@@ -42,6 +42,16 @@ void registerParsers () {
 
 }
 
+void releaseParsers () {
+	ParsersCollection *collection = ParsersCollection::getInstance();
+	std::vector<Parser *> vector = collection->AsVector();
+	for (std::vector<Parser *>::iterator i = vector.begin(); i != vector.end(); ++i) {
+		vector.erase(i);
+		delete (*i);
+	}
+	delete collection;
+}
+
 void printParsers () {
 	std::cout << "List of registered parsers:\n";
 	std::vector<Parser *> collection = ParsersCollection::getInstance()->AsVector();
@@ -57,5 +67,6 @@ int main () {
 	pcap_file_header *hdr = (pcap_file_header *)util::mallocRead(&cin, sizeof (pcap_file_header));
 	free (hdr);
 	packetsReader();
+	releaseParsers();
 	return (0);
 }

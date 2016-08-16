@@ -42,16 +42,18 @@ public:
 	const Chunk *Parent;
 };
 
-template <class PARENT, class RETURN>
 class Parser {
 private:
 	std::vector<Parser> Followers;
 public:
 	Parser();
 	virtual ~Parser();
-	virtual RETURN *parse(PARENT *data);
+
+	virtual void *DoParse(Parser *data);
+
 	virtual std::string ID();
 	virtual std::string Description();
+
 	std::vector<Parser> *GetFollowers();
 	void SetFollowers(std::vector<Parser> *followers);
 };

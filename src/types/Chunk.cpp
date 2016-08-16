@@ -14,17 +14,31 @@ Chunk::Chunk(const Data *data)
 	, DataPosition(data->Position)
 	, Parent(NULL)
 {
-	ParsersCollection().Register((Parser<void,void>)this);
 }
 
-template <class PARENT, class RETURN>
-Parser<PARENT, RETURN>::Parser ()
-	: Followers(std::vector<Parser<PARENT, RETURN> >())
+Parser::Parser ()
 {
 }
 
-template <class PARENT, class RETURN>
-std::vector<Parser<PARENT, RETURN> > *Parser<PARENT, RETURN>::GetFollowers ()
+Parser::~Parser()
 {
-	return (Followers);
+}
+
+void *Parser::DoParse(Parser *data)
+{
+	return (0);
+}
+
+std::string Parser::ID () {
+	return ("");
+}
+
+std::string Parser::Description () {
+	return ("");
+}
+
+
+std::vector<Parser> *Parser::GetFollowers ()
+{
+	return (&Followers);
 }

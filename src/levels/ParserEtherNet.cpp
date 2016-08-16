@@ -7,7 +7,6 @@
 
 #include "ParserEtherNet.h"
 
-
 std::string ParserEtherNet::ID()
 {
 	return (std::string("Ethernet"));
@@ -20,11 +19,11 @@ std::string ParserEtherNet::Description()
 
 ChunkEtherNet *ParserEtherNet::DoParse(Data *data, Chunk *parent)
 {
-	MAC DA(data);
-	MAC SA(data);
+	MAC *DA = new MAC(data);
+	MAC *SA = new MAC(data);
 	unsigned short eType = data->read2Reverse();
 
-	return (new ChunkEtherNet(data, &DA, &SA, eType));
+	return (new ChunkEtherNet(data, DA, SA, eType));
 
 //	if (eType > 1500) {
 //		Data = new EtherFrame_DIX (this, DA, SA, eType, &score, size);

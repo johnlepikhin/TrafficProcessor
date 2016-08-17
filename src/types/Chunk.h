@@ -41,21 +41,21 @@ public:
 };
 
 /**
- * Base class for parsers of all types
+ * Base class for processors of all types
  */
-class Parser {
+class Processor {
 private:
-	std::vector<Parser> *Followers;
+	std::vector<Processor> *Followers;
 public:
 	/**
-	 * Template for constructor of new parsers
+	 * Template for constructor of new processors
 	 */
-	Parser();
+	Processor();
 
 	/**
-	 * Base destructor for all parsers
+	 * Base destructor for all processors
 	 */
-	virtual ~Parser();
+	virtual ~Processor();
 
 	/**
 	 * Parser of chunk. Must return NULL if it was unable to detect format
@@ -66,28 +66,28 @@ public:
 	virtual Chunk *DoParse(Data *data, Chunk *parent);
 
 	/**
-	 * Returns unique ID for this Parser
+	 * Returns unique ID for this Processor
 	 * @return ID
 	 */
 	virtual std::string ID();
 
 	/**
-	 * Returns description for the Parser
+	 * Returns description for the Processor
 	 * @return Description
 	 */
 	virtual std::string Description();
 
 	/**
-	 * Returns reference to the vector of following parsers
+	 * Returns reference to the vector of following processors
 	 * @return Vector of followers
 	 */
-	std::vector<Parser> *GetFollowers();
+	std::vector<Processor> *GetFollowers();
 
 	/**
 	 * Sets new value for vector of followers. Old vector is deleted.
 	 * @param followers Reference to new vector
 	 */
-	void SetFollowers(std::vector<Parser> *followers);
+	void SetFollowers(std::vector<Processor> *followers);
 };
 
 #endif /* SRC_CORE_CHUNK_H_ */

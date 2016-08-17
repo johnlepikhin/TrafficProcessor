@@ -13,7 +13,7 @@
 
 class ParsersCollection {
 private:
-    std::vector<Parser *> collection;
+    std::vector<Processor *> collection;
 
     static ParsersCollection * p_instance;
     ParsersCollection() {};
@@ -26,10 +26,10 @@ public:
 		}
 		return (p_instance);
 	}
-	void Register(Parser *parser) {
+	void Register(Processor *parser) {
 		collection.push_back(parser);
 	}
-	std::vector<Parser *> AsVector();
+	std::vector<Processor *> AsVector();
 };
 
 #endif /* SRC_CORE_PARSERSCOLLECTION_H_ */

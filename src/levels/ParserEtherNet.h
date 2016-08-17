@@ -4,7 +4,7 @@
 
 #include "ChunkEtherNet.h"
 
-class ParserEtherNet : public Parser {
+class ParserEtherNet : public Processor {
 public:
 	ChunkEtherNet *DoParse(Data *data, Chunk *parent);
 	std::string ID();

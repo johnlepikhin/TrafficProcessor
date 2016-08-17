@@ -16,12 +16,12 @@ Chunk::Chunk(const Data *data)
 {
 }
 
-Parser::Parser ()
-	: Followers(new std::vector<Parser>())
+Processor::Processor ()
+	: Followers(new std::vector<Processor>())
 {
 }
 
-Parser::~Parser()
+Processor::~Processor()
 {
 	if (Followers)
 		try {
@@ -31,26 +31,26 @@ Parser::~Parser()
 		}
 }
 
-Chunk *Parser::DoParse(Data *data, Chunk *parent)
+Chunk *Processor::DoParse(Data *data, Chunk *parent)
 {
 	return (0);
 }
 
-std::string Parser::ID () {
+std::string Processor::ID () {
 	return ("");
 }
 
-std::string Parser::Description () {
+std::string Processor::Description () {
 	return ("");
 }
 
 
-std::vector<Parser> *Parser::GetFollowers ()
+std::vector<Processor> *Processor::GetFollowers ()
 {
 	return (Followers);
 }
 
-void Parser::SetFollowers(std::vector<Parser> *followers)
+void Processor::SetFollowers(std::vector<Processor> *followers)
 {
 	delete Followers;
 	Followers = followers;

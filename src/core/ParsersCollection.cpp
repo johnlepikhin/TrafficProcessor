@@ -9,7 +9,7 @@
 
 ParsersCollection *ParsersCollection::p_instance = 0;
 
-std::vector<Parser *> ParsersCollection::AsVector()
+std::vector<Processor *> ParsersCollection::AsVector()
 {
 	return (collection);
 }

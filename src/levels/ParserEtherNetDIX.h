@@ -10,7 +10,7 @@
 
 #include "ChunkEtherNetDIX.h"
 
-class ParserEtherNetDIX: public Parser {
+class ParserEtherNetDIX: public Processor {
 public:
 	ChunkEtherNetDIX *DoParse(Data *data, Chunk *parent);
 	std::string ID();

@@ -37,15 +37,15 @@ static void packetsReader () {
 
 void registerParsers () {
 	ParsersCollection *collection = ParsersCollection::getInstance();
-	collection->Register((Parser *)new ParserEtherNet());
-	collection->Register((Parser *)new ParserEtherNetDIX());
+	collection->Register((Processor *)new ParserEtherNet());
+	collection->Register((Processor *)new ParserEtherNetDIX());
 
 }
 
 void releaseParsers () {
 	ParsersCollection *collection = ParsersCollection::getInstance();
-	std::vector<Parser *> vector = collection->AsVector();
-	for (std::vector<Parser *>::iterator i = vector.begin(); i != vector.end(); ++i) {
+	std::vector<Processor *> vector = collection->AsVector();
+	for (std::vector<Processor *>::iterator i = vector.begin(); i != vector.end(); ++i) {
 		vector.erase(i);
 		delete (*i);
 	}
@@ -54,8 +54,8 @@ void releaseParsers () {
 
 void printParsers () {
 	std::cout << "List of registered parsers:\n";
-	std::vector<Parser *> collection = ParsersCollection::getInstance()->AsVector();
-	for (std::vector<Parser *>::iterator i = collection.begin(); i != collection.end(); ++i) {
+	std::vector<Processor *> collection = ParsersCollection::getInstance()->AsVector();
+	for (std::vector<Processor *>::iterator i = collection.begin(); i != collection.end(); ++i) {
 		std::cout << (*i)->ID() << "\n";
 	}
 }

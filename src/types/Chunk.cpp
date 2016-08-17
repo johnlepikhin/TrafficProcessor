@@ -18,6 +18,8 @@ Chunk::Chunk(const Data *data, const unsigned long dataPosition)
 
 Chunk::~Chunk()
 {
+	Parent = 0;
+	DataPtr = 0;
 }
 
 Processor::Processor ()

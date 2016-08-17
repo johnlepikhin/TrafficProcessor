@@ -14,6 +14,7 @@ public:
 	/**
 	 * Construct Chunk from Data and parent Chunk
 	 * @param data Reference to data (original Pcap)
+	 * @param dataPosition Offset of chunk beginning in Data
 	 * @param parent Reference to parent Chunk
 	 */
 	Chunk(const Data * const data, const unsigned long dataPosition, Chunk *parent);
@@ -21,6 +22,7 @@ public:
 	/**
 	 * Construct Chunk from Data and NULL parent
 	 * @param data Reference to data (original Pcap)
+	 * @param dataPosition Offset of chunk beginning in Data
 	 */
 	Chunk(const Data *data, const unsigned long dataPosition);
 

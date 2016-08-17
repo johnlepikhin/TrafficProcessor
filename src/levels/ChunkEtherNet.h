@@ -20,6 +20,7 @@ public:
 	/**
 	 * Constructor
 	 * @param data Reference to Data from where chunk was read
+	 * @param dataPosition Offset of chunk beginning in Data
 	 * @param destinationMAC Reference to destination MAC address
 	 * @param sourceMAC Reference to source MAC address
 	 * @param ethernetType 2-byte value at offset 13 in ethernet frame (ethernet type or payload length)

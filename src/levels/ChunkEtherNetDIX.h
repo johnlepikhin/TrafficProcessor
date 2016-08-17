@@ -12,6 +12,7 @@ public:
 	/**
 	 * Constructor for DIX
 	 * @param data Reference to Data from where chunk was read
+	 * @param dataPosition Offset of chunk beginning in Data
 	 * @param parent Optional reference to parent Chunk
 	 */
 	ChunkEtherNetDIX(Data *data, const unsigned long dataPosition, ChunkEtherNet *parent);

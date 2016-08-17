@@ -16,13 +16,13 @@ public:
 	 * @param data Reference to data (original Pcap)
 	 * @param parent Reference to parent Chunk
 	 */
-	Chunk(const Data * const data, Chunk *parent);
+	Chunk(const Data * const data, const unsigned long dataPosition, Chunk *parent);
 
 	/**
 	 * Construct Chunk from Data and NULL parent
 	 * @param data Reference to data (original Pcap)
 	 */
-	Chunk(const Data *data);
+	Chunk(const Data *data, const unsigned long dataPosition);
 
 	/**
 	 * Reference to original Pcap

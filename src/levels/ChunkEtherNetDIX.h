@@ -14,7 +14,7 @@ public:
 	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 */
-	ChunkEtherNetDIX(Data *data, ChunkEtherNet *parent);
+	ChunkEtherNetDIX(Data *data, const unsigned long dataPosition, ChunkEtherNet *parent);
 };
 
 #endif /* SRC_LEVELS_CHUNKETHERNETDIX_H_ */

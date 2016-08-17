@@ -25,6 +25,7 @@ public:
 	 * @param ethernetType 2-byte value at offset 13 in ethernet frame (ethernet type or payload length)
 	 */
 	ChunkEtherNet(Data *data,
+			const unsigned long dataPosition,
 			const MAC * const destinationMAC,
 			const MAC * const sourceMAC,
 			const unsigned short ethernetType);

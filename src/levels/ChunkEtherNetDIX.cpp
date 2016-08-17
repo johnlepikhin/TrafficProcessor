@@ -1,7 +1,7 @@
 
 #include "ChunkEtherNetDIX.h"
 
-ChunkEtherNetDIX::ChunkEtherNetDIX(Data *data, ChunkEtherNet *parent)
-	: Chunk(data, parent)
+ChunkEtherNetDIX::ChunkEtherNetDIX(Data *data, const unsigned long dataPosition, ChunkEtherNet *parent)
+	: Chunk(data, dataPosition, parent)
 {
 }

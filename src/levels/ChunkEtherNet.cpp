@@ -8,10 +8,11 @@
 #include "ChunkEtherNet.h"
 
 ChunkEtherNet::ChunkEtherNet(Data *data,
+		const unsigned long dataPosition,
 		const MAC * const destinationMAC,
 		const MAC * const sourceMAC,
 		const unsigned short ethernetType)
-	: Chunk(data)
+	: Chunk(data, dataPosition)
 	, DestinationMAC(destinationMAC)
 	, SourceMAC(sourceMAC)
 	, EtherNetType(ethernetType)

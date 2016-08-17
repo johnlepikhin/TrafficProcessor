@@ -2,16 +2,16 @@
 #include "Chunk.h"
 #include "../core/ParsersCollection.h"
 
-Chunk::Chunk(const Data * const data, Chunk *parent)
+Chunk::Chunk(const Data * const data, const unsigned long dataPosition, Chunk *parent)
 	: DataPtr(data)
-	, DataPosition(data->Position)
+	, DataPosition(dataPosition)
 	, Parent(parent)
 {
 }
 
-Chunk::Chunk(const Data *data)
+Chunk::Chunk(const Data *data, const unsigned long dataPosition)
 	: DataPtr(data)
-	, DataPosition(data->Position)
+	, DataPosition(dataPosition)
 	, Parent(NULL)
 {
 }

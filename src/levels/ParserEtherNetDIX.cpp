@@ -21,6 +21,8 @@ std::string ParserEtherNetDIX::Description()
 
 ChunkEtherNetDIX *ParserEtherNetDIX::DoParse(Data *data, Chunk *parent)
 {
+	const unsigned long dataPosition = data->Position;
+
 	if (typeid(parent) != typeid(ChunkEtherNet)) {
 		return (NULL);
 	}
@@ -28,7 +30,7 @@ ChunkEtherNetDIX *ParserEtherNetDIX::DoParse(Data *data, Chunk *parent)
 	ChunkEtherNet *ethernet = (ChunkEtherNet *)parent;
 
 	if (ethernet->EtherNetType > 1500) {
-		return (new ChunkEtherNetDIX(data, ethernet));
+		return (new ChunkEtherNetDIX(data, dataPosition, ethernet));
 	}
 
 	return (NULL);

@@ -7,7 +7,7 @@
 
 #include "utils.h"
 #include "../types/Data.h"
-#include "ParsersCollection.h"
+#include "ProcessorsCollection.h"
 #include "../levels/ParserEtherNet.h"
 #include "../levels/ParserEtherNetDIX.h"
 
@@ -36,14 +36,14 @@ static void packetsReader () {
 }
 
 void registerParsers () {
-	ParsersCollection *collection = ParsersCollection::getInstance();
+	ProcessorsCollection *collection = ProcessorsCollection::getInstance();
 	collection->Register((Processor *)new ParserEtherNet());
 	collection->Register((Processor *)new ParserEtherNetDIX());
 
 }
 
 void releaseParsers () {
-	ParsersCollection *collection = ParsersCollection::getInstance();
+	ProcessorsCollection *collection = ProcessorsCollection::getInstance();
 	std::vector<Processor *> vector = collection->AsVector();
 	for (std::vector<Processor *>::iterator i = vector.begin(); i != vector.end(); ++i) {
 		vector.erase(i);
@@ -54,7 +54,7 @@ void releaseParsers () {
 
 void printParsers () {
 	std::cout << "List of registered parsers:\n";
-	std::vector<Processor *> collection = ParsersCollection::getInstance()->AsVector();
+	std::vector<Processor *> collection = ProcessorsCollection::getInstance()->AsVector();
 	for (std::vector<Processor *>::iterator i = collection.begin(); i != collection.end(); ++i) {
 		std::cout << (*i)->ID() << "\n";
 	}

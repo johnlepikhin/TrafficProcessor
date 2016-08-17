@@ -11,18 +11,21 @@
 #include <vector>
 #include "../types/Chunk.h"
 
-class ParsersCollection {
+/**
+ * Stores collection of
+ */
+class ProcessorsCollection {
 private:
     std::vector<Processor *> collection;
 
-    static ParsersCollection * p_instance;
-    ParsersCollection() {};
-	ParsersCollection( const ParsersCollection& ) {};
-	ParsersCollection& operator= (const ParsersCollection &);
+    static ProcessorsCollection * p_instance;
+    ProcessorsCollection() {};
+	ProcessorsCollection( const ProcessorsCollection& ) {};
+	ProcessorsCollection& operator= (const ProcessorsCollection &);
 public:
-	static ParsersCollection *getInstance() {
+	static ProcessorsCollection *getInstance() {
 		if (!p_instance) {
-			p_instance = new ParsersCollection();
+			p_instance = new ProcessorsCollection();
 		}
 		return (p_instance);
 	}

@@ -10,6 +10,9 @@
 #include "ProcessorsCollection.h"
 #include "../levels/ParserEtherNet.h"
 #include "../levels/ParserEtherNetDIX.h"
+#include "../levels/ParserEtherNetRAW.h"
+#include "../levels/ParserEtherNetSNAP.h"
+#include "../levels/ParserEtherNet802LLC.h"
 
 using namespace std;
 
@@ -39,7 +42,9 @@ void registerParsers () {
 	ProcessorsCollection *collection = ProcessorsCollection::getInstance();
 	collection->Register((Processor *)new ParserEtherNet());
 	collection->Register((Processor *)new ParserEtherNetDIX());
-
+	collection->Register((Processor *)new ParserEtherNetRAW());
+	collection->Register((Processor *)new ParserEtherNetSNAP());
+	collection->Register((Processor *)new ParserEtherNet802LLC());
 }
 
 void releaseParsers () {

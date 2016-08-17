@@ -19,12 +19,18 @@ std::string ParserEtherNet::Description()
 
 ChunkEtherNet *ParserEtherNet::DoParse(Data *data, Chunk *parent)
 {
-	const unsigned long dataPosition = data->Position;
 	MAC *DA = new MAC(data);
 	MAC *SA = new MAC(data);
-	unsigned short eType = data->read2Reverse();
-
-	return (new ChunkEtherNet(data, dataPosition, DA, SA, eType));
+	try {
+		const unsigned long dataPosition = data->Position;
+		unsigned short eType = data->read2Reverse();
+		ChunkEtherNet *r = new ChunkEtherNet(data, dataPosition, DA, SA, eType);
+		return (r);
+	} catch (...) {
+		delete DA;
+		delete SA;
+		throw;
+	}
 
 //	if (eType > 1500) {
 //		Data = new EtherFrame_DIX (this, DA, SA, eType, &score, size);

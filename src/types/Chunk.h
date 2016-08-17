@@ -26,6 +26,8 @@ public:
 	 */
 	Chunk(const Data *data, const unsigned long dataPosition);
 
+	virtual ~Chunk();
+
 	/**
 	 * Reference to original Pcap
 	 */

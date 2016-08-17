@@ -1,6 +1,6 @@
 
 #include "Chunk.h"
-#include "../core/ParsersCollection.h"
+#include "../core/ProcessorsCollection.h"
 
 Chunk::Chunk(const Data * const data, const unsigned long dataPosition, Chunk *parent)
 	: DataPtr(data)

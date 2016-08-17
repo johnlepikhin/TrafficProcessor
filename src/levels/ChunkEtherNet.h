@@ -15,6 +15,9 @@
 /**
  * Container for EtherNet frame
  */
+//lint -sem(ChunkEtherNet::ChunkEtherNet, 1p)
+//lint -sem(ChunkEtherNet::ChunkEtherNet, 3p, custodial(3))
+//lint -sem(ChunkEtherNet::ChunkEtherNet, 4p, custodial(4))
 class ChunkEtherNet : public Chunk {
 public:
 	/**

@@ -17,7 +17,6 @@ public:
 	 * @param data Pointer to Data, buffer must point to position from where MAC to read
 	 */
 	MAC(Data *data);
-	~MAC();
 
 	/**
 	 * Human readable representation

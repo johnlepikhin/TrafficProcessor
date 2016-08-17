@@ -13,11 +13,6 @@ MAC::MAC(Data *data)
 	ptr = data->getPtrWithSize(6);
 }
 
-MAC::~MAC()
-{
-	ptr = NULL;
-}
-
 std::string MAC::asString() const {
 	char r[18];
 	snprintf(r, sizeof(r), "%02hhx:%02hhx:%02hhx:%02hhx:%02hhx:%02hhx",

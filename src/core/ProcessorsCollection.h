@@ -12,7 +12,7 @@
 #include "../types/Chunk.h"
 
 /**
- * Stores collection of
+ * Stores collection of Processors (singleton)
  */
 class ProcessorsCollection {
 private:
@@ -23,15 +23,29 @@ private:
 	ProcessorsCollection( const ProcessorsCollection& ) {};
 	ProcessorsCollection& operator= (const ProcessorsCollection &);
 public:
+	/**
+	 * Returns instanse of singleton
+	 * @return Reference to ProcessorsCollection object
+	 */
 	static ProcessorsCollection *getInstance() {
 		if (!p_instance) {
 			p_instance = new ProcessorsCollection();
 		}
 		return (p_instance);
 	}
-	void Register(Processor *parser) {
-		collection.push_back(parser);
+
+	/**
+	 * Adds new Processor to the collection
+	 * @param processor Processor to register
+	 */
+	void Register(Processor *processor) {
+		collection.push_back(processor);
 	}
+
+	/**
+	 * Returns the collection as std::vector
+	 * @return Vector
+	 */
 	std::vector<Processor *> AsVector();
 };
 

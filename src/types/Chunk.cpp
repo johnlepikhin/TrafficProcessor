@@ -16,6 +16,10 @@ Chunk::Chunk(const Data *data, const unsigned long dataPosition)
 {
 }
 
+Chunk::~Chunk()
+{
+}
+
 Processor::Processor ()
 	: Followers(new std::vector<Processor>())
 {

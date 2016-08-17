@@ -4,8 +4,16 @@
 
 #include "ChunkEtherNet.h"
 
+/**
+ * Container for DIX EtherNet frame
+ */
 class ChunkEtherNetDIX: public Chunk {
 public:
+	/**
+	 * Constructor for DIX
+	 * @param data Reference to Data from where chunk was read
+	 * @param parent Optional reference to parent Chunk
+	 */
 	ChunkEtherNetDIX(Data *data, ChunkEtherNet *parent);
 };
 

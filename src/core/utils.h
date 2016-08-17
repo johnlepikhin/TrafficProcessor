@@ -27,15 +27,15 @@ namespace util {
 	void exitMemoryError ();
 
 	/**
-	 * <malloc>"()" memory of specified size, check if allocation was successful and call
-	 * <exit_memory>"()" if pointer is NULL. Return pointer to the block otherwise.
+	 * malloc() memory of specified size, check if allocation was successful and call
+	 * exit_memory() if pointer is NULL. Return pointer to the block otherwise.
 	 * @param size Size of block to be allocated
 	 * @return Pointer to successfully allocated block
 	 */
 	void *mallocOrFatal (size_t size);
 
 	/**
-	 * <mallocOrFatal>"(size)" memory and read bytes from stream into it
+	 * mallocOrFatal(size) memory and read bytes from stream into it
 	 * @param stream Input stream
 	 * @param size Number of bytes to read
 	 */

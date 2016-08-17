@@ -30,7 +30,7 @@ ChunkEtherNetDIX *ParserEtherNetDIX::DoParse(Data *data, Chunk *parent)
 	ChunkEtherNet *ethernet = (ChunkEtherNet *)parent;
 
 	if (ethernet->EtherNetType > 1500) {
-		return (new ChunkEtherNetDIX(data, dataPosition, ethernet));
+		return (new ChunkEtherNetDIX(data, dataPosition, ethernet, ethernet->EtherNetType));
 	}
 
 	return (NULL);

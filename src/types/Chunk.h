@@ -49,7 +49,7 @@ public:
  */
 class Processor {
 private:
-	std::vector<Processor> *Followers;
+	std::vector<Processor *> Followers;
 public:
 	/**
 	 * Template for constructor of new processors
@@ -85,13 +85,13 @@ public:
 	 * Returns reference to the vector of following processors
 	 * @return Vector of followers
 	 */
-	std::vector<Processor> *GetFollowers();
+	const std::vector<Processor *> *GetFollowers();
 
 	/**
 	 * Sets new value for vector of followers. Old vector is deleted.
 	 * @param followers Reference to new vector
 	 */
-	void SetFollowers(std::vector<Processor> *followers);
+	void SetFollowers(std::vector<Processor *> *followers);
 };
 
 #endif /* SRC_CORE_CHUNK_H_ */

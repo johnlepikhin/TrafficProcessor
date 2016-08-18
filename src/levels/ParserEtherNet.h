@@ -11,6 +11,11 @@
 class ParserEtherNet : public Processor {
 public:
 	/**
+	 * Basic constructor for parser
+	 */
+	ParserEtherNet();
+
+	/**
 	 * Try to get EtherNet frame from data.
 	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk

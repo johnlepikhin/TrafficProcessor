@@ -6,6 +6,20 @@
  */
 
 #include "ParserEtherNet.h"
+#include "ParserEtherNetDIX.h"
+#include "ParserEtherNet802LLC.h"
+#include "ParserEtherNetRAW.h"
+#include "ParserEtherNetSNAP.h"
+
+ParserEtherNet::ParserEtherNet()
+{
+	std::vector<Processor *> followers;
+	followers.push_back(new ParserEtherNetDIX());
+	followers.push_back(new ParserEtherNet802LLC());
+	followers.push_back(new ParserEtherNetRAW());
+	followers.push_back(new ParserEtherNetSNAP());
+	SetFollowers(&followers);
+}
 
 std::string ParserEtherNet::ID()
 {
@@ -22,13 +36,9 @@ ChunkEtherNet *ParserEtherNet::DoParse(Data *data, Chunk *parent)
 	MAC *DA = new MAC(data);
 	MAC *SA = new MAC(data);
 	try {
-		std::cout << "ether 1\n";
 		const unsigned long dataPosition = data->Position;
-		std::cout << "ether 2\n";
 		unsigned short eType = data->read2Reverse();
-		std::cout << "ether 3\n";
 		ChunkEtherNet *r = new ChunkEtherNet(data, dataPosition, DA, SA, eType);
-		std::cout << "ether 4\n";
 		return (r);
 	} catch (...) {
 		delete DA;

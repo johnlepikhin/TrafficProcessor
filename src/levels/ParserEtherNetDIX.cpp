@@ -8,6 +8,17 @@
 #include <typeinfo>
 
 #include "ParserEtherNetDIX.h"
+#include "ParserIPv4.h"
+#include "ParserIPv6.h"
+
+ParserEtherNetDIX::ParserEtherNetDIX()
+{
+	std::vector<Processor *> followers;
+	followers.push_back(new ParserIPv4());
+	followers.push_back(new ParserIPv6());
+	SetFollowers(&followers);
+}
+
 
 std::string ParserEtherNetDIX::ID()
 {
@@ -26,7 +37,6 @@ ChunkEtherNetDIX *ParserEtherNetDIX::DoParse(Data *data, ChunkEtherNet *parent)
 	if (parent->EtherNetType > 1500) {
 		return (new ChunkEtherNetDIX(data, dataPosition, parent, parent->EtherNetType));
 	}
-	std::cout << "dix 2\n";
 
 	return (NULL);
 }

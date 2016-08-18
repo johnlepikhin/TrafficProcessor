@@ -17,21 +17,14 @@
 
 using namespace std;
 
-/**
- * @struct pkthdr
- * @brief Pcap binary packet header format
- */
-//struct pkthdr {
-//	const char data[8];			/**< data Magic number, version major/minor */
-//    const bpf_u_int32 caplen;	/**< length of portion present */
-//    const bpf_u_int32 len;		/**< length this packet (off wire) */
-//};
-
-static void packetsReader () {
+static void packetsReader (std::istream *input) {
 	bool done = false;
+	ParserEtherNet *parser = new ParserEtherNet();
+
 	while (!done) {
 		try {
-			Data *p = new Data(&cin);
+			Data *p = new Data(input);
+			parser->DoParse(p, 0);
 			delete p;
 		} catch (...) {
 			done = true;
@@ -53,9 +46,9 @@ void releaseParsers () {
 	ProcessorsCollection *collection = ProcessorsCollection::getInstance();
 	std::vector<Processor *> vector = collection->AsVector();
 	for (std::vector<Processor *>::iterator i = vector.begin(); i != vector.end(); ++i) {
-		vector.erase(i);
 		delete (*i);
 	}
+	vector.clear();
 	delete collection;
 }
 
@@ -63,7 +56,7 @@ void printParsers () {
 	std::cout << "List of registered parsers:\n";
 	std::vector<Processor *> collection = ProcessorsCollection::getInstance()->AsVector();
 	for (std::vector<Processor *>::iterator i = collection.begin(); i != collection.end(); ++i) {
-		std::cout << (*i)->ID() << "\n";
+		std::cout << " - " << (*i)->ID() << " - " << (*i)->Description() << "\n";
 	}
 }
 
@@ -71,9 +64,9 @@ int main () {
 	registerParsers();
 	printParsers();
 
-	pcap_file_header *hdr = (pcap_file_header *)util::mallocRead(&cin, sizeof (pcap_file_header));
+	pcap_file_header *hdr = (pcap_file_header *)util::mallocRead(&std::cin, sizeof (pcap_file_header));
 	free (hdr);
-	packetsReader();
+	packetsReader(&std::cin);
 	releaseParsers();
 	return (0);
 }

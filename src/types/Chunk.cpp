@@ -23,18 +23,19 @@ Chunk::~Chunk()
 }
 
 Processor::Processor ()
-	: Followers(new std::vector<Processor>())
 {
 }
 
 Processor::~Processor()
 {
-	if (Followers)
-		try {
-			delete Followers;
-		} catch (...) {
-
+	try {
+		for (std::vector<Processor *>::iterator i = Followers.begin(); i != Followers.end(); ++i) {
+			delete (*i);
 		}
+		Followers.clear();
+	} catch (...) {
+
+	}
 }
 
 Chunk *Processor::DoParse(Data *data, Chunk *parent)
@@ -51,13 +52,20 @@ std::string Processor::Description () {
 }
 
 
-std::vector<Processor> *Processor::GetFollowers ()
+const std::vector<Processor *> *Processor::GetFollowers ()
 {
-	return (Followers);
+	return (&Followers);
 }
 
-void Processor::SetFollowers(std::vector<Processor> *followers)
+void Processor::SetFollowers(std::vector<Processor *> *followers)
 {
-	delete Followers;
-	Followers = followers;
+	for (std::vector<Processor *>::iterator i = Followers.begin(); i != Followers.end(); ++i) {
+		if ((*i) != NULL) {
+			delete (*i);
+		}
+	}
+	Followers.clear();
+	for (std::vector<Processor *>::iterator i = followers->begin(); i != followers->end(); ++i) {
+		Followers.push_back((*i));
+	}
 }

@@ -49,7 +49,7 @@ const char *Data::getPtrWithSize(std::streamsize size) {
 }
 
 const char *Data::getPtrAtOffset(std::streamoff offset) const {
-	if (Position+(unsigned long)offset > IS.length()) {
+	if (Position+(unsigned long)offset >= IS.length()) {
 		throw std::underflow_error("Data is underflow");
 	}
 

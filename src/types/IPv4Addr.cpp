@@ -12,7 +12,7 @@ IPv4Addr::IPv4Addr(Data *data, std::streamoff offset) {
 	ptr = data->getPtrAtOffset(offset);
 }
 
-std::string IPv4Addr::asString() {
+std::string IPv4Addr::asString() const {
 	char r[16];
 	snprintf(r, sizeof(r), "%i.%i.%i.%i",
 			(unsigned char)ptr[0],
@@ -22,7 +22,7 @@ std::string IPv4Addr::asString() {
 	return (r);
 }
 
-std::string IPv4Addr::asBinary() {
+std::string IPv4Addr::asBinary() const {
 	return (std::string(ptr, 4));
 }
 

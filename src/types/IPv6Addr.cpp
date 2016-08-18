@@ -11,7 +11,7 @@ IPv6Addr::IPv6Addr(Data *data, std::streamoff offset) {
 	ptr = data->getPtrAtOffset(offset);
 }
 
-std::string IPv6Addr::asString() {
+std::string IPv6Addr::asString() const {
 	char r[50];
 	snprintf(r, sizeof(r), "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x",
 			(unsigned char)ptr[0],
@@ -33,7 +33,7 @@ std::string IPv6Addr::asString() {
 	return (r);
 }
 
-std::string IPv6Addr::asBinary() {
+std::string IPv6Addr::asBinary() const {
 	return (std::string(ptr, 16));
 }
 

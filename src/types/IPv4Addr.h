@@ -21,7 +21,7 @@ public:
 	 * Human readable representation
 	 * @return Human readable representation
 	 */
-	std::string asString();
+	std::string asString() const;
 
 	/**
 	 * Compare with other IPv4 address
@@ -35,7 +35,7 @@ public:
 	 * Binary representation
 	 * @return Binary representation
 	 */
-	std::string asBinary();
+	std::string asBinary() const;
 private:
 	const char *ptr;
 };

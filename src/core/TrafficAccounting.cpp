@@ -13,6 +13,7 @@
 #include "../levels/ParserEtherNetRAW.h"
 #include "../levels/ParserEtherNetSNAP.h"
 #include "../levels/ParserEtherNet802LLC.h"
+#include "../levels/ParserIPv4.h"
 
 using namespace std;
 
@@ -45,6 +46,7 @@ void registerParsers () {
 	collection->Register((Processor *)new ParserEtherNetRAW());
 	collection->Register((Processor *)new ParserEtherNetSNAP());
 	collection->Register((Processor *)new ParserEtherNet802LLC());
+	collection->Register((Processor *)new ParserIPv4());
 }
 
 void releaseParsers () {

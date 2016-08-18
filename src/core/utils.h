@@ -13,6 +13,9 @@
 /**
  * Uncategorized functions
  */
+//lint -sem(util::mallocRead, 1p)
+//lint -sem(util::anyRead, 1p)
+//lint -sem(util::anyRead, 2p)
 namespace util {
 
 	/**

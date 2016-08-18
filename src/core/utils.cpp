@@ -32,10 +32,6 @@ namespace util {
 	void *mallocRead (std::istream *stream, std::streamsize size) {
 		void *r = (void *)mallocOrFatal((size_t)size);
 
-		if (NULL == stream) {
-			throw std::invalid_argument("Stream is NULL in mallocRead");
-		}
-
 		stream->read((char *)r, size);
 		if (stream->fail ()) {
 			free (r);
@@ -47,10 +43,6 @@ namespace util {
 	}
 
 	void anyRead (std::istream *stream, void *ptr, std::streamsize size) {
-		if (NULL == stream) {
-			throw std::invalid_argument("Stream is NULL in anyRead");
-		}
-
 		stream->read((char *)ptr, size);
 
 		if (stream->fail ()) {

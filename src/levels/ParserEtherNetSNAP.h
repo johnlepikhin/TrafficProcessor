@@ -8,6 +8,8 @@
 /**
  * Parser of SNAP EtherNet frame
  */
+//lint -sem(ParserEtherNetSNAP::DoParse, 1p)
+//lint -sem(ParserEtherNetSNAP::DoParse, 2p)
 class ParserEtherNetSNAP: public Processor {
 public:
 	/**
@@ -16,7 +18,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkEtherNetSNAP *DoParse(Data *data, Chunk *parent);
+	ChunkEtherNetSNAP *DoParse(Data *data, ChunkEtherNet *parent);
 
 	/**
 	 * Returns unique ID for this Parser

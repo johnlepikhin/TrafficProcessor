@@ -7,6 +7,7 @@
 /**
  * Parser of base EtherNet frame
  */
+//lint -sem(ParserEtherNet::DoParse, 1p)
 class ParserEtherNet : public Processor {
 public:
 	/**

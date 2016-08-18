@@ -13,6 +13,8 @@
 /**
  * Parser of DIX EtherNet frame
  */
+//lint -sem(ParserEtherNetDIX::DoParse, 1p)
+//lint -sem(ParserEtherNetDIX::DoParse, 2p)
 class ParserEtherNetDIX: public Processor {
 public:
 	/**
@@ -21,7 +23,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkEtherNetDIX *DoParse(Data *data, Chunk *parent);
+	ChunkEtherNetDIX *DoParse(Data *data, ChunkEtherNet *parent);
 
 	/**
 	 * Returns unique ID for this Parser

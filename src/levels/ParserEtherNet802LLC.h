@@ -8,6 +8,8 @@
 /**
  * Parser of 802.3 LLC EtherNet frame
  */
+//lint -sem(ParserEtherNet802LLC::DoParse, 1p)
+//lint -sem(ParserEtherNet802LLC::DoParse, 2p)
 class ParserEtherNet802LLC: public Processor {
 public:
 	/**
@@ -16,7 +18,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkEtherNet802LLC *DoParse(Data *data, Chunk *parent);
+	ChunkEtherNet802LLC *DoParse(Data *data, ChunkEtherNet *parent);
 
 	/**
 	 * Returns unique ID for this Parser

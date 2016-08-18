@@ -8,6 +8,8 @@
 /**
  * Parser of RAW EtherNet frame
  */
+//lint -sem(ParserEtherNetRAW::DoParse, 1p)
+//lint -sem(ParserEtherNetRAW::DoParse, 2p)
 class ParserEtherNetRAW: public Processor {
 public:
 	/**
@@ -16,7 +18,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkEtherNetRAW *DoParse(Data *data, Chunk *parent);
+	ChunkEtherNetRAW *DoParse(Data *data, ChunkEtherNet *parent);
 
 	/**
 	 * Returns unique ID for this Parser

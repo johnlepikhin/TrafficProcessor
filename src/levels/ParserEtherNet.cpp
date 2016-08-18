@@ -22,29 +22,17 @@ ChunkEtherNet *ParserEtherNet::DoParse(Data *data, Chunk *parent)
 	MAC *DA = new MAC(data);
 	MAC *SA = new MAC(data);
 	try {
+		std::cout << "ether 1\n";
 		const unsigned long dataPosition = data->Position;
+		std::cout << "ether 2\n";
 		unsigned short eType = data->read2Reverse();
+		std::cout << "ether 3\n";
 		ChunkEtherNet *r = new ChunkEtherNet(data, dataPosition, DA, SA, eType);
+		std::cout << "ether 4\n";
 		return (r);
 	} catch (...) {
 		delete DA;
 		delete SA;
 		throw;
 	}
-
-//	if (eType > 1500) {
-//		Data = new EtherFrame_DIX (this, DA, SA, eType, &score, size);
-//	} else {
-//		unsigned short b2;
-//		anyReadAhead(&b2, 2, 0);
-//		if (0xffff == b2) {
-//			Data = new EtherFrame_RAW (this, DA, SA, eType, &score, size);
-//		} else {
-//			if (0xaaaa == b2) {
-//				Data = new EtherFrame_SNAP (this, DA, SA, eType, &score, size);
-//			} else {
-//				Data = new EtherFrame802_3_LLC (this, DA, SA, eType, &score, size);
-//			}
-//		}
-//	}
 }

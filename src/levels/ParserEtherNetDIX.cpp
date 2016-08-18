@@ -19,19 +19,14 @@ std::string ParserEtherNetDIX::Description()
 	return (std::string("Ethernet DIX frame"));
 }
 
-ChunkEtherNetDIX *ParserEtherNetDIX::DoParse(Data *data, Chunk *parent)
+ChunkEtherNetDIX *ParserEtherNetDIX::DoParse(Data *data, ChunkEtherNet *parent)
 {
 	const unsigned long dataPosition = data->Position;
 
-	if (typeid(parent) != typeid(ChunkEtherNet)) {
-		return (NULL);
+	if (parent->EtherNetType > 1500) {
+		return (new ChunkEtherNetDIX(data, dataPosition, parent, parent->EtherNetType));
 	}
-
-	ChunkEtherNet *ethernet = (ChunkEtherNet *)parent;
-
-	if (ethernet->EtherNetType > 1500) {
-		return (new ChunkEtherNetDIX(data, dataPosition, ethernet, ethernet->EtherNetType));
-	}
+	std::cout << "dix 2\n";
 
 	return (NULL);
 }

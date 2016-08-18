@@ -32,7 +32,7 @@ namespace TestTypesMAC {
 				std::stringstream input;
 				input << "00000000" << std::string(4, '\000') << std::string(4, '\000');
 				Data *data = new Data(&input);
-				MAC mac = MAC(data);
+				(void)MAC(data);
 				delete data;
 			}
 		};
@@ -48,7 +48,7 @@ namespace TestTypesMAC {
 				std::stringstream input;
 				input << "00000000\7" << std::string(3, '\000') << "\7" << std::string(3, '\000');
 				Data *data = new Data(&input);
-				MAC mac = MAC(data);
+				(void)MAC(data);
 				delete data;
 			}
 		};

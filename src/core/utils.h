@@ -16,6 +16,8 @@
 //lint -sem(util::mallocRead, 1p)
 //lint -sem(util::anyRead, 1p)
 //lint -sem(util::anyRead, 2p)
+//lint -sem(util::exitFatal, r_no)
+//lint -sem(util::exitMemoryError, r_no)
 namespace util {
 
 	/**

@@ -2,6 +2,15 @@
 #include <typeinfo>
 
 #include "ParserIPv4.h"
+#include "PrinterIPv4.h"
+
+ParserIPv4::ParserIPv4()
+{
+	std::vector<Processor *> followers;
+	followers.push_back(new PrinterIPv4());
+	SetFollowers(&followers);
+}
+
 
 std::string ParserIPv4::ID()
 {

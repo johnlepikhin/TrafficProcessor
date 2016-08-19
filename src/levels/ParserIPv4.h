@@ -13,6 +13,11 @@
 class ParserIPv4: public Processor {
 public:
 	/**
+	 * Basic constructor for parser
+	 */
+	ParserIPv4();
+
+	/**
 	 * Try to get IPv4 from data.
 	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk

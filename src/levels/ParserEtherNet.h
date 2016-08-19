@@ -7,7 +7,7 @@
 /**
  * Parser of base EtherNet frame
  */
-//lint -sem(ParserEtherNet::DoParse, 1p)
+//lint -sem(ParserEtherNet::Process, 1p)
 class ParserEtherNet : public Processor {
 public:
 	/**
@@ -21,7 +21,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkEtherNet *DoParse(Data *data, Chunk *parent);
+	ChunkEtherNet *Process(Data *data, Chunk *parent);
 
 	/**
 	 * Returns unique ID for this Parser

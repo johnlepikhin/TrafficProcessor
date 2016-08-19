@@ -32,7 +32,7 @@ namespace testParserIPv4 {
 	unsigned int packet_len = 128;
 
 
-	TEST(levels_ParserIPv4, HandlesDoParseSimple) {
+	TEST(levels_ParserIPv4, HandlesProcessSimple) {
 		struct Test {
 			static void test () {
 				std::stringstream input;
@@ -41,9 +41,9 @@ namespace testParserIPv4 {
 				ParserEtherNet parser_ethernet;
 				ParserEtherNetDIX parser_ethernet_dix;
 				ParserIPv4 parser_ipv4;
-				ChunkEtherNet *chunk_ethernet = parser_ethernet.DoParse(&data, NULL);
-				ChunkEtherNetDIX *chunk_ethernet_dix = parser_ethernet_dix.DoParse(&data, chunk_ethernet);
-				ChunkIPv4 *chunk = parser_ipv4.DoParse(&data, chunk_ethernet_dix);
+				ChunkEtherNet *chunk_ethernet = parser_ethernet.Process(&data, NULL);
+				ChunkEtherNetDIX *chunk_ethernet_dix = parser_ethernet_dix.Process(&data, chunk_ethernet);
+				ChunkIPv4 *chunk = parser_ipv4.Process(&data, chunk_ethernet_dix);
 				delete chunk_ethernet;
 				delete chunk_ethernet_dix;
 				delete chunk;
@@ -63,9 +63,9 @@ namespace testParserIPv4 {
 				ParserEtherNet parser_ethernet;
 				ParserEtherNetDIX parser_ethernet_dix;
 				ParserIPv4 parser_ipv4;
-				ChunkEtherNet *chunk_ethernet = parser_ethernet.DoParse(&data, NULL);
-				ChunkEtherNetDIX *chunk_ethernet_dix = parser_ethernet_dix.DoParse(&data, chunk_ethernet);
-				ChunkIPv4 *chunk = parser_ipv4.DoParse(&data, chunk_ethernet_dix);
+				ChunkEtherNet *chunk_ethernet = parser_ethernet.Process(&data, NULL);
+				ChunkEtherNetDIX *chunk_ethernet_dix = parser_ethernet_dix.Process(&data, chunk_ethernet);
+				ChunkIPv4 *chunk = parser_ipv4.Process(&data, chunk_ethernet_dix);
 				delete chunk_ethernet;
 				delete chunk_ethernet_dix;
 				delete chunk;
@@ -76,7 +76,7 @@ namespace testParserIPv4 {
 	}
 
 
-	TEST(levels_ParserIPv4, HandlesDoParseCheckContent) {
+	TEST(levels_ParserIPv4, HandlesProcessCheckContent) {
 		std::stringstream input;
 		input.write((char *)&packet[0], packet_len);
 		Data data = Data(&input);
@@ -84,9 +84,9 @@ namespace testParserIPv4 {
 		ParserEtherNet parser_ethernet;
 		ParserEtherNetDIX parser_ethernet_dix;
 		ParserIPv4 parser_ipv4;
-		ChunkEtherNet *chunk_ethernet = parser_ethernet.DoParse(&data, NULL);
-		ChunkEtherNetDIX *chunk_ethernet_dix = parser_ethernet_dix.DoParse(&data, chunk_ethernet);
-		ChunkIPv4 *chunk = parser_ipv4.DoParse(&data, chunk_ethernet_dix);
+		ChunkEtherNet *chunk_ethernet = parser_ethernet.Process(&data, NULL);
+		ChunkEtherNetDIX *chunk_ethernet_dix = parser_ethernet_dix.Process(&data, chunk_ethernet);
+		ChunkIPv4 *chunk = parser_ipv4.Process(&data, chunk_ethernet_dix);
 		std::cout << chunk->SrcIP->asString() << "\n";
 
 		EXPECT_STREQ("173.255.112.173", chunk->SrcIP->asString().c_str());

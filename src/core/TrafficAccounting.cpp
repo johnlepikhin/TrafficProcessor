@@ -26,7 +26,7 @@ static void packetsReader (std::istream *input) {
 	while (!done) {
 		try {
 			Data *p = new Data(input);
-			Chunk *chunk = parser.DoParse(p, 0);
+			Chunk *chunk = parser.Process(p, 0);
 			if (NULL != chunk) {
 				delete chunk;
 			}

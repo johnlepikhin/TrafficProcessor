@@ -13,7 +13,7 @@ std::string ParserIPv6::Description()
 	return (std::string("IPv6 packet"));
 }
 
-ChunkIPv6 *ParserIPv6::DoParse(Data *data, ChunkEtherNetDIX *parent)
+ChunkIPv6 *ParserIPv6::Process(Data *data, ChunkEtherNetDIX *parent)
 {
 	const unsigned long dataPosition = data->Position;
 

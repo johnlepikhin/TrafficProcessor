@@ -17,7 +17,7 @@ std::string PrinterIPv4::Description()
 	return (std::string("IPv4 packet printer"));
 }
 
-ChunkIPv4 *PrinterIPv4::DoParse(Data *data, ChunkIPv4 *parent)
+ChunkIPv4 *PrinterIPv4::Process(Data *data, ChunkIPv4 *parent)
 {
 	std::cout << "IPv4 " << parent->SrcIP->asString() << " " << parent->DstIP->asString() << "\n";
 	return (0);

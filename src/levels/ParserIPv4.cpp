@@ -22,7 +22,7 @@ std::string ParserIPv4::Description()
 	return (std::string("IPv4 packet"));
 }
 
-ChunkIPv4 *ParserIPv4::DoParse(Data *data, ChunkEtherNetDIX *parent)
+ChunkIPv4 *ParserIPv4::Process(Data *data, ChunkEtherNetDIX *parent)
 {
 	const unsigned long dataPosition = data->Position;
 

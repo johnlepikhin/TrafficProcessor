@@ -8,8 +8,8 @@
 /**
  * Parser for IPv4 protocol
  */
-//lint -sem(ParserIPv4::DoParse, 1p)
-//lint -sem(ParserIPv4::DoParse, 2p)
+//lint -sem(ParserIPv4::Process, 1p)
+//lint -sem(ParserIPv4::Process, 2p)
 class ParserIPv4: public Processor {
 public:
 	/**
@@ -23,7 +23,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkIPv4 *DoParse(Data *data, ChunkEtherNetDIX *parent);
+	ChunkIPv4 *Process(Data *data, ChunkEtherNetDIX *parent);
 
 	/**
 	 * Returns unique ID for this Parser

@@ -8,8 +8,8 @@
 /**
  * Parser for IPv6 protocol
  */
-//lint -sem(ParserIPv6::DoParse, 1p)
-//lint -sem(ParserIPv6::DoParse, 2p)
+//lint -sem(ParserIPv6::Process, 1p)
+//lint -sem(ParserIPv6::Process, 2p)
 class ParserIPv6: public Processor {
 public:
 	/**
@@ -18,7 +18,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkIPv6 *DoParse(Data *data, ChunkEtherNetDIX *parent);
+	ChunkIPv6 *Process(Data *data, ChunkEtherNetDIX *parent);
 
 	/**
 	 * Returns unique ID for this Parser

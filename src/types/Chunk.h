@@ -67,7 +67,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or Chunk
 	 */
-	virtual Chunk *DoParse(Data *data, Chunk *parent);
+	virtual Chunk *Process(Data *data, Chunk *parent);
 
 	/**
 	 * Returns unique ID for this Processor

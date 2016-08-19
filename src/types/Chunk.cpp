@@ -38,7 +38,7 @@ Processor::~Processor()
 	}
 }
 
-Chunk *Processor::DoParse(Data *data, Chunk *parent)
+Chunk *Processor::Process(Data *data, Chunk *parent)
 {
 	return (0);
 }

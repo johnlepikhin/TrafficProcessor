@@ -31,7 +31,7 @@ std::string ParserEtherNet::Description()
 	return (std::string("Ethernet frame"));
 }
 
-ChunkEtherNet *ParserEtherNet::DoParse(Data *data, Chunk *parent)
+ChunkEtherNet *ParserEtherNet::Process(Data *data, Chunk *parent)
 {
 	MAC *DA = new MAC(data);
 	MAC *SA = new MAC(data);

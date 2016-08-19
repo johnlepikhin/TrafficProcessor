@@ -13,7 +13,7 @@ std::string ParserEtherNetRAW::Description()
 	return (std::string("Ethernet RAW(IPX) frame"));
 }
 
-ChunkEtherNetRAW *ParserEtherNetRAW::DoParse(Data *data, ChunkEtherNet *parent)
+ChunkEtherNetRAW *ParserEtherNetRAW::Process(Data *data, ChunkEtherNet *parent)
 {
 	const unsigned long dataPosition = data->Position;
 

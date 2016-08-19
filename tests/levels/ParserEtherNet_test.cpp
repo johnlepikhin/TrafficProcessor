@@ -35,14 +35,14 @@ namespace testParserEtherNet {
 	unsigned int packet_len = 128;
 
 
-	TEST(levels_ParserEtherNet, HandlesDoParseSimple) {
+	TEST(levels_ParserEtherNet, HandlesProcessSimple) {
 		struct Test {
 			static void test () {
 				std::stringstream input;
 				input.write((char *)&packet[0], packet_len);
 				Data data = Data(&input);
 				ParserEtherNet parser;
-				ChunkEtherNet *chunk = parser.DoParse(&data, NULL);
+				ChunkEtherNet *chunk = parser.Process(&data, NULL);
 				delete chunk;
 			}
 		};
@@ -57,7 +57,7 @@ namespace testParserEtherNet {
 				input.write((char *)&packet[0], 5);
 				Data data = Data(&input);
 				ParserEtherNet parser;
-				ChunkEtherNet *chunk = parser.DoParse(&data, NULL);
+				ChunkEtherNet *chunk = parser.Process(&data, NULL);
 				delete chunk;
 			}
 		};
@@ -66,12 +66,12 @@ namespace testParserEtherNet {
 	}
 
 
-	TEST(levels_ParserEtherNet, HandlesDoParseCheckContent) {
+	TEST(levels_ParserEtherNet, HandlesProcessCheckContent) {
 		std::stringstream input;
 		input.write((char *)&packet[0], packet_len);
 		Data data = Data(&input);
 		ParserEtherNet parser;
-		ChunkEtherNet *chunk = parser.DoParse(&data, NULL);
+		ChunkEtherNet *chunk = parser.Process(&data, NULL);
 		EXPECT_STREQ("28:28:5d:86:88:9a", chunk->SourceMAC->asString().c_str());
 		EXPECT_STREQ("64:80:99:47:bc:ac", chunk->DestinationMAC->asString().c_str());
 		EXPECT_EQ(0x0800, chunk->EtherNetType);

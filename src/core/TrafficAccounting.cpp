@@ -99,7 +99,8 @@ int main () {
 	registerParsers();
 	printParsers();
 
-	istream *stream_ref = &testData;
+//	istream *stream_ref = &testData;
+	istream *stream_ref = &cin;
 
 	pcap_file_header *hdr = NULL;
 	try {

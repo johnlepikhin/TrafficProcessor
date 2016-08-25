@@ -4,7 +4,7 @@
 
 #include "IPv4Addr.h"
 
-IPv4Addr::IPv4Addr(Data *data, std::streamoff offset) {
+IPv4Addr::IPv4Addr(const Data *data, std::streamoff offset) {
 	if (NULL == data) {
 		throw std::invalid_argument("Data is NULL in IPv6 address constructor");
 	}

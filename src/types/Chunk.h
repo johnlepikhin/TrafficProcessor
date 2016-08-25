@@ -17,7 +17,7 @@ public:
 	 * @param dataPosition Offset of chunk beginning in Data
 	 * @param parent Reference to parent Chunk
 	 */
-	Chunk(const Data * const data, const unsigned long dataPosition, Chunk *parent);
+	Chunk(const Data * const data, const unsigned long dataPosition, const Chunk *parent);
 
 	/**
 	 * Construct Chunk from Data and NULL parent
@@ -88,11 +88,18 @@ public:
 	 */
 	virtual std::string Description() = 0;
 
+
+	/**
+	 * Add follower for this processor
+	 * @param follower
+	 */
+	void AddFollower(Processor *follower);
+
 	/**
 	 * Returns reference to the vector of following processors
 	 * @return Vector of followers
 	 */
-	const std::vector<Processor *> *GetFollowers();
+	const std::vector<Processor *> *GetFollowers() const;
 
 	/**
 	 * Sets new value for vector of followers. Old vector is deleted.

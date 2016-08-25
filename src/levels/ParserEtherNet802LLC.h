@@ -8,8 +8,8 @@
 /**
  * Parser of 802.3 LLC EtherNet frame
  */
-//lint -sem(ParserEtherNet802LLC::, 1p)
-//lint -sem(ParserEtherNet802LLC::, 2p)
+//lint -sem(ParserEtherNet802LLC::Process, 1p)
+//lint -sem(ParserEtherNet802LLC::Process, 2p)
 class ParserEtherNet802LLC: public Processor {
 public:
 	/**

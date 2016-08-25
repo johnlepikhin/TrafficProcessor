@@ -13,13 +13,14 @@ std::string ParserEtherNet802LLC::Description()
 	return (std::string("Ethernet 802.3 LLC frame"));
 }
 
-ChunkEtherNet802LLC *ParserEtherNet802LLC::Process(Data *data, Chunk *p)
+ChunkEtherNet802LLC *ParserEtherNet802LLC::Process(Data *d, Chunk *p)
 {
+	Data *data = d;
 	const unsigned long dataPosition = data->Position;
 
-	ChunkEtherNet *parent = (ChunkEtherNet *)p;
+	ChunkEtherNet *parent = dynamic_cast<ChunkEtherNet *>(p);
 
-	if (parent->EtherNetType <= 1500) {
+	if (parent && parent->EtherNetType <= 1500) {
 		unsigned short b2 = 0;
 		data->read(&b2, 2);
 		if (0xaaaa != b2) {

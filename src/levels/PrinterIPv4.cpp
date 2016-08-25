@@ -19,8 +19,10 @@ std::string PrinterIPv4::Description()
 
 ChunkIPv4 *PrinterIPv4::Process(Data *data, Chunk *p)
 {
-	ChunkIPv4 *parent = (ChunkIPv4 *)p;
+	ChunkIPv4 *parent = dynamic_cast<ChunkIPv4 *>(p);
 
-	std::cout << "IPv4 " << parent->SrcIP->asString() << " " << parent->DstIP->asString() << "\n";
+	if (parent) {
+		std::cout << "IPv4 " << parent->SrcIP->asString() << " " << parent->DstIP->asString() << "\n";
+	}
 	return (0);
 }

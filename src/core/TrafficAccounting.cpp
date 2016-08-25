@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <pcap/pcap.h>
+#include <memory>
 
 #include "utils.h"
 #include "../types/Data.h"
@@ -19,22 +20,36 @@
 
 using namespace std;
 
-static void packetsReader (std::istream *input) {
-	bool done = false;
-	ParserEtherNet parser = ParserEtherNet();
+class Reader {
+public:
+	Data InputData;
 
-	while (!done) {
-		try {
-			Data *p = new Data(input);
-			parser.Recursive(p, 0);
-			delete p;
-		} catch (...) {
-			done = true;
+	Reader()
+		: InputData(Data(&std::cin))
+	{
+	}
+
+	Reader(std::istream *input)
+		: InputData(Data(input))
+	{
+	}
+
+	void ReadPackets ()
+	{
+		bool done = false;
+		ParserEtherNet parser = ParserEtherNet();
+
+		while (!done) {
+			try {
+				parser.Recursive(&InputData, 0);
+			} catch (...) {
+				done = true;
+			}
 		}
 	}
-}
+};
 
-void registerParsers () {
+static void registerParsers () {
 	ProcessorsCollection *collection = ProcessorsCollection::getInstance();
 	collection->Register((Processor *)new ParserEtherNet());
 	collection->Register((Processor *)new ParserEtherNetDIX());
@@ -45,7 +60,7 @@ void registerParsers () {
 	collection->Register((Processor *)new PrinterIPv4());
 }
 
-void releaseParsers () {
+static void releaseParsers () {
 	ProcessorsCollection *collection = ProcessorsCollection::getInstance();
 	std::vector<Processor *> vector = collection->AsVector();
 	for (std::vector<Processor *>::iterator i = vector.begin(); i != vector.end(); ++i) {
@@ -55,7 +70,7 @@ void releaseParsers () {
 	delete collection;
 }
 
-void printParsers () {
+static void printParsers () {
 	std::cout << "List of registered parsers:\n";
 	std::vector<Processor *> collection = ProcessorsCollection::getInstance()->AsVector();
 	for (std::vector<Processor *>::iterator i = collection.begin(); i != collection.end(); ++i) {
@@ -65,7 +80,7 @@ void printParsers () {
 
 static std::stringstream testData;
 
-void initTestData () {
+static void initTestData () {
 	//15:19:44.224169 28:28:5d:86:88:9a > 64:80:99:47:bc:ac, ethertype IPv4 (0x0800), length 112: 173.255.112.173.443 > 192.168.57.2.48334: Flags [P.], seq 1364983495:1364983541, ack 867086730, win 243, options [nop,nop,TS val 2867588903 ecr 176329713], length 46
 	//        0x0000:  6480 9947 bcac 2828 5d86 889a 0800 4500  d..G..((].....E.
 	//        0x0010:  0062 2e68 4000 2c06 07d7 adff 70ad c0a8  .b.h@.,.....p...
@@ -91,7 +106,7 @@ void initTestData () {
 	};
 	unsigned int packet_len = 128 + 24;
 
-	testData.write((char *)&packet[0], packet_len);
+	testData.write((char *)&packet[0], (long)packet_len);
 };
 
 int main () {
@@ -99,20 +114,13 @@ int main () {
 	registerParsers();
 	printParsers();
 
-//	istream *stream_ref = &testData;
-	istream *stream_ref = &cin;
+	istream *stream_ref = &testData;
+//	istream *stream_ref = &cin;
 
-	pcap_file_header *hdr = NULL;
-	try {
-		hdr = (pcap_file_header *)util::mallocRead(stream_ref, sizeof (pcap_file_header));
-		packetsReader(stream_ref);
-		releaseParsers();
-		free (hdr);
-	} catch (...) {
-		if (NULL != hdr) {
-			free (hdr);
-		}
-		throw;
-	}
+	stream_ref->ignore(sizeof (pcap_file_header));
+	Reader reader = Reader(stream_ref);
+	reader.ReadPackets();
+	releaseParsers();
+
 	return (0);
 }

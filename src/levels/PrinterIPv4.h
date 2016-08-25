@@ -5,6 +5,7 @@
 #include "ChunkIPv4.h"
 
 class PrinterIPv4: public Processor {
+public:
 	/**
 	 * Basic printer for ChunkIPv4
 	 * @param data Reference to Data from where chunk was read

@@ -23,6 +23,7 @@ private:
 	ProcessorsCollection( const ProcessorsCollection& ) {};
 	ProcessorsCollection& operator= (const ProcessorsCollection &);
 public:
+
 	/**
 	 * Returns instanse of singleton
 	 * @return Reference to ProcessorsCollection object
@@ -46,7 +47,7 @@ public:
 	 * Returns the collection as std::vector
 	 * @return Vector
 	 */
-	std::vector<Processor *> AsVector();
+	std::vector<Processor *> AsVector() const;
 };
 
 #endif /* SRC_CORE_PARSERSCOLLECTION_H_ */

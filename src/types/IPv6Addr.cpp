@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdexcept>
 
-IPv6Addr::IPv6Addr(Data *data, std::streamoff offset) {
+IPv6Addr::IPv6Addr(const Data *data, std::streamoff offset) {
 	if (NULL == data) {
 		throw std::invalid_argument("Data is NULL in IPv6 address constructor");
 	}

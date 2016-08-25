@@ -12,3 +12,9 @@ ChunkIPv6::ChunkIPv6(Data *data
 	, Protocol(0)	// TODO
 {
 }
+
+ChunkIPv6::~ChunkIPv6()
+{
+	delete SrcIP;
+	delete DstIP;
+}

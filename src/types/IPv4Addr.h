@@ -15,7 +15,7 @@ public:
 	 * @param data Pointer to Data
 	 * @param offset Offset from where address must be read
 	 */
-	IPv4Addr(Data *data, std::streamoff offset);
+	IPv4Addr(const Data *data, std::streamoff offset);
 
 	/**
 	 * Human readable representation

@@ -13,13 +13,14 @@ std::string ParserEtherNetRAW::Description()
 	return (std::string("Ethernet RAW(IPX) frame"));
 }
 
-ChunkEtherNetRAW *ParserEtherNetRAW::Process(Data *data, Chunk *p)
+ChunkEtherNetRAW *ParserEtherNetRAW::Process(Data *d, Chunk *p)
 {
+	Data *data = d;
 	const unsigned long dataPosition = data->Position;
 
-	ChunkEtherNet *parent = (ChunkEtherNet *)p;
+	ChunkEtherNet *parent = dynamic_cast<ChunkEtherNet *>(p);
 
-	if (parent->EtherNetType <= 1500) {
+	if (parent && parent->EtherNetType <= 1500) {
 		unsigned short b2;
 		data->readAhead(&b2, 2, 0);
 		if (0xffff == b2) {

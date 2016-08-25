@@ -13,8 +13,6 @@
 /**
  * Parser of DIX EtherNet frame
  */
-//lint -sem(ParserEtherNetDIX::Process, 1p)
-//lint -sem(ParserEtherNetDIX::Process, 2p)
 class ParserEtherNetDIX: public Processor {
 public:
 	/**

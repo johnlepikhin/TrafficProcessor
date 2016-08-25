@@ -17,3 +17,9 @@ ChunkIPv4::ChunkIPv4(Data *data
 	, Protocol(protocol)
 {
 }
+
+ChunkIPv4::~ChunkIPv4()
+{
+	delete SrcIP;
+	delete DstIP;
+}

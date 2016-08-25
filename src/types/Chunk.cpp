@@ -2,7 +2,7 @@
 #include "Chunk.h"
 #include "../core/ProcessorsCollection.h"
 
-Chunk::Chunk(const Data * const data, const unsigned long dataPosition, Chunk *parent)
+Chunk::Chunk(const Data * const data, const unsigned long dataPosition, const Chunk *parent)
 	: DataPtr(data)
 	, DataPosition(dataPosition)
 	, Parent(parent)
@@ -42,9 +42,15 @@ void Processor::Recursive(Data *data, Chunk *parent)
 {
 	Chunk *result = this->Process(data, parent);
 	if (NULL != result) {
-		for (std::vector<Processor *>::iterator i = Followers.begin(); i != Followers.end(); ++i) {
-			(*i)->Recursive(data, result);
+		try {
+			for (std::vector<Processor *>::iterator i = Followers.begin(); i != Followers.end(); ++i) {
+				(*i)->Recursive(data, result);
+			}
+		} catch (...) {
+			delete result;
+			throw;
 		}
+		delete result;
 	}
 }
 
@@ -57,9 +63,14 @@ std::string Processor::Description () {
 }
 
 
-const std::vector<Processor *> *Processor::GetFollowers ()
+const std::vector<Processor *> *Processor::GetFollowers () const
 {
 	return (&Followers);
+}
+
+void Processor::AddFollower(Processor *follower)
+{
+	Followers.push_back(follower);
 }
 
 void Processor::SetFollowers(std::vector<Processor *> *followers)

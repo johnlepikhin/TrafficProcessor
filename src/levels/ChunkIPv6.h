@@ -25,6 +25,8 @@ public:
 			, IPv6Addr *srcIP
 			, IPv6Addr *dstIP);
 
+	~ChunkIPv6();
+
 	/**
 	 * Source IP address
 	 */

@@ -31,6 +31,8 @@ public:
 			, unsigned short pktLength
 			, unsigned char protocol);
 
+	~ChunkIPv4();
+
 	/**
 	 * Header length in 32-bit words
 	 */

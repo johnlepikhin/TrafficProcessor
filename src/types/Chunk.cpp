@@ -40,6 +40,12 @@ Processor::~Processor()
 
 void Processor::Recursive(Data *data, Chunk *parent)
 {
+	Chunk *result = this->Process(data, parent);
+	if (NULL != result) {
+		for (std::vector<Processor *>::iterator i = Followers.begin(); i != Followers.end(); ++i) {
+			(*i)->Recursive(data, result);
+		}
+	}
 }
 
 std::string Processor::ID () {

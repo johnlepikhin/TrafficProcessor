@@ -13,11 +13,14 @@ std::string ParserIPv6::Description()
 	return (std::string("IPv6 packet"));
 }
 
-ChunkIPv6 *ParserIPv6::Process(Data *data, ChunkEtherNetDIX *parent)
+ChunkIPv6 *ParserIPv6::Process(Data *data, Chunk *p)
 {
 	const unsigned long dataPosition = data->Position;
 
-	if (parent->EtherNetType == 0x86dd) {
+	ChunkEtherNetDIX *parentDIX = (ChunkEtherNetDIX *)p;
+	ChunkEtherNet *parentEthernet = (ChunkEtherNet *)parentDIX->Parent;
+
+	if (parentEthernet->EtherNetType == 0x86dd) {
 		IPv6Addr *srcIP = new IPv6Addr(data, 8);
 		IPv6Addr *dstIP = new IPv6Addr(data, 24);
 
@@ -33,7 +36,7 @@ ChunkIPv6 *ParserIPv6::Process(Data *data, ChunkEtherNetDIX *parent)
 			data->ignore(4);
 		}
 
-		return (new ChunkIPv6(data, dataPosition, parent, srcIP, dstIP));
+		return (new ChunkIPv6(data, dataPosition, parentDIX, srcIP, dstIP));
 	}
 
 	return (NULL);

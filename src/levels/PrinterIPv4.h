@@ -11,7 +11,7 @@ class PrinterIPv4: public Processor {
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */
-	ChunkIPv4 *Process(Data *data, ChunkIPv4 *parent);
+	ChunkIPv4 *Process(Data *data, Chunk *parent);
 
 	/**
 	 * Returns unique ID for this Printer

@@ -38,9 +38,8 @@ Processor::~Processor()
 	}
 }
 
-Chunk *Processor::Process(Data *data, Chunk *parent)
+void Processor::Recursive(Data *data, Chunk *parent)
 {
-	return (0);
 }
 
 std::string Processor::ID () {

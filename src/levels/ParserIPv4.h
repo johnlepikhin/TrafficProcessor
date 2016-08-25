@@ -23,7 +23,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkIPv4 *Process(Data *data, ChunkEtherNetDIX *parent);
+	ChunkIPv4 *Process(Data *data, Chunk *parent);
 
 	/**
 	 * Returns unique ID for this Parser

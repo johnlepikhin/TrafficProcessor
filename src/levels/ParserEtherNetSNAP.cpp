@@ -13,9 +13,11 @@ std::string ParserEtherNetSNAP::Description()
 	return (std::string("Ethernet SNAP frame"));
 }
 
-ChunkEtherNetSNAP *ParserEtherNetSNAP::Process(Data *data, ChunkEtherNet *parent)
+ChunkEtherNetSNAP *ParserEtherNetSNAP::Process(Data *data, Chunk *p)
 {
 	const unsigned long dataPosition = data->Position;
+
+	ChunkEtherNet *parent = (ChunkEtherNet *)p;
 
 	if (parent->EtherNetType <= 1500) {
 		unsigned int b2 = 0;

@@ -62,24 +62,31 @@ public:
 	virtual ~Processor();
 
 	/**
+	 * Call Process() and all followers recursively
+	 * @param data
+	 * @param parent
+	 */
+	void Recursive(Data *data, Chunk *parent);
+
+	/**
 	 * Parser of chunk. Must return NULL if it was unable to detect format
 	 * @param data Reference to Data
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or Chunk
 	 */
-	virtual Chunk *Process(Data *data, Chunk *parent);
+	virtual Chunk *Process(Data *data, Chunk *parent) = 0;
 
 	/**
 	 * Returns unique ID for this Processor
 	 * @return ID
 	 */
-	virtual std::string ID();
+	virtual std::string ID() = 0;
 
 	/**
 	 * Returns description for the Processor
 	 * @return Description
 	 */
-	virtual std::string Description();
+	virtual std::string Description() = 0;
 
 	/**
 	 * Returns reference to the vector of following processors

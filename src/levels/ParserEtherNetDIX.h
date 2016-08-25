@@ -28,7 +28,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkEtherNetDIX *Process(Data *data, ChunkEtherNet *parent);
+	ChunkEtherNetDIX *Process(Data *data, Chunk *parent);
 
 	/**
 	 * Returns unique ID for this Parser

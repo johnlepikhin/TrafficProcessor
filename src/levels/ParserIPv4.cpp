@@ -22,11 +22,14 @@ std::string ParserIPv4::Description()
 	return (std::string("IPv4 packet"));
 }
 
-ChunkIPv4 *ParserIPv4::Process(Data *data, ChunkEtherNetDIX *parent)
+ChunkIPv4 *ParserIPv4::Process(Data *data, Chunk *p)
 {
 	const unsigned long dataPosition = data->Position;
 
-	if (parent->EtherNetType == 0x800) {
+	ChunkEtherNetDIX *parentDIX = (ChunkEtherNetDIX *)p;
+	ChunkEtherNet *parentEthernet = (ChunkEtherNet *)parentDIX->Parent;
+
+	if (parentEthernet->EtherNetType == 0x800) {
 		char b;
 		data->readAhead(&b, 1, 0);
 		unsigned char IHL32bit = b & 0xf;
@@ -39,7 +42,8 @@ ChunkIPv4 *ParserIPv4::Process(Data *data, ChunkEtherNetDIX *parent)
 		data->readAhead(&Protocol, 1, 9);
 		Protocol = (unsigned char)data->getPtrAtOffset(9)[0];
 		data->ignore(IHL32bit*4);
-		return (new ChunkIPv4(data, dataPosition, parent, IHL32bit, SrcIP, DstIP, PktLength, Protocol));
+
+		return (new ChunkIPv4(data, dataPosition, parentDIX, IHL32bit, SrcIP, DstIP, PktLength, Protocol));
 	}
 
 	return (NULL);

@@ -30,9 +30,11 @@ std::string ParserEtherNetDIX::Description()
 	return (std::string("Ethernet DIX frame"));
 }
 
-ChunkEtherNetDIX *ParserEtherNetDIX::Process(Data *data, ChunkEtherNet *parent)
+ChunkEtherNetDIX *ParserEtherNetDIX::Process(Data *data, Chunk *p)
 {
 	const unsigned long dataPosition = data->Position;
+
+	ChunkEtherNet *parent = (ChunkEtherNet *)p;
 
 	if (parent->EtherNetType > 1500) {
 		return (new ChunkEtherNetDIX(data, dataPosition, parent, parent->EtherNetType));

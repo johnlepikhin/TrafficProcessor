@@ -24,7 +24,8 @@ ChunkIPv4 *PrinterIPv4::Process(Data *data, Chunk *p)
 	if (parent) {
 		std::cout << "IPv4 " << parent->SrcIP->asString()
 				<< " " << parent->DstIP->asString()
-				<< " dontFragment=" << parent->FlagIsFragmented
+				<< " packetLength=" << parent->PktLength
+				<< " dontFragment=" << parent->FlagDontFragment
 				<< " isFragmented=" << parent->FlagIsFragmented
 				<< " ID=" << parent->ID
 				<< " fragmentOffset=" << parent->FragmentOffset

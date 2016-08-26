@@ -44,7 +44,8 @@ ChunkIPv4 *ParserIPv4::Process(Data *d, Chunk *p)
 			bool FlagDontFragment = flags & 0x40;
 			bool FlagIsFragmented = flags & 0x20;
 
-			unsigned short FragmentOffset = data->read1Ahead(6) << 3;
+			unsigned short FragmentOffset = data->read2Ahead(6);
+			FragmentOffset = ((FragmentOffset >> 8) + ((FragmentOffset & 0x1f) << 8)) << 3;
 
 			unsigned short ID = data->read2Ahead(4);
 

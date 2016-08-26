@@ -95,24 +95,40 @@ void Data::readAhead(void *buffer, std::streamsize size, std::streamoff offset =
 	IS.copy((char *)buffer, (unsigned long)size, Position+(unsigned long)offset);
 }
 
+unsigned char Data::read1() {
+	unsigned char r = 0;
+
+	read(&r, 1);
+
+	return (r);
+}
+
+unsigned char Data::read1Ahead(std::streamoff offset) {
+	unsigned char r = 0;
+
+	readAhead(&r, 1, offset);
+
+	return (r);
+}
+
 unsigned short Data::read2() {
 	unsigned short int r = 0;
-
-	if (Position+2 > IS.length()) {
-		throw std::underflow_error("Data is underflow");
-	}
 
 	read(&r, 2);
 
 	return (r);
 }
 
+unsigned short Data::read2Ahead(std::streamoff offset) {
+	unsigned short r = 0;
+
+	readAhead(&r, 2, offset);
+
+	return (r);
+}
+
 unsigned short Data::read2Reverse() {
 	unsigned short r = read2 ();
-
-	if (Position+2 > IS.length()) {
-		throw std::underflow_error("Data is underflow");
-	}
 
 	return (util::reverse2 (r));
 }

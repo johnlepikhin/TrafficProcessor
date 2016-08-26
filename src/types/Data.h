@@ -67,10 +67,28 @@ public:
 	void readAhead (void *buffer, std::streamsize size, std::streamoff offset) const;
 
 	/**
+	 * Read byte and return it as unsigned char. Update position in buffer to new offset.
+	 * @return Result value
+	 */
+	unsigned char read1 ();
+
+	/**
+	 * Read byte and return it as unsigned char.
+	 * @return Result value
+	 */
+	unsigned char read1Ahead (std::streamoff offset);
+
+	/**
 	 * Read two bytes and return it as int. Update position in buffer to new offset.
 	 * @return Result value
 	 */
 	unsigned short read2 ();
+
+	/**
+	 * Read two bytes and return it as int. Update position in buffer to new offset.
+	 * @return Result value
+	 */
+	unsigned short read2Ahead (std::streamoff offset);
 
 	/**
 	 * Same as Data::read2, but returns bytes in reverse order.

@@ -16,22 +16,32 @@
 #include "../levels/ParserEtherNet802LLC.h"
 #include "../levels/ParserIPv4.h"
 #include "../levels/PrinterIPv4.h"
+#include "../levels/PrinterEtherNetDIX.h"
 
 
 using namespace std;
 
 class Reader {
 public:
-	Data InputData;
+	std::istream *InputStream;
+	Data *InputData;
 
 	Reader()
-		: InputData(Data(&std::cin))
+		: InputData(0)
+		, InputStream(&std::cin)
 	{
 	}
 
 	Reader(std::istream *input)
-		: InputData(Data(input))
+		: InputData(0)
+		, InputStream(input)
 	{
+	}
+
+	~Reader()
+	{
+		if (InputData)
+			delete InputData;
 	}
 
 	void ReadPackets ()
@@ -41,7 +51,9 @@ public:
 
 		while (!done) {
 			try {
-				parser.Recursive(&InputData, 0);
+				InputData = new Data(InputStream);
+				parser.Recursive(InputData, 0);
+				delete InputData;
 			} catch (...) {
 				done = true;
 			}
@@ -58,6 +70,7 @@ static void registerParsers () {
 	collection->Register((Processor *)new ParserEtherNet802LLC());
 	collection->Register((Processor *)new ParserIPv4());
 	collection->Register((Processor *)new PrinterIPv4());
+	collection->Register((Processor *)new PrinterEtherNetDIX());
 }
 
 static void releaseParsers () {
@@ -114,8 +127,8 @@ int main () {
 	registerParsers();
 	printParsers();
 
-	istream *stream_ref = &testData;
-//	istream *stream_ref = &cin;
+//	istream *stream_ref = &testData;
+	istream *stream_ref = &cin;
 
 	stream_ref->ignore(sizeof (pcap_file_header));
 	Reader reader = Reader(stream_ref);

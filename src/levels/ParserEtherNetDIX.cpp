@@ -10,13 +10,13 @@
 #include "ParserEtherNetDIX.h"
 #include "ParserIPv4.h"
 #include "ParserIPv6.h"
+#include "PrinterEtherNetDIX.h"
 
 ParserEtherNetDIX::ParserEtherNetDIX()
 {
-	std::vector<Processor *> followers;
-	followers.push_back(new ParserIPv4());
-	followers.push_back(new ParserIPv6());
-	SetFollowers(&followers);
+	AddFollower(new PrinterEtherNetDIX());
+	AddFollower(new ParserIPv4());
+	AddFollower(new ParserIPv6());
 }
 
 

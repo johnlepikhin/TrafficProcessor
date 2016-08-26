@@ -22,7 +22,14 @@ ChunkIPv4 *PrinterIPv4::Process(Data *data, Chunk *p)
 	ChunkIPv4 *parent = dynamic_cast<ChunkIPv4 *>(p);
 
 	if (parent) {
-		std::cout << "IPv4 " << parent->SrcIP->asString() << " " << parent->DstIP->asString() << "\n";
+		std::cout << "IPv4 " << parent->SrcIP->asString()
+				<< " " << parent->DstIP->asString()
+				<< " dontFragment=" << parent->FlagIsFragmented
+				<< " isFragmented=" << parent->FlagIsFragmented
+				<< " ID=" << parent->ID
+				<< " fragmentOffset=" << parent->FragmentOffset
+				<< " TTL=" << parent->TTL
+				<< "\n";
 	}
 	return (0);
 }

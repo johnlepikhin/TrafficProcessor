@@ -8,13 +8,23 @@ ChunkIPv4::ChunkIPv4(Data *data
 		, IPv4Addr *srcIP
 		, IPv4Addr *dstIP
 		, unsigned short pktLength
-		, unsigned char protocol)
+		, unsigned char protocol
+		, bool flagDontFragment
+		, bool flagIsFragmented
+		, unsigned short id
+		, unsigned short fragmentOffset
+		, unsigned short ttl)
 	: Chunk(data, dataPosition, parent)
 	, IHL32bit(iHL32bit)
 	, SrcIP(srcIP)
 	, DstIP(dstIP)
 	, PktLength(pktLength)
 	, Protocol(protocol)
+	, FlagDontFragment(flagDontFragment)
+	, FlagIsFragmented(flagIsFragmented)
+	, ID(id)
+	, FragmentOffset(fragmentOffset)
+	, TTL(ttl)
 {
 }
 

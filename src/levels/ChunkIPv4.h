@@ -21,6 +21,11 @@ public:
 	 * @param dstIP Destination IP address
 	 * @param pktLength Full packet length
 	 * @param protocol Next protocol ID
+	 * @param flagDontFragment True if packet cannot be fragmented
+	 * @param flagIsFragmented True if there are another fragments for this packet
+	 * @param id Identifier of packet (the same in all fragments)
+	 * @param fragmentOffset offset of this fragment in bytes
+	 * @param ttl TTL
 	 */
 	ChunkIPv4(Data *data
 			, const unsigned long dataPosition
@@ -29,7 +34,12 @@ public:
 			, IPv4Addr *srcIP
 			, IPv4Addr *dstIP
 			, unsigned short pktLength
-			, unsigned char protocol);
+			, unsigned char protocol
+			, bool flagDontFragment
+			, bool flagIsFragmented
+			, unsigned short id
+			, unsigned short fragmentOffset
+			, unsigned short ttl);
 
 	~ChunkIPv4();
 
@@ -57,6 +67,31 @@ public:
 	 * Next protocol ID
 	 */
 	unsigned char Protocol;
+
+	/**
+	 * True if DontFragment flag is set
+	 */
+	bool FlagDontFragment;
+
+	/**
+	 * True if packet is fragmented
+	 */
+	bool FlagIsFragmented;
+
+	/**
+	 * ID of IP packet
+	 */
+	unsigned short ID;
+
+	/**
+	 * Offset of the fragment in bytes
+	 */
+	unsigned short FragmentOffset;
+
+	/**
+	 * TTL
+	 */
+	unsigned short TTL;
 };
 
 #endif /* SRC_LEVELS_CHUNKIPV4_H_ */

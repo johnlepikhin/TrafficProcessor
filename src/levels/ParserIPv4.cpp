@@ -31,20 +31,46 @@ ChunkIPv4 *ParserIPv4::Process(Data *d, Chunk *p)
 		ChunkEtherNet *parentEthernet = (ChunkEtherNet *)(parentDIX->Parent);
 
 		if (parentEthernet && parentEthernet->EtherNetType == 0x800) {
-			char b;
-			data->readAhead(&b, 1, 0);
-			unsigned char IHL32bit = b & 0xf;
+			unsigned char IHL32bit =  data->read1Ahead(0);
+			IHL32bit = IHL32bit & 0xf;
+
 			IPv4Addr *SrcIP = new IPv4Addr(data, 12);
 			IPv4Addr *DstIP = new IPv4Addr(data, 16);
-			unsigned short PktLength;
-			unsigned char Protocol;
-			data->readAhead(&PktLength, 2, 2);
+
+			unsigned short PktLength = data->read2Ahead(2);
 			PktLength = (short)((PktLength>>8) | (PktLength<<8));
-			data->readAhead(&Protocol, 1, 9);
+
+			unsigned char flags = data->read1Ahead(6);
+			bool FlagDontFragment = flags & 0x40;
+			bool FlagIsFragmented = flags & 0x20;
+
+			unsigned short FragmentOffset = data->read1Ahead(6) << 3;
+
+			unsigned short ID = data->read2Ahead(4);
+
+			unsigned char TTL = data->read1Ahead(8);
+
+			unsigned char Protocol = data->read1Ahead(9);
+
 			Protocol = (unsigned char)data->getPtrAtOffset(9)[0];
+
 			data->ignore(IHL32bit*4);
 
-			return (new ChunkIPv4(data, dataPosition, parentDIX, IHL32bit, SrcIP, DstIP, PktLength, Protocol));
+			ChunkIPv4 *r = new ChunkIPv4(
+					data,
+					dataPosition,
+					parentDIX,
+					IHL32bit,
+					SrcIP,
+					DstIP,
+					PktLength,
+					Protocol,
+					FlagDontFragment,
+					FlagIsFragmented,
+					ID,
+					FragmentOffset,
+					TTL);
+			return (r);
 		}
 	}
 

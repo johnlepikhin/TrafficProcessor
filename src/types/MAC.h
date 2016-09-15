@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#include "Data.h"
+#include <sparsed-ropes/Quilt.h>
 
 /**
  * MAC address container and reader
@@ -16,7 +16,7 @@ public:
 	 * Create MAC from Data
 	 * @param data Pointer to Data, buffer must point to position from where MAC to read
 	 */
-	MAC(Data *data);
+	MAC(const Quilt &data, size_t offset);
 
 	/**
 	 * Human readable representation
@@ -39,7 +39,7 @@ public:
 	std::string asBinary() const;
 
 private:
-	const char *ptr;
+	std::string Binary;
 };
 
 #endif /* MAC_H_ */

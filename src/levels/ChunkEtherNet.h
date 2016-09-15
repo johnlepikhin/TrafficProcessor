@@ -23,15 +23,14 @@ public:
 	/**
 	 * Constructor
 	 * @param data Reference to Data from where chunk was read
-	 * @param dataPosition Offset of chunk beginning in Data
 	 * @param destinationMAC Reference to destination MAC address
 	 * @param sourceMAC Reference to source MAC address
 	 * @param ethernetType 2-byte value at offset 13 in ethernet frame (ethernet type or payload length)
 	 */
-	ChunkEtherNet(Data *data,
-			const unsigned long dataPosition,
-			const MAC * const destinationMAC,
-			const MAC * const sourceMAC,
+	ChunkEtherNet(const Quilt *data,
+			const Quilt *containedData,
+			const MAC *destinationMAC,
+			const MAC *sourceMAC,
 			const unsigned short ethernetType);
 
 	~ChunkEtherNet();
@@ -39,12 +38,12 @@ public:
 	/**
 	 * Reference to destination MAC address
 	 */
-	const MAC * const DestinationMAC;
+	const MAC *DestinationMAC;
 
 	/**
 	 * Reference to source MAC address
 	 */
-	const MAC * const SourceMAC;
+	const MAC *SourceMAC;
 
 	/**
 	 * 2-byte value at offset 13, ethernet type or payload length

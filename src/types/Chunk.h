@@ -4,7 +4,7 @@
 
 #include <string>
 #include <vector>
-#include "Data.h"
+#include <sparsed-ropes/Quilt.h>
 
 /**
  * Base class for all types of packets
@@ -13,30 +13,29 @@ class Chunk {
 public:
 	/**
 	 * Construct Chunk from Data and parent Chunk
-	 * @param data Reference to data (original Pcap)
-	 * @param dataPosition Offset of chunk beginning in Data
+	 * @param data Reference to original data piece
+	 * @param containedData Reference to contained data piece
 	 * @param parent Reference to parent Chunk
 	 */
-	Chunk(const Data * const data, const unsigned long dataPosition, const Chunk *parent);
+	Chunk(const Quilt *data, const Quilt *containedData, const Chunk *parent);
 
 	/**
 	 * Construct Chunk from Data and NULL parent
 	 * @param data Reference to data (original Pcap)
-	 * @param dataPosition Offset of chunk beginning in Data
 	 */
-	Chunk(const Data *data, const unsigned long dataPosition);
+	Chunk(const Quilt *data, const Quilt *containedData);
 
 	virtual ~Chunk();
 
 	/**
-	 * Reference to original Pcap
+	 * Reference to original data piece
 	 */
-	const Data *DataPtr;
+	const Quilt *Data;
 
 	/**
-	 * Pointer to position in Data where Chunk begins
+	 * Reference to containing data piece
 	 */
-	unsigned long DataPosition;
+	const Quilt *ContainedData;
 
 	/**
 	 * Pointer to parent Chunk
@@ -66,7 +65,7 @@ public:
 	 * @param data
 	 * @param parent
 	 */
-	void Recursive(Data *data, Chunk *parent);
+	void Recursive(const Quilt *data, const Chunk *parent);
 
 	/**
 	 * Parser of chunk. Must return NULL if it was unable to detect format
@@ -74,7 +73,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or Chunk
 	 */
-	virtual Chunk *Process(Data *data, Chunk *parent) = 0;
+	virtual Chunk *Process(const Quilt *data, const Chunk *parent) = 0;
 
 	/**
 	 * Returns unique ID for this Processor
@@ -99,13 +98,13 @@ public:
 	 * Returns reference to the vector of following processors
 	 * @return Vector of followers
 	 */
-	const std::vector<Processor *> *GetFollowers() const;
+	const std::vector<Processor *> &GetFollowers() const;
 
 	/**
 	 * Sets new value for vector of followers. Old vector is deleted.
 	 * @param followers Reference to new vector
 	 */
-	void SetFollowers(std::vector<Processor *> *followers);
+	void SetFollowers(std::vector<Processor *> &followers);
 };
 
 #endif /* SRC_CORE_CHUNK_H_ */

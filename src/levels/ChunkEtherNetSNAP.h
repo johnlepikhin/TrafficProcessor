@@ -13,15 +13,14 @@ public:
 	/**
 	 * Constructor for SNAP
 	 * @param data Reference to Data from where chunk was read
-	 * @param dataPosition Offset of chunk beginning in Data
 	 * @param parent Optional reference to parent Chunk
 	 * @param length Length of payload
 	 * @param oui OUI
 	 * @param pid PID
 	 */
-	ChunkEtherNetSNAP(Data *data
-			, const unsigned long dataPosition
-			, ChunkEtherNet *parent
+	ChunkEtherNetSNAP(const Quilt *data
+			, const Quilt *containedData
+			, const ChunkEtherNet *parent
 			, const unsigned short length
 			, const unsigned int oui
 			, const unsigned short pid);

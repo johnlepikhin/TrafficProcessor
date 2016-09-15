@@ -1,11 +1,11 @@
 
 #include "ChunkEtherNetRAW.h"
 
-ChunkEtherNetRAW::ChunkEtherNetRAW(Data *data
-		, const unsigned long dataPosition
-		, ChunkEtherNet *parent
+ChunkEtherNetRAW::ChunkEtherNetRAW(const Quilt *data
+		, const Quilt *containedData
+		, const ChunkEtherNet *parent
 		, const unsigned short length)
-	: Chunk(data, dataPosition, parent)
+	: Chunk(data, containedData, parent)
 	, PayloadLength(length)
 
 {

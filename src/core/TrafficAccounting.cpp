@@ -7,7 +7,7 @@
 #include <memory>
 
 #include "utils.h"
-#include "../types/Data.h"
+#include <sparsed-ropes/Quilt.h>
 #include "ProcessorsCollection.h"
 #include "../levels/ParserEtherNet.h"
 #include "../levels/ParserEtherNetDIX.h"
@@ -23,25 +23,15 @@ using namespace std;
 
 class Reader {
 public:
-	std::istream *InputStream;
-	Data *InputData;
+	std::istream &InputStream;
 
-	Reader()
-		: InputData(0)
-		, InputStream(&std::cin)
-	{
-	}
-
-	Reader(std::istream *input)
-		: InputData(0)
-		, InputStream(input)
+	Reader(std::istream &input)
+		: InputStream(input)
 	{
 	}
 
 	~Reader()
 	{
-		if (InputData)
-			delete InputData;
 	}
 
 	void ReadPackets ()
@@ -51,9 +41,8 @@ public:
 
 		while (!done) {
 			try {
-				InputData = new Data(InputStream);
+				const Quilt *InputData = util::quiltOfPcap(InputStream);
 				parser.Recursive(InputData, 0);
-				delete InputData;
 			} catch (...) {
 				done = true;
 			}
@@ -68,8 +57,8 @@ static void registerParsers () {
 	collection->Register((Processor *)new ParserEtherNetRAW());
 	collection->Register((Processor *)new ParserEtherNetSNAP());
 	collection->Register((Processor *)new ParserEtherNet802LLC());
-	collection->Register((Processor *)new ParserIPv4());
-	collection->Register((Processor *)new PrinterIPv4());
+//	collection->Register((Processor *)new ParserIPv4());
+//	collection->Register((Processor *)new PrinterIPv4());
 	collection->Register((Processor *)new PrinterEtherNetDIX());
 }
 
@@ -131,7 +120,7 @@ int main () {
 	istream *stream_ref = &cin;
 
 	stream_ref->ignore(sizeof (pcap_file_header));
-	Reader reader = Reader(stream_ref);
+	Reader reader = Reader(*stream_ref);
 	reader.ReadPackets();
 	releaseParsers();
 

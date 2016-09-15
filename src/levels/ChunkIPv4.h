@@ -14,7 +14,6 @@ public:
 	/**
 	 * Constructor
 	 * @param data Reference to Data from where chunk was read
-	 * @param dataPosition Offset of chunk beginning in Data
 	 * @param parent Optional reference to parent Chunk
 	 * @param iHL32bit Header length in 32-bit words
 	 * @param srcIP Source IP address
@@ -27,8 +26,8 @@ public:
 	 * @param fragmentOffset offset of this fragment in bytes
 	 * @param ttl TTL
 	 */
-	ChunkIPv4(Data *data
-			, const unsigned long dataPosition
+	ChunkIPv4(Quilt *data
+			, Quilt *containedData
 			, ChunkEtherNetDIX *parent
 			, unsigned char iHL32bit
 			, IPv4Addr *srcIP

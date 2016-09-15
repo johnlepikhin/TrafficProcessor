@@ -10,6 +10,8 @@
 
 #include <istream>
 
+#include "sparsed-ropes/Quilt.h"
+
 /**
  * Uncategorized functions
  */
@@ -44,7 +46,7 @@ namespace util {
 	 * @param stream Input stream
 	 * @param size Number of bytes to read
 	 */
-	void *mallocRead (std::istream *stream, std::streamsize size);
+	void *mallocRead (std::istream &stream, std::streamsize size);
 
 	/**
 	 * Read arbitrary number of bytes from input stream into specified memory block
@@ -52,7 +54,7 @@ namespace util {
 	 * @param ptr Pointer to allocated memory block
 	 * @param size Number of bytes to read
 	 */
-	void anyRead (std::istream *stream, void *ptr, std::streamsize size);
+	void anyRead (std::istream &stream, void *ptr, std::streamsize size);
 
 	/**
 	 * Return 2-byte input value with reversed byte order
@@ -60,6 +62,8 @@ namespace util {
 	 * @return Reversed value
 	 */
 	unsigned short reverse2 (unsigned short value);
+
+	const Quilt *quiltOfPcap(std::istream &stream);
 }
 
 #endif /* UTILS_H_ */

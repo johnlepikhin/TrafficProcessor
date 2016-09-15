@@ -8,7 +8,7 @@
 #include <stdexcept>
 #include "../core/utils.h"
 
-Data::Data(std::istream *stream) :
+Data::Data(std::istream &stream) :
 	Size(0),
 	Captured (0),
 	Position(0)
@@ -17,14 +17,14 @@ Data::Data(std::istream *stream) :
 		throw std::invalid_argument("Input stream is NULL");
 	}
 
-	stream->ignore(8);
+	stream.ignore(8);
 	util::anyRead (stream, &Captured, sizeof (Captured));
 	util::anyRead (stream, &Size, sizeof (Size));
 
 	IS.resize(Captured, '\0');
 	char *begin = &*IS.begin();
-	stream->read(begin, (long)Captured);
-	unsigned long rd = (unsigned long)stream->gcount();
+	stream.read(begin, (long)Captured);
+	unsigned long rd = (unsigned long)stream.gcount();
 	if (rd < Captured) {
 		std::stringstream msg;
 		msg << "Cannot read announced number of captured bytes: "

@@ -13,12 +13,10 @@
 
 ParserEtherNet::ParserEtherNet()
 {
-	std::vector<Processor *> followers;
-	followers.push_back(new ParserEtherNetDIX());
-	followers.push_back(new ParserEtherNet802LLC());
-	followers.push_back(new ParserEtherNetRAW());
-	followers.push_back(new ParserEtherNetSNAP());
-	SetFollowers(&followers);
+	AddFollower(new ParserEtherNetDIX());
+	AddFollower(new ParserEtherNet802LLC());
+	AddFollower(new ParserEtherNetRAW());
+	AddFollower(new ParserEtherNetSNAP());
 }
 
 std::string ParserEtherNet::ID()
@@ -31,18 +29,14 @@ std::string ParserEtherNet::Description()
 	return (std::string("Ethernet frame"));
 }
 
-ChunkEtherNet *ParserEtherNet::Process(Data *data, Chunk *parent)
+ChunkEtherNet *ParserEtherNet::Process(const Quilt *data, const Chunk *parent)
 {
-	MAC *DA = new MAC(data);
-	MAC *SA = new MAC(data);
-	try {
-		const unsigned long dataPosition = data->Position;
-		unsigned short eType = data->read2Reverse();
-		ChunkEtherNet *r = new ChunkEtherNet(data, dataPosition, DA, SA, eType);
-		return (r);
-	} catch (...) {
-		delete DA;
-		delete SA;
-		throw;
-	}
+	const MAC *DA = new MAC(*data, 0);
+	const MAC *SA = new MAC(*data, 6);
+
+	unsigned short eType = data->GetShortLEOrFail(12);
+	const Quilt *containedData = new QuiltCut(*data, 14);
+	ChunkEtherNet *r = new ChunkEtherNet(data, containedData, DA, SA, eType);
+
+	return (r);
 }

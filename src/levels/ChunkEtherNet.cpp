@@ -7,12 +7,12 @@
 
 #include "ChunkEtherNet.h"
 
-ChunkEtherNet::ChunkEtherNet(Data *data,
-		const unsigned long dataPosition,
-		const MAC * const destinationMAC,
-		const MAC * const sourceMAC,
+ChunkEtherNet::ChunkEtherNet(const Quilt *data,
+		const Quilt *containedData,
+		const MAC *destinationMAC,
+		const MAC *sourceMAC,
 		const unsigned short ethernetType)
-	: Chunk(data, dataPosition)
+	: Chunk(data, containedData)
 	, DestinationMAC(destinationMAC)
 	, SourceMAC(sourceMAC)
 	, EtherNetType(ethernetType)
@@ -21,6 +21,4 @@ ChunkEtherNet::ChunkEtherNet(Data *data,
 
 ChunkEtherNet::~ChunkEtherNet()
 {
-	delete SourceMAC;
-	delete DestinationMAC;
 }

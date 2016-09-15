@@ -12,13 +12,12 @@ public:
 	/**
 	 * Constructor for DIX
 	 * @param data Reference to Data from where chunk was read
-	 * @param dataPosition Offset of chunk beginning in Data
 	 * @param parent Optional reference to parent Chunk
 	 * @param etherType EtherNet type (OSI level 3 type)
 	 */
-	ChunkEtherNetDIX(const Data *data
-			, const unsigned long dataPosition
-			, ChunkEtherNet *parent
+	ChunkEtherNetDIX(const Quilt *data
+			, const Quilt *containedData
+			, const ChunkEtherNet *parent
 			, const unsigned short etherType);
 
 	/**

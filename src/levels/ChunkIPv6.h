@@ -14,13 +14,12 @@ public:
 	/**
 	 * Constructor
 	 * @param data Reference to Data from where chunk was read
-	 * @param dataPosition Offset of chunk beginning in Data
 	 * @param parent Optional reference to parent Chunk
 	 * @param srcIP Source IP address
 	 * @param dstIP Destination IP address
 	 */
-	ChunkIPv6(Data *data
-			, const unsigned long dataPosition
+	ChunkIPv6(Quilt *data
+			, Quilt *containedData
 			, ChunkEtherNetDIX *parent
 			, IPv6Addr *srcIP
 			, IPv6Addr *dstIP);

@@ -18,7 +18,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkEtherNetSNAP *Process(Data *data, Chunk *parent);
+	ChunkEtherNetSNAP *Process(const Quilt *data, const Chunk *parent);
 
 	/**
 	 * Returns unique ID for this Parser

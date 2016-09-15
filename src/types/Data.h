@@ -14,7 +14,7 @@ public:
 	 * Data constructor.
 	 * @param stream Input stream to get Pcap frame from
 	 */
-	Data (std::istream *stream);
+	Data (std::istream &stream);
 
 	~Data ();
 

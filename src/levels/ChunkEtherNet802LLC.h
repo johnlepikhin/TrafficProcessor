@@ -13,16 +13,15 @@ public:
 	/**
 	 * Constructor for 802.3 LLC
 	 * @param data Reference to Data from where chunk was read
-	 * @param dataPosition Offset of chunk beginning in Data
 	 * @param parent Optional reference to parent Chunk
 	 * @param length Length of payload
 	 * @param dsap Destination Service Access Point
 	 * @param ssap Source Service Access Point
 	 * @param control Control
 	 */
-	ChunkEtherNet802LLC(Data *data
-			, const unsigned long dataPosition
-			, ChunkEtherNet *parent
+	ChunkEtherNet802LLC(const Quilt *data
+			, const Quilt *containedData
+			, const ChunkEtherNet *parent
 			, const unsigned short length
 			, const unsigned char dsap
 			, const unsigned char ssap

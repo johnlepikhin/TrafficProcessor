@@ -1,8 +1,8 @@
 
 #include "ChunkIPv4.h"
 
-ChunkIPv4::ChunkIPv4(Data *data
-		, const unsigned long dataPosition
+ChunkIPv4::ChunkIPv4(Quilt *data
+		, Quilt *containedData
 		, ChunkEtherNetDIX *parent
 		, unsigned char iHL32bit
 		, IPv4Addr *srcIP
@@ -14,7 +14,7 @@ ChunkIPv4::ChunkIPv4(Data *data
 		, unsigned short id
 		, unsigned short fragmentOffset
 		, unsigned short ttl)
-	: Chunk(data, dataPosition, parent)
+	: Chunk(data, containedData, parent)
 	, IHL32bit(iHL32bit)
 	, SrcIP(srcIP)
 	, DstIP(dstIP)

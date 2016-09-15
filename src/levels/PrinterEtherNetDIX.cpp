@@ -14,9 +14,9 @@ std::string PrinterEtherNetDIX::Description()
 PrinterEtherNetDIX::PrinterEtherNetDIX() {
 }
 
-Chunk *PrinterEtherNetDIX::Process(Data *data, Chunk *p)
+Chunk *PrinterEtherNetDIX::Process(const Quilt *data, const Chunk *p)
 {
-	ChunkEtherNetDIX *parent = dynamic_cast<ChunkEtherNetDIX *>(p);
+	const ChunkEtherNetDIX *parent = dynamic_cast<const ChunkEtherNetDIX *>(p);
 
 	if (parent) {
 		const ChunkEtherNet *ethernet = dynamic_cast<const ChunkEtherNet *>(parent->Parent);
@@ -24,7 +24,7 @@ Chunk *PrinterEtherNetDIX::Process(Data *data, Chunk *p)
 			std::cout << "EtherNetDIX " << ethernet->SourceMAC->asString()
 					<< " -> " << ethernet->DestinationMAC->asString()
 					<< " type=" << ethernet->EtherNetType
-					<< "   Data: captured=" << ethernet->DataPtr->Captured << ", size=" << ethernet->DataPtr->Size
+					<< "   Data: captured=" << ethernet->Data->CoveredSize << ", size=" << ethernet->Data->Length
 					<< "\n";
 		}
 	}

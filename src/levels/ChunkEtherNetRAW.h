@@ -13,13 +13,12 @@ public:
 	/**
 	 * Constructor for RAW
 	 * @param data Reference to Data from where chunk was read
-	 * @param dataPosition Offset of chunk beginning in Data
 	 * @param parent Optional reference to parent Chunk
 	 * @param length Length of payload
 	 */
-	ChunkEtherNetRAW(Data *data
-			, const unsigned long dataPosition
-			, ChunkEtherNet *parent
+	ChunkEtherNetRAW(const Quilt *data
+			, const Quilt *containedData
+			, const ChunkEtherNet *parent
 			, const unsigned short length);
 
 	/**

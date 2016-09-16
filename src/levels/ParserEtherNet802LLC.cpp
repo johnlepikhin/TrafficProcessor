@@ -2,6 +2,14 @@
 #include <typeinfo>
 
 #include "ParserEtherNet802LLC.h"
+#include "PrinterEtherNet802LLC.h"
+
+ParserEtherNet802LLC::ParserEtherNet802LLC()
+{
+	AddFollower(new PrinterEtherNet802LLC());
+//	AddFollower(new ParserIPv4());
+//	AddFollower(new ParserIPv6());
+}
 
 std::string ParserEtherNet802LLC::ID()
 {
@@ -18,7 +26,7 @@ ChunkEtherNet802LLC *ParserEtherNet802LLC::Process(const Quilt *data, const Chun
 	const ChunkEtherNet *parent = dynamic_cast<const ChunkEtherNet *>(p);
 
 	if (parent && parent->EtherNetType <= 1500) {
-		unsigned short b2 = data->GetShortBEOrFail(0);
+		unsigned short b2 = data->GetShortLEOrFail(0);
 		if (0xaaaa != b2) {
 			unsigned char dsap = b2 >> 8;
 			unsigned char ssap = b2 & 0xff;

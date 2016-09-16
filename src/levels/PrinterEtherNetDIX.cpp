@@ -20,10 +20,11 @@ Chunk *PrinterEtherNetDIX::Process(const Quilt *data, const Chunk *p)
 
 	if (parent) {
 		const ChunkEtherNet *ethernet = dynamic_cast<const ChunkEtherNet *>(parent->Parent);
+		const ChunkEtherNetDIX *dix = dynamic_cast<const ChunkEtherNetDIX *>(parent);
 		if (ethernet) {
 			std::cout << "EtherNetDIX " << ethernet->SourceMAC->asString()
 					<< " -> " << ethernet->DestinationMAC->asString()
-					<< " type=" << ethernet->EtherNetType
+					<< " type=" << dix->EtherNetType
 					<< "   Data: captured=" << ethernet->Data->CoveredSize << ", size=" << ethernet->Data->Length
 					<< "\n";
 		}

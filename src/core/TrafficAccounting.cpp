@@ -17,6 +17,9 @@
 #include "../levels/ParserIPv4.h"
 #include "../levels/PrinterIPv4.h"
 #include "../levels/PrinterEtherNetDIX.h"
+#include "../levels/PrinterEtherNetRAW.h"
+#include "../levels/PrinterEtherNetSNAP.h"
+#include "../levels/PrinterEtherNet802LLC.h"
 
 
 using namespace std;
@@ -61,6 +64,9 @@ static void registerParsers () {
 //	collection->Register((Processor *)new ParserIPv4());
 //	collection->Register((Processor *)new PrinterIPv4());
 	collection->Register((Processor *)new PrinterEtherNetDIX());
+	collection->Register((Processor *)new PrinterEtherNetRAW());
+	collection->Register((Processor *)new PrinterEtherNetSNAP());
+	collection->Register((Processor *)new PrinterEtherNet802LLC());
 }
 
 static void releaseParsers () {

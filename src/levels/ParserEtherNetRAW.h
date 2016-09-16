@@ -13,6 +13,11 @@
 class ParserEtherNetRAW: public Processor {
 public:
 	/**
+	 * Basic constructor for parser
+	 */
+	ParserEtherNetRAW();
+
+	/**
 	 * Try to get EtherNet DIX frame from data.
 	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk

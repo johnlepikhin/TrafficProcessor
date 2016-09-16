@@ -20,7 +20,8 @@ ChunkEtherNetRAW *ParserEtherNetRAW::Process(const Quilt *data, const Chunk *p)
 	if (parent && parent->EtherNetType <= 1500) {
 		unsigned short b2 = data->GetShortBEOrFail(0);
 		if (0xffff == b2) {
-			return (new ChunkEtherNetRAW(data, data, parent, parent->EtherNetType));
+			Quilt *containedData = new QuiltCut(data, 0);
+			return (new ChunkEtherNetRAW(data, containedData, parent, parent->EtherNetType));
 		}
 	}
 

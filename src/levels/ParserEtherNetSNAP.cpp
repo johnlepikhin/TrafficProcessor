@@ -24,7 +24,7 @@ ChunkEtherNetSNAP *ParserEtherNetSNAP::Process(const Quilt *data, const Chunk *p
 			data->CopyBytesOrFail((char *)&oui+1, 2, 3);
 			unsigned short pid = data->GetShortBEOrFail(5);
 
-			const Quilt *containedData = new QuiltCut(*data, 8);
+			const Quilt *containedData = new QuiltCut(data, 8);
 
 			ChunkEtherNetSNAP *r = new ChunkEtherNetSNAP(
 					data,

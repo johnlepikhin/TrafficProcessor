@@ -62,9 +62,9 @@ namespace util {
 		anyRead (stream, &captured, sizeof (captured));
 		anyRead (stream, &size, sizeof (size));
 
-		std::string IS;
-		IS.resize(captured, '\0');
-		char *begin = &*IS.begin();
+		std::string *IS = new std::string;
+		IS->resize(captured, '\0');
+		char *begin = &*IS->begin();
 		stream.read(begin, (long)captured);
 		unsigned long rd = (unsigned long)stream.gcount();
 		if (rd < captured) {

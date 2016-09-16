@@ -6,6 +6,7 @@ Chunk::Chunk(const Quilt *data, const Quilt *containedData, const Chunk *parent)
 	: Data(data)
 	, ContainedData(containedData)
 	, Parent(parent)
+	, RefCounter(0)
 {
 }
 
@@ -13,11 +14,25 @@ Chunk::Chunk(const Quilt *data, const Quilt *containedData)
 	: Data(data)
 	, ContainedData(containedData)
 	, Parent(NULL)
+	, RefCounter(0)
 {
 }
 
 Chunk::~Chunk()
 {
+	if (ContainedData)
+		delete ContainedData;
+}
+
+void Chunk::IncrRefs(int incr)
+{
+	RefCounter+=incr;
+}
+
+int Chunk::DecrRefs(int decr)
+{
+	RefCounter-=decr;
+	return (RefCounter);
 }
 
 Processor::Processor ()
@@ -48,7 +63,8 @@ void Processor::Recursive(const Quilt *data, const Chunk *parent)
 			delete result;
 			throw;
 		}
-		delete result;
+		if (!result->RefCounter)
+			delete result;
 	}
 }
 

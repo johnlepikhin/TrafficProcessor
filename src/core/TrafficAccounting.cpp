@@ -43,6 +43,7 @@ public:
 			try {
 				const Quilt *InputData = util::quiltOfPcap(InputStream);
 				parser.Recursive(InputData, 0);
+				delete InputData;
 			} catch (...) {
 				done = true;
 			}

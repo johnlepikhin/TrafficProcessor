@@ -21,4 +21,6 @@ ChunkEtherNet::ChunkEtherNet(const Quilt *data,
 
 ChunkEtherNet::~ChunkEtherNet()
 {
+	delete DestinationMAC;
+	delete SourceMAC;
 }

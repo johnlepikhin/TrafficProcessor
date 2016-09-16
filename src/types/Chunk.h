@@ -27,6 +27,9 @@ public:
 
 	virtual ~Chunk();
 
+	void IncrRefs(int incr);
+	int DecrRefs(int decr);
+
 	/**
 	 * Reference to original data piece
 	 */
@@ -41,6 +44,8 @@ public:
 	 * Pointer to parent Chunk
 	 */
 	const Chunk *Parent;
+
+	int RefCounter;
 };
 
 /**

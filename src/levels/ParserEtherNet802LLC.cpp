@@ -23,7 +23,7 @@ ChunkEtherNet802LLC *ParserEtherNet802LLC::Process(const Quilt *data, const Chun
 			unsigned char dsap = b2 >> 8;
 			unsigned char ssap = b2 & 0xff;
 			unsigned char control = data->GetCharOrFail(1);
-			const Quilt *containedData = new QuiltCut(*data, 3);
+			const Quilt *containedData = new QuiltCut(data, 3);
 			ChunkEtherNet802LLC *r = new ChunkEtherNet802LLC(
 					data,
 					containedData,

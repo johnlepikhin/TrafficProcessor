@@ -13,11 +13,6 @@
 class ParserEtherNetSNAP: public Processor {
 public:
 	/**
-	 * Basic constructor for parser
-	 */
-	ParserEtherNetSNAP();
-
-	/**
 	 * Try to get EtherNet SNAP frame from data.
 	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk

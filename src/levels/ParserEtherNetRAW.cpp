@@ -4,14 +4,6 @@
 #include "ParserEtherNetRAW.h"
 #include "PrinterEtherNetRAW.h"
 
-ParserEtherNetRAW::ParserEtherNetRAW()
-{
-	AddFollower(new PrinterEtherNetRAW());
-//	AddFollower(new ParserIPv4());
-//	AddFollower(new ParserIPv6());
-}
-
-
 std::string ParserEtherNetRAW::ID()
 {
 	return (std::string("EthernetRAW"));

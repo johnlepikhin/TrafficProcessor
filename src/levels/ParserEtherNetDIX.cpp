@@ -6,14 +6,6 @@
 #include "ParserIPv6.h"
 #include "PrinterEtherNetDIX.h"
 
-ParserEtherNetDIX::ParserEtherNetDIX()
-{
-	AddFollower(new PrinterEtherNetDIX());
-//	AddFollower(new ParserIPv4());
-//	AddFollower(new ParserIPv6());
-}
-
-
 std::string ParserEtherNetDIX::ID()
 {
 	return (std::string("EthernetDIX"));

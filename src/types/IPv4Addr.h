@@ -3,7 +3,7 @@
 #define IPV4ADDR_H_
 
 #include <string>
-#include "Data.h"
+#include <sparsed-ropes/Quilt.h>
 
 /**
  * IPv4 address container and reader
@@ -15,7 +15,7 @@ public:
 	 * @param data Pointer to Data
 	 * @param offset Offset from where address must be read
 	 */
-	IPv4Addr(const Data *data, std::streamoff offset);
+	IPv4Addr(const Quilt &data, std::streamoff offset);
 
 	/**
 	 * Human readable representation
@@ -37,7 +37,7 @@ public:
 	 */
 	std::string asBinary() const;
 private:
-	const char *ptr;
+	std::string Binary;
 };
 
 #endif /* IPV4ADDR_H_ */

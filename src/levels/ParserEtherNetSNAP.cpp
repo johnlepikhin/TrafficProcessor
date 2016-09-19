@@ -4,13 +4,6 @@
 #include "ParserEtherNetSNAP.h"
 #include "PrinterEtherNetSNAP.h"
 
-ParserEtherNetSNAP::ParserEtherNetSNAP()
-{
-	AddFollower(new PrinterEtherNetSNAP());
-//	AddFollower(new ParserIPv4());
-//	AddFollower(new ParserIPv6());
-}
-
 std::string ParserEtherNetSNAP::ID()
 {
 	return (std::string("EthernetSNAP"));

@@ -11,14 +11,6 @@
 #include "ParserEtherNetRAW.h"
 #include "ParserEtherNetSNAP.h"
 
-ParserEtherNet::ParserEtherNet()
-{
-	AddFollower(new ParserEtherNetDIX());
-	AddFollower(new ParserEtherNet802LLC());
-	AddFollower(new ParserEtherNetRAW());
-	AddFollower(new ParserEtherNetSNAP());
-}
-
 std::string ParserEtherNet::ID()
 {
 	return (std::string("Ethernet"));

@@ -24,6 +24,27 @@
 
 using namespace std;
 
+static ParserEtherNet *generateParseTree()
+{
+	PrinterIPv4 *printerIPV4 = new PrinterIPv4();
+
+	ParserIPv4 *parserIPv4 = new ParserIPv4();
+	parserIPv4->AddFollower(printerIPV4);
+
+	ParserEtherNetDIX *etherNetDIX = new ParserEtherNetDIX();
+	etherNetDIX->AddFollower(new PrinterEtherNetDIX());
+	etherNetDIX->AddFollower(parserIPv4);
+//	ethernetDIX->AddFollower(new ParserIPv6());
+
+	ParserEtherNet *etherNet = new ParserEtherNet();
+	etherNet->AddFollower(etherNetDIX);
+	etherNet->AddFollower(new ParserEtherNet802LLC());
+	etherNet->AddFollower(new ParserEtherNetRAW());
+	etherNet->AddFollower(new ParserEtherNetSNAP());
+
+	return (etherNet);
+}
+
 class Reader {
 public:
 	std::istream &InputStream;
@@ -40,17 +61,19 @@ public:
 	void ReadPackets ()
 	{
 		bool done = false;
-		ParserEtherNet parser = ParserEtherNet();
+		ParserEtherNet *parser = generateParseTree();
 
 		while (!done) {
 			try {
 				const Quilt *InputData = util::quiltOfPcap(InputStream);
-				parser.Recursive(InputData, 0);
+				parser->Recursive(InputData, 0);
 				delete InputData;
 			} catch (...) {
 				done = true;
 			}
 		}
+
+		delete parser;
 	}
 };
 
@@ -61,8 +84,8 @@ static void registerParsers () {
 	collection->Register((Processor *)new ParserEtherNetRAW());
 	collection->Register((Processor *)new ParserEtherNetSNAP());
 	collection->Register((Processor *)new ParserEtherNet802LLC());
-//	collection->Register((Processor *)new ParserIPv4());
-//	collection->Register((Processor *)new PrinterIPv4());
+	collection->Register((Processor *)new ParserIPv4());
+	collection->Register((Processor *)new PrinterIPv4());
 	collection->Register((Processor *)new PrinterEtherNetDIX());
 	collection->Register((Processor *)new PrinterEtherNetRAW());
 	collection->Register((Processor *)new PrinterEtherNetSNAP());

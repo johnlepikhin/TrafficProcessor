@@ -4,6 +4,7 @@
 
 #include "../types/Chunk.h"
 #include "ChunkIPv4.h"
+#include <unordered_map>
 
 /**
  * Parser for IPv4 protocol
@@ -13,17 +14,12 @@
 class ParserIPv4: public Processor {
 public:
 	/**
-	 * Basic constructor for parser
-	 */
-	ParserIPv4();
-
-	/**
 	 * Try to get IPv4 from data.
 	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkIPv4 *Process(Data *data, Chunk *parent);
+	ChunkIPv4 *Process(const Quilt *data, const Chunk *parent);
 
 	/**
 	 * Returns unique ID for this Parser

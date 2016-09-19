@@ -10,10 +10,6 @@
 //lint -sem(ParserEtherNet::Process, 1p)
 class ParserEtherNet : public Processor {
 public:
-	/**
-	 * Basic constructor for parser
-	 */
-	ParserEtherNet();
 
 	/**
 	 * Try to get EtherNet frame from data.

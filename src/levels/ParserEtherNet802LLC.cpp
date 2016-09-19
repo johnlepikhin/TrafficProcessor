@@ -4,13 +4,6 @@
 #include "ParserEtherNet802LLC.h"
 #include "PrinterEtherNet802LLC.h"
 
-ParserEtherNet802LLC::ParserEtherNet802LLC()
-{
-	AddFollower(new PrinterEtherNet802LLC());
-//	AddFollower(new ParserIPv4());
-//	AddFollower(new ParserIPv6());
-}
-
 std::string ParserEtherNet802LLC::ID()
 {
 	return (std::string("Ethernet802LLC"));

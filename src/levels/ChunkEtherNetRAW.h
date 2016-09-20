@@ -16,8 +16,8 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @param length Length of payload
 	 */
-	ChunkEtherNetRAW(const Quilt *data
-			, const Quilt *containedData
+	ChunkEtherNetRAW(Quilt *data
+			, Quilt *containedData
 			, const ChunkEtherNet *parent
 			, const unsigned short length);
 

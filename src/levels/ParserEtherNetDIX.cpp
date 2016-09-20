@@ -16,9 +16,9 @@ std::string ParserEtherNetDIX::Description()
 	return (std::string("Ethernet DIX frame"));
 }
 
-ChunkEtherNetDIX *ParserEtherNetDIX::Process(const Quilt *data, const Chunk *p)
+ChunkEtherNetDIX *ParserEtherNetDIX::Process(Quilt *data, Chunk *p)
 {
-	const ChunkEtherNet *parent = dynamic_cast<const ChunkEtherNet *>(p);
+	ChunkEtherNet *parent = dynamic_cast<ChunkEtherNet *>(p);
 
 	if (parent && parent->EtherNetType > 1500) {
 		Quilt *containedData = new QuiltCut(data, 0);

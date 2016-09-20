@@ -14,9 +14,9 @@ std::string PrinterEtherNetSNAP::Description()
 PrinterEtherNetSNAP::PrinterEtherNetSNAP() {
 }
 
-Chunk *PrinterEtherNetSNAP::Process(const Quilt *data, const Chunk *p)
+Chunk *PrinterEtherNetSNAP::Process(Quilt *data, Chunk *p)
 {
-	const ChunkEtherNetSNAP *parent = dynamic_cast<const ChunkEtherNetSNAP *>(p);
+	ChunkEtherNetSNAP *parent = dynamic_cast<ChunkEtherNetSNAP *>(p);
 
 	if (parent) {
 		const ChunkEtherNet *ethernet = dynamic_cast<const ChunkEtherNet *>(parent->Parent);

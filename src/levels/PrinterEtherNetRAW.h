@@ -17,7 +17,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */
-	Chunk *Process(const Quilt *data, const Chunk *parent);
+	Chunk *Process(Quilt *data, Chunk *parent);
 
 	/**
 	 * Returns unique ID for this Printer

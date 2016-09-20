@@ -1,13 +1,14 @@
 
 #include "ChunkIPv4.h"
 
-ChunkIPv4::ChunkIPv4(const Quilt *data
-		, const Quilt *containedData
+ChunkIPv4::ChunkIPv4(Quilt *data
+		, Quilt *containedData
 		, const ChunkEtherNetDIX *parent
 		, unsigned char iHL32bit
 		, const IPv4Addr *srcIP
 		, const IPv4Addr *dstIP
 		, unsigned short pktLength
+		, unsigned short payloadLength
 		, unsigned char protocol
 		, bool flagDontFragment
 		, bool flagIsFragmented
@@ -19,6 +20,7 @@ ChunkIPv4::ChunkIPv4(const Quilt *data
 	, SrcIP(srcIP)
 	, DstIP(dstIP)
 	, PktLength(pktLength)
+	, PayloadLength(payloadLength)
 	, Protocol(protocol)
 	, FlagDontFragment(flagDontFragment)
 	, FlagIsFragmented(flagIsFragmented)

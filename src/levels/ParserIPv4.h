@@ -4,7 +4,6 @@
 
 #include "../types/Chunk.h"
 #include "ChunkIPv4.h"
-#include <unordered_map>
 
 /**
  * Parser for IPv4 protocol
@@ -19,7 +18,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkIPv4 *Process(const Quilt *data, const Chunk *parent);
+	ChunkIPv4 *Process(Quilt *data, Chunk *parent);
 
 	/**
 	 * Returns unique ID for this Parser

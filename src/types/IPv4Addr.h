@@ -36,6 +36,8 @@ public:
 	 * @return Binary representation
 	 */
 	std::string asBinary() const;
+
+	unsigned int asInt() const;
 private:
 	std::string Binary;
 };

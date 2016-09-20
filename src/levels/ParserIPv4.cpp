@@ -6,17 +6,17 @@
 
 std::string ParserIPv4::ID()
 {
-	return (std::string("IPv4"));
+	return (std::string("IPv4_Fragment"));
 }
 
 std::string ParserIPv4::Description()
 {
-	return (std::string("IPv4 packet"));
+	return (std::string("IPv4 packet fragment"));
 }
 
-ChunkIPv4 *ParserIPv4::Process(const Quilt *data, const Chunk *p)
+ChunkIPv4 *ParserIPv4::Process(Quilt *data, Chunk *p)
 {
-	const ChunkEtherNetDIX *parentDIX = dynamic_cast<const ChunkEtherNetDIX *>(p);
+	ChunkEtherNetDIX *parentDIX = dynamic_cast<ChunkEtherNetDIX *>(p);
 	if (parentDIX) {
 		ChunkEtherNet *parentEthernet = (ChunkEtherNet *)(parentDIX->Parent);
 
@@ -29,6 +29,8 @@ ChunkIPv4 *ParserIPv4::Process(const Quilt *data, const Chunk *p)
 
 			unsigned short PktLength = data->GetShortLEOrFail(2);
 			PktLength = (short)((PktLength>>8) | (PktLength<<8));
+
+			unsigned short PayloadLength = PktLength - IHL32bit*4;
 
 			unsigned char flags = data->GetCharOrFail(6);
 			bool FlagDontFragment = flags & 0x40;
@@ -45,7 +47,7 @@ ChunkIPv4 *ParserIPv4::Process(const Quilt *data, const Chunk *p)
 
 			Protocol = data->GetCharOrFail(9);
 
-			const QuiltCut *payload = new QuiltCut(data, IHL32bit*4);
+			QuiltCut *payload = new QuiltCut(data, IHL32bit*4);
 
 			ChunkIPv4 *r = new ChunkIPv4(
 					data,
@@ -55,6 +57,7 @@ ChunkIPv4 *ParserIPv4::Process(const Quilt *data, const Chunk *p)
 					SrcIP,
 					DstIP,
 					PktLength,
+					PayloadLength,
 					Protocol,
 					FlagDontFragment,
 					FlagIsFragmented,

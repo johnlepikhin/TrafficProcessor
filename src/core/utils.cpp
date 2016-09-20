@@ -50,7 +50,7 @@ namespace util {
 		return (((v & 0xff) << 8) + (v >> 8));
 	}
 
-	const Quilt *quiltOfPcap(std::istream &stream)
+	Quilt *quiltOfPcap(std::istream &stream)
 	{
 		if (NULL == stream) {
 			throw std::invalid_argument("Input stream is NULL");
@@ -76,7 +76,7 @@ namespace util {
 			throw std::underflow_error(msg.str());
 		}
 
-		const Quilt *r = new QuiltSnippet(IS, size);
+		Quilt *r = new QuiltSnippet(IS, size);
 
 		return (r);
 	}

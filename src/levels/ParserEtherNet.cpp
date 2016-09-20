@@ -21,13 +21,13 @@ std::string ParserEtherNet::Description()
 	return (std::string("Ethernet frame"));
 }
 
-ChunkEtherNet *ParserEtherNet::Process(const Quilt *data, const Chunk *parent)
+ChunkEtherNet *ParserEtherNet::Process(Quilt *data, Chunk *parent)
 {
 	const MAC *DA = new MAC(*data, 0);
 	const MAC *SA = new MAC(*data, 6);
 
 	unsigned short eType = data->GetShortBEOrFail(12);
-	const Quilt *containedData = new QuiltCut(data, 14);
+	Quilt *containedData = new QuiltCut(data, 14);
 	ChunkEtherNet *r = new ChunkEtherNet(data, containedData, DA, SA, eType);
 
 	return (r);

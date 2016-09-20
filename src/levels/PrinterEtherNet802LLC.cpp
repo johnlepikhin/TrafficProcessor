@@ -14,9 +14,9 @@ std::string PrinterEtherNet802LLC::Description()
 PrinterEtherNet802LLC::PrinterEtherNet802LLC() {
 }
 
-Chunk *PrinterEtherNet802LLC::Process(const Quilt *data, const Chunk *p)
+Chunk *PrinterEtherNet802LLC::Process(Quilt *data, Chunk *p)
 {
-	const ChunkEtherNet802LLC *parent = dynamic_cast<const ChunkEtherNet802LLC *>(p);
+	ChunkEtherNet802LLC *parent = dynamic_cast<ChunkEtherNet802LLC *>(p);
 
 	if (parent) {
 		const ChunkEtherNet *ethernet = dynamic_cast<const ChunkEtherNet *>(parent->Parent);

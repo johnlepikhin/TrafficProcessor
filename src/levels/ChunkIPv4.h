@@ -26,13 +26,14 @@ public:
 	 * @param fragmentOffset offset of this fragment in bytes
 	 * @param ttl TTL
 	 */
-	ChunkIPv4(const Quilt *data
-			, const Quilt *containedData
+	ChunkIPv4(Quilt *data
+			, Quilt *containedData
 			, const ChunkEtherNetDIX *parent
 			, unsigned char iHL32bit
 			, const IPv4Addr *srcIP
 			, const IPv4Addr *dstIP
 			, unsigned short pktLength
+			, unsigned short payloadLength
 			, unsigned char protocol
 			, bool flagDontFragment
 			, bool flagIsFragmented
@@ -61,6 +62,11 @@ public:
 	 * Full packet length
 	 */
 	unsigned short PktLength;
+
+	/**
+	 * Payload length
+	 */
+	unsigned short PayloadLength;
 
 	/**
 	 * Next protocol ID

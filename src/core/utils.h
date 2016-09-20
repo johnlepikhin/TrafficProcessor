@@ -63,7 +63,7 @@ namespace util {
 	 */
 	unsigned short reverse2 (unsigned short value);
 
-	const Quilt *quiltOfPcap(std::istream &stream);
+	Quilt *quiltOfPcap(std::istream &stream);
 }
 
 #endif /* UTILS_H_ */

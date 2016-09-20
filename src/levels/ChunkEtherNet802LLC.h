@@ -19,8 +19,8 @@ public:
 	 * @param ssap Source Service Access Point
 	 * @param control Control
 	 */
-	ChunkEtherNet802LLC(const Quilt *data
-			, const Quilt *containedData
+	ChunkEtherNet802LLC(Quilt *data
+			, Quilt *containedData
 			, const ChunkEtherNet *parent
 			, const unsigned short length
 			, const unsigned char dsap

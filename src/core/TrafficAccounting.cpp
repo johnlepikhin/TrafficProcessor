@@ -16,6 +16,7 @@
 #include "../levels/ParserEtherNet802LLC.h"
 #include "../levels/ParserIPv4.h"
 #include "../levels/PrinterIPv4.h"
+#include "../levels/ParserPacketIPv4.h"
 #include "../levels/PrinterEtherNetDIX.h"
 #include "../levels/PrinterEtherNetRAW.h"
 #include "../levels/PrinterEtherNetSNAP.h"
@@ -28,11 +29,14 @@ static ParserEtherNet *generateParseTree()
 {
 	PrinterIPv4 *printerIPV4 = new PrinterIPv4();
 
+	ParserPacketIPv4 *parserPacketIPv4 = new ParserPacketIPv4();
+
 	ParserIPv4 *parserIPv4 = new ParserIPv4();
-	parserIPv4->AddFollower(printerIPV4);
+//	parserIPv4->AddFollower(printerIPV4);
+	parserIPv4->AddFollower(parserPacketIPv4);
 
 	ParserEtherNetDIX *etherNetDIX = new ParserEtherNetDIX();
-	etherNetDIX->AddFollower(new PrinterEtherNetDIX());
+//	etherNetDIX->AddFollower(new PrinterEtherNetDIX());
 	etherNetDIX->AddFollower(parserIPv4);
 //	ethernetDIX->AddFollower(new ParserIPv6());
 
@@ -65,7 +69,7 @@ public:
 
 		while (!done) {
 			try {
-				const Quilt *InputData = util::quiltOfPcap(InputStream);
+				Quilt *InputData = util::quiltOfPcap(InputStream);
 				parser->Recursive(InputData, 0);
 				delete InputData;
 			} catch (...) {
@@ -86,6 +90,7 @@ static void registerParsers () {
 	collection->Register((Processor *)new ParserEtherNet802LLC());
 	collection->Register((Processor *)new ParserIPv4());
 	collection->Register((Processor *)new PrinterIPv4());
+	collection->Register((Processor *)new ParserPacketIPv4());
 	collection->Register((Processor *)new PrinterEtherNetDIX());
 	collection->Register((Processor *)new PrinterEtherNetRAW());
 	collection->Register((Processor *)new PrinterEtherNetSNAP());

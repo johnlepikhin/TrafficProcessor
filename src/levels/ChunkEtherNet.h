@@ -27,8 +27,8 @@ public:
 	 * @param sourceMAC Reference to source MAC address
 	 * @param ethernetType 2-byte value at offset 13 in ethernet frame (ethernet type or payload length)
 	 */
-	ChunkEtherNet(const Quilt *data,
-			const Quilt *containedData,
+	ChunkEtherNet(Quilt *data,
+			Quilt *containedData,
 			const MAC *destinationMAC,
 			const MAC *sourceMAC,
 			const unsigned short ethernetType);

@@ -7,8 +7,8 @@
 
 #include "ChunkEtherNet.h"
 
-ChunkEtherNet::ChunkEtherNet(const Quilt *data,
-		const Quilt *containedData,
+ChunkEtherNet::ChunkEtherNet(Quilt *data,
+		Quilt *containedData,
 		const MAC *destinationMAC,
 		const MAC *sourceMAC,
 		const unsigned short ethernetType)

@@ -15,8 +15,8 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @param etherType EtherNet type (OSI level 3 type)
 	 */
-	ChunkEtherNetDIX(const Quilt *data
-			, const Quilt *containedData
+	ChunkEtherNetDIX(Quilt *data
+			, Quilt *containedData
 			, const ChunkEtherNet *parent
 			, const unsigned short etherType);
 

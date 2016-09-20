@@ -23,6 +23,11 @@ std::string IPv4Addr::asBinary() const {
 	return (Binary);
 }
 
+unsigned int IPv4Addr::asInt() const
+{
+	return ((Binary[0] << 24) + (Binary[1] << 16) + (Binary[2] << 8) + Binary[3]);
+}
+
 int IPv4Addr::compare(IPv4Addr *other) {
 	return (asBinary().compare(other->asBinary()));
 }

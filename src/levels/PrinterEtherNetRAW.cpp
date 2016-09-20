@@ -14,9 +14,9 @@ std::string PrinterEtherNetRAW::Description()
 PrinterEtherNetRAW::PrinterEtherNetRAW() {
 }
 
-Chunk *PrinterEtherNetRAW::Process(const Quilt *data, const Chunk *p)
+Chunk *PrinterEtherNetRAW::Process(Quilt *data, Chunk *p)
 {
-	const ChunkEtherNetRAW *parent = dynamic_cast<const ChunkEtherNetRAW *>(p);
+	ChunkEtherNetRAW *parent = dynamic_cast<ChunkEtherNetRAW *>(p);
 
 	if (parent) {
 		const ChunkEtherNet *ethernet = dynamic_cast<const ChunkEtherNet *>(parent->Parent);

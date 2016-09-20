@@ -17,13 +17,13 @@ public:
 	 * @param containedData Reference to contained data piece
 	 * @param parent Reference to parent Chunk
 	 */
-	Chunk(const Quilt *data, const Quilt *containedData, const Chunk *parent);
+	Chunk(Quilt *data, Quilt *containedData, const Chunk *parent);
 
 	/**
 	 * Construct Chunk from Data and NULL parent
 	 * @param data Reference to data (original Pcap)
 	 */
-	Chunk(const Quilt *data, const Quilt *containedData);
+	Chunk(Quilt *data, Quilt *containedData);
 
 	virtual ~Chunk();
 
@@ -33,12 +33,12 @@ public:
 	/**
 	 * Reference to original data piece
 	 */
-	const Quilt *Data;
+	Quilt *Data;
 
 	/**
 	 * Reference to containing data piece
 	 */
-	const Quilt *ContainedData;
+	Quilt *ContainedData;
 
 	/**
 	 * Pointer to parent Chunk
@@ -70,7 +70,7 @@ public:
 	 * @param data
 	 * @param parent
 	 */
-	void Recursive(const Quilt *data, const Chunk *parent);
+	void Recursive(Quilt *data, Chunk *parent);
 
 	/**
 	 * Parser of chunk. Must return NULL if it was unable to detect format
@@ -78,7 +78,9 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or Chunk
 	 */
-	virtual Chunk *Process(const Quilt *data, const Chunk *parent) = 0;
+	virtual Chunk *Process(Quilt *data, Chunk *parent) = 0;
+
+	virtual void DestroyChunk(Chunk *);
 
 	/**
 	 * Returns unique ID for this Processor

@@ -2,7 +2,7 @@
 #include "Chunk.h"
 #include "../core/ProcessorsCollection.h"
 
-Chunk::Chunk(const Quilt *data, const Quilt *containedData, const Chunk *parent)
+Chunk::Chunk(Quilt *data, Quilt *containedData, const Chunk *parent)
 	: Data(data)
 	, ContainedData(containedData)
 	, Parent(parent)
@@ -10,7 +10,7 @@ Chunk::Chunk(const Quilt *data, const Quilt *containedData, const Chunk *parent)
 {
 }
 
-Chunk::Chunk(const Quilt *data, const Quilt *containedData)
+Chunk::Chunk(Quilt *data, Quilt *containedData)
 	: Data(data)
 	, ContainedData(containedData)
 	, Parent(NULL)
@@ -39,6 +39,11 @@ Processor::Processor ()
 {
 }
 
+void Processor::DestroyChunk(Chunk *chunk)
+{
+	delete chunk;
+}
+
 Processor::~Processor()
 {
 	try {
@@ -51,7 +56,7 @@ Processor::~Processor()
 	}
 }
 
-void Processor::Recursive(const Quilt *data, const Chunk *parent)
+void Processor::Recursive(Quilt *data, Chunk *parent)
 {
 	Chunk *result = this->Process(data, parent);
 	if (NULL != result) {
@@ -60,11 +65,11 @@ void Processor::Recursive(const Quilt *data, const Chunk *parent)
 				(*i)->Recursive(result->ContainedData, result);
 			}
 		} catch (...) {
-			delete result;
+			DestroyChunk(result);
 			throw;
 		}
 		if (!result->RefCounter)
-			delete result;
+			DestroyChunk(result);
 	}
 }
 

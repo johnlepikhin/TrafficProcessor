@@ -8,7 +8,10 @@
 
 typedef int IPv4PacketID;
 
-class IPPacketMap : public std::unordered_map<IPv4PacketID, PacketIPv4 *> {
+//class IPPacketMap : public std::unordered_map<IPv4PacketID, PacketIPv4 *> {
+//};
+
+class IPPacketMap : public std::vector<PacketIPv4 *> {
 };
 
 class IPPairMap : public std::unordered_map<unsigned long long, IPPacketMap *> {

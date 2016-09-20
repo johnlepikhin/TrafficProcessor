@@ -14,25 +14,25 @@ PacketIPv4 *IPPairMap::AddChunk(ChunkIPv4 *chunk)
 
 	if (it != end()) {
 		IPPacketMap *IDMap = (*it).second;
-		std::unordered_map<IPv4PacketID, PacketIPv4 *>::const_iterator id_it
-			= IDMap->find(chunk->ID);
 
-		if (id_it != IDMap->end()) {
-			(*id_it).second->AddChunk(chunk);
-
-			return ((*id_it).second);
-		} else {
-			PacketIPv4 *pkt = new PacketIPv4(chunk);
-			IDMap->emplace(chunk->ID, pkt);
-
-			return (pkt);
+		for (auto p_it = IDMap->rbegin(); p_it != IDMap->rend(); ++p_it) {
+			ChunkIPv4 *ipv4_chunk = (ChunkIPv4 *)(*p_it)->Parent;
+			if (ipv4_chunk->ID == chunk->ID) {
+				(*p_it)->AddChunk(chunk);
+				return (*p_it);
+			}
 		}
+
+		PacketIPv4 *pkt = new PacketIPv4(chunk);
+		IDMap->push_back(pkt);
+
+		return (pkt);
 	} else {
 		IPPacketMap *IDMap = new IPPacketMap();
 		emplace(pair, IDMap);
 
 		PacketIPv4 *pkt = new PacketIPv4(chunk);
-		IDMap->emplace(chunk->ID, pkt);
+		IDMap->push_back(pkt);
 
 		return (pkt);
 	}
@@ -50,11 +50,13 @@ void ParserPacketIPv4::DestroyChunk(Chunk *c)
 
 	if (it != IPCollector.end()) {
 		IPPacketMap *IDMap = (*it).second;
-		std::unordered_map<IPv4PacketID, PacketIPv4 *>::const_iterator id_it
-			= IDMap->find(chunk->ID);
 
-		if (id_it != IDMap->end()) {
-			IDMap->erase(id_it);
+		for (auto p_it = IDMap->rbegin(); p_it != IDMap->rend(); ++p_it) {
+			ChunkIPv4 *ipv4_chunk = (ChunkIPv4 *)(*p_it)->Parent;
+			if (ipv4_chunk->ID == chunk->ID) {
+				IDMap->erase((++p_it).base());
+				break;
+			}
 		}
 
 		if (IDMap->empty()) {
@@ -75,7 +77,7 @@ ParserPacketIPv4::~ParserPacketIPv4()
 {
 	for (auto pair_it = IPCollector.begin(); pair_it != IPCollector.end(); ++pair_it) {
 		for (auto id_it = pair_it->second->begin(); id_it != pair_it->second->end(); ++id_it) {
-			delete id_it->second;
+			delete (*id_it);
 		}
 		delete pair_it->second;
 	}

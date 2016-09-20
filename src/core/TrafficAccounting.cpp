@@ -152,6 +152,8 @@ int main () {
 	printParsers();
 
 //	istream *stream_ref = &testData;
+
+	std::ios::sync_with_stdio(false);
 	istream *stream_ref = &cin;
 
 	stream_ref->ignore(sizeof (pcap_file_header));

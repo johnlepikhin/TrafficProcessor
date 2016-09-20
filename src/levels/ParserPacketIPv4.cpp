@@ -3,7 +3,7 @@
 
 unsigned long long pair_of_IPv4(const ChunkIPv4 *chunk)
 {
-	return (((unsigned long long)chunk->SrcIP->asInt() << 32) + chunk->SrcIP->asInt());
+	return (((unsigned long long)chunk->SrcIP->asInt() << 32) + chunk->DstIP->asInt());
 }
 
 PacketIPv4 *IPPairMap::AddChunk(ChunkIPv4 *chunk)

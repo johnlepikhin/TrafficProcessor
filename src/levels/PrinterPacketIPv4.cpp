@@ -20,6 +20,7 @@ Chunk *PrinterPacketIPv4::Process(Quilt *data, Chunk *p)
 		std::cout << "IPv4_Packet " << IPv4Addr::asString(hdr->SrcIP)
 				<< " " << IPv4Addr::asString(hdr->DstIP)
 				<< " ID=" << hdr->ID
+				<< " Protocol=" << (int)hdr->Protocol
 				<< " packetLength=" << parent->ExpectedSize
 				<< " dataLength=" << parent->ReceivedSize
 				<< " isComplete=" << parent->IsComplete

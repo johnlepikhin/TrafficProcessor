@@ -23,16 +23,24 @@
 #include "../levels/PrinterEtherNetSNAP.h"
 #include "../levels/PrinterEtherNet802LLC.h"
 
+#include "../levels/ParserTCP.h"
+#include "../levels/PrinterTCP.h"
+
 
 using namespace std;
 
 static ParserEtherNet *generateParseTree()
 {
-//	PrinterIPv4 *printerIPV4 = new PrinterIPv4();
-	PrinterPacketIPv4 *printerPacketIPV4 = new PrinterPacketIPv4();
+//	PrinterTCP *printerTCP = new PrinterTCP();
+	ParserTCP *parserTCP = new ParserTCP();
+//	parserTCP->AddFollower(printerTCP);
+
+	//	PrinterIPv4 *printerIPV4 = new PrinterIPv4();
+//	PrinterPacketIPv4 *printerPacketIPV4 = new PrinterPacketIPv4();
 
 	ParserPacketIPv4 *parserPacketIPv4 = new ParserPacketIPv4();
-	parserPacketIPv4->AddFollower(printerPacketIPV4);
+//	parserPacketIPv4->AddFollower(printerPacketIPV4);
+	parserPacketIPv4->AddFollower(parserTCP);
 
 	ParserIPv4 *parserIPv4 = new ParserIPv4();
 //	parserIPv4->AddFollower(printerIPV4);

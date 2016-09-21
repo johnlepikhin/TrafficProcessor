@@ -1,10 +1,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include <sparsed-ropes/Quilt.h>
+#include <unistd.h>
 
 namespace util {
 	void exitFatal (const char *msg) {
@@ -50,31 +50,38 @@ namespace util {
 		return (((v & 0xff) << 8) + (v >> 8));
 	}
 
-	Quilt *quiltOfPcap(std::istream &stream)
-	{
-		if (NULL == stream) {
-			throw std::invalid_argument("Input stream is NULL");
+	ssize_t readToBuffer(int fd, char *buf, size_t count) {
+		ssize_t dataToRead = count;
+
+		while(dataToRead) {
+			ssize_t rd = read(fd, buf, dataToRead);
+			if (rd < 0)
+				return (rd);
+			if (0 == rd)
+				throw std::underflow_error("Stream is empty");
+			dataToRead-=rd;
+			buf+=rd;
 		}
 
+		return (count);
+	}
+
+	ssize_t skipBytesInFD(int fd, size_t count) {
+		char buffer[4096];
+		return (readToBuffer(fd, buffer, count));
+	}
+
+	Quilt *quiltOfPcap(int fd)
+	{
 		unsigned int size, captured;
 
-		stream.ignore(8);
-		anyRead (stream, &captured, sizeof (captured));
-		anyRead (stream, &size, sizeof (size));
+		skipBytesInFD(fd, 8);
+		readToBuffer (fd, (char *)&captured, sizeof (captured));
+		readToBuffer (fd, (char *)&size, sizeof (size));
 
 		std::string *IS = new std::string;
-		IS->resize(captured, '\0');
-		char *begin = &*IS->begin();
-		stream.read(begin, (long)captured);
-		unsigned long rd = (unsigned long)stream.gcount();
-		if (rd < captured) {
-			std::stringstream msg;
-			msg << "Cannot read announced number of captured bytes: "
-				<< captured
-				<< ", was read only "
-				<< rd;
-			throw std::underflow_error(msg.str());
-		}
+		IS->resize(captured);
+		readToBuffer(fd, &(IS->at(0)), captured);
 
 		Quilt *r = new QuiltSnippet(IS, size);
 

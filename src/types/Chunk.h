@@ -17,7 +17,7 @@ public:
 	 * @param containedData Reference to contained data piece
 	 * @param parent Reference to parent Chunk
 	 */
-	Chunk(Quilt *data, Quilt *containedData, const Chunk *parent);
+	Chunk(Quilt *data, Quilt *containedData, Chunk *parent);
 
 	/**
 	 * Construct Chunk from Data and NULL parent
@@ -43,7 +43,7 @@ public:
 	/**
 	 * Pointer to parent Chunk
 	 */
-	const Chunk *Parent;
+	Chunk *Parent;
 
 	int RefCounter;
 };

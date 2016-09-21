@@ -2,7 +2,7 @@
 #include "Chunk.h"
 #include "../core/ProcessorsCollection.h"
 
-Chunk::Chunk(Quilt *data, Quilt *containedData, const Chunk *parent)
+Chunk::Chunk(Quilt *data, Quilt *containedData, Chunk *parent)
 	: Data(data)
 	, ContainedData(containedData)
 	, Parent(parent)

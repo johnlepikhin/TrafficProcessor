@@ -20,7 +20,7 @@ public:
 	 */
 	ChunkEtherNetSNAP(Quilt *data
 			, Quilt *containedData
-			, const ChunkEtherNet *parent
+			, ChunkEtherNet *parent
 			, const unsigned short length
 			, const unsigned int oui
 			, const unsigned short pid);

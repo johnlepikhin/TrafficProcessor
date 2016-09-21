@@ -1,9 +1,3 @@
-/*
- * utils.h
- *
- *  Created on: 06 июня 2016 г.
- *      Author: eugene
- */
 
 #ifndef UTILS_H_
 #define UTILS_H_
@@ -63,7 +57,9 @@ namespace util {
 	 */
 	unsigned short reverse2 (unsigned short value);
 
-	Quilt *quiltOfPcap(std::istream &stream);
+	ssize_t skipBytesInFD(int fd, size_t count);
+
+	Quilt *quiltOfPcap(int fd);
 }
 
 #endif /* UTILS_H_ */

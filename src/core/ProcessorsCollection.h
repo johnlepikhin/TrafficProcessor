@@ -1,9 +1,3 @@
-/*
- * ParsersCollection.h
- *
- *  Created on: 16 авг. 2016 г.
- *      Author: eugene
- */
 
 #ifndef SRC_CORE_PARSERSCOLLECTION_H_
 #define SRC_CORE_PARSERSCOLLECTION_H_

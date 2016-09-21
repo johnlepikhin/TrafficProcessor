@@ -17,7 +17,7 @@ public:
 	 */
 	ChunkEtherNetDIX(Quilt *data
 			, Quilt *containedData
-			, const ChunkEtherNet *parent
+			, ChunkEtherNet *parent
 			, const unsigned short etherType);
 
 	/**

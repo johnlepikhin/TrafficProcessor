@@ -3,7 +3,7 @@
 
 unsigned long long pair_of_IPv4(const ChunkIPv4 *chunk)
 {
-	return (((unsigned long long)chunk->SrcIP->asInt() << 32) + chunk->DstIP->asInt());
+	return (((unsigned long long)chunk->SrcIP->Binary << 32) + chunk->DstIP->Binary);
 }
 
 PacketIPv4 *IPPairMap::AddChunk(ChunkIPv4 *chunk)
@@ -41,7 +41,6 @@ PacketIPv4 *IPPairMap::AddChunk(ChunkIPv4 *chunk)
 void ParserPacketIPv4::DestroyChunk(Chunk *c)
 {
 	PacketIPv4 *packet = dynamic_cast<PacketIPv4 *>(c);
-
 	const ChunkIPv4 *chunk = dynamic_cast<const ChunkIPv4 *>(packet->Parent);
 
 	unsigned long long pair = pair_of_IPv4(chunk);
@@ -59,6 +58,7 @@ void ParserPacketIPv4::DestroyChunk(Chunk *c)
 			}
 		}
 
+		// TODO: check+remove periodically
 		if (IDMap->empty()) {
 			delete it->second;
 			IPCollector.erase(it);

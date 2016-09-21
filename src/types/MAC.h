@@ -2,8 +2,6 @@
 #ifndef MAC_H_
 #define MAC_H_
 
-#include <iostream>
-
 #include <sparsed-ropes/Quilt.h>
 
 /**
@@ -36,10 +34,10 @@ public:
 	 * Binary representation
 	 * @return Binary representation
 	 */
-	std::string asBinary() const;
+	unsigned long long asBinary() const;
 
 private:
-	std::string Binary;
+	unsigned long long Binary;
 };
 
 #endif /* MAC_H_ */

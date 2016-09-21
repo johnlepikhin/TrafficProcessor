@@ -35,11 +35,7 @@ public:
 	 * Binary representation
 	 * @return Binary representation
 	 */
-	std::string asBinary() const;
-
-	unsigned int asInt() const;
-private:
-	std::string Binary;
+	unsigned int Binary;
 };
 
 #endif /* IPV4ADDR_H_ */

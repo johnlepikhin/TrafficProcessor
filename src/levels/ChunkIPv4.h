@@ -28,7 +28,7 @@ public:
 	 */
 	ChunkIPv4(Quilt *data
 			, Quilt *containedData
-			, const ChunkEtherNetDIX *parent
+			, ChunkEtherNetDIX *parent
 			, unsigned char iHL32bit
 			, const IPv4Addr *srcIP
 			, const IPv4Addr *dstIP

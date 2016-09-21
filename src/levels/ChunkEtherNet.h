@@ -1,9 +1,3 @@
-/*
- * ChunkEtherNet.h
- *
- *  Created on: 15 авг. 2016 г.
- *      Author: eugene
- */
 
 #ifndef SRC_LEVELS_CHUNKETHERNET_H_
 #define SRC_LEVELS_CHUNKETHERNET_H_

@@ -3,7 +3,7 @@
 
 ChunkEtherNet802LLC::ChunkEtherNet802LLC(Quilt *data
 		, Quilt *containedData
-		, const ChunkEtherNet *parent
+		, ChunkEtherNet *parent
 		, const unsigned short length
 		, const unsigned char dsap
 		, const unsigned char ssap

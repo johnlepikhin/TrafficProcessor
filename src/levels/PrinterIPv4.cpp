@@ -1,9 +1,3 @@
-/*
- * PrinterIPv4.cpp
- *
- *  Created on: 19 авг. 2016 г.
- *      Author: eugene
- */
 
 #include "PrinterIPv4.h"
 

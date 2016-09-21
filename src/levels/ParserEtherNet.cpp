@@ -1,9 +1,3 @@
-/*
- * ParserEtherNet.cpp
- *
- *  Created on: 16 авг. 2016 г.
- *      Author: eugene
- */
 
 #include "ParserEtherNet.h"
 #include "ParserEtherNetDIX.h"

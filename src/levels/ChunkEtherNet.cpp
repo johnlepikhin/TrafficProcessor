@@ -1,9 +1,3 @@
-/*
- * ChunkEtherNet.cpp
- *
- *  Created on: 15 авг. 2016 г.
- *      Author: eugene
- */
 
 #include "ChunkEtherNet.h"
 

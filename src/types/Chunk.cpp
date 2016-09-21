@@ -56,13 +56,15 @@ Processor::~Processor()
 	}
 }
 
-void Processor::Recursive(Quilt *data, Chunk *parent)
+bool Processor::Recursive(Quilt *data, Chunk *parent)
 {
 	Chunk *result = this->Process(data, parent);
 	if (NULL != result) {
 		try {
 			for (std::vector<Processor *>::iterator i = Followers.begin(); i != Followers.end(); ++i) {
-				(*i)->Recursive(result->ContainedData, result);
+				bool found = (*i)->Recursive(result->ContainedData, result);
+				if (found)
+					break;
 			}
 		} catch (...) {
 			DestroyChunk(result);
@@ -70,7 +72,11 @@ void Processor::Recursive(Quilt *data, Chunk *parent)
 		}
 		if (!result->RefCounter)
 			DestroyChunk(result);
+
+		return (true);
 	}
+
+	return (false);
 }
 
 std::string Processor::ID () {

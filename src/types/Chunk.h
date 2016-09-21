@@ -70,7 +70,7 @@ public:
 	 * @param data
 	 * @param parent
 	 */
-	void Recursive(Quilt *data, Chunk *parent);
+	bool Recursive(Quilt *data, Chunk *parent);
 
 	/**
 	 * Parser of chunk. Must return NULL if it was unable to detect format

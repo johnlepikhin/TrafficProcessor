@@ -4,17 +4,19 @@
 
 #include "IPv4Addr.h"
 
-IPv4Addr::IPv4Addr(const Quilt &data, std::streamoff offset) {
+IPv4Addr::IPv4Addr(const Quilt &data, std::streamoff offset)
+	: Binary(0)
+{
 	data.CopyBytesOrFail((char *)&Binary, offset, 4);
 }
 
 std::string IPv4Addr::asString() const {
 	char r[16];
 	snprintf(r, sizeof(r), "%i.%i.%i.%i",
-			(unsigned char)(Binary >> 24),
-			(unsigned char)((Binary >> 16) & 0xf),
-			(unsigned char)((Binary >> 8) & 0xf),
-			(unsigned char)(Binary & 0xf));
+			(Binary & 0xff),
+			((Binary >> 8) & 0xff),
+			((Binary >> 16) & 0xff),
+			(Binary >> 24));
 	return (r);
 }
 

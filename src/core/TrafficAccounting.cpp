@@ -27,16 +27,16 @@ using namespace std;
 
 static ParserEtherNet *generateParseTree()
 {
-//	PrinterIPv4 *printerIPV4 = new PrinterIPv4();
+	PrinterIPv4 *printerIPV4 = new PrinterIPv4();
 
 	ParserPacketIPv4 *parserPacketIPv4 = new ParserPacketIPv4();
 
 	ParserIPv4 *parserIPv4 = new ParserIPv4();
-//	parserIPv4->AddFollower(printerIPV4);
+	parserIPv4->AddFollower(printerIPV4);
 	parserIPv4->AddFollower(parserPacketIPv4);
 
 	ParserEtherNetDIX *etherNetDIX = new ParserEtherNetDIX();
-//	etherNetDIX->AddFollower(new PrinterEtherNetDIX());
+	etherNetDIX->AddFollower(new PrinterEtherNetDIX());
 	etherNetDIX->AddFollower(parserIPv4);
 //	ethernetDIX->AddFollower(new ParserIPv6());
 

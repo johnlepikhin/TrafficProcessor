@@ -16,6 +16,7 @@
 #include "../levels/ParserEtherNet802LLC.h"
 #include "../levels/ParserIPv4.h"
 #include "../levels/PrinterIPv4.h"
+#include "../levels/PrinterPacketIPv4.h"
 #include "../levels/ParserPacketIPv4.h"
 #include "../levels/PrinterEtherNetDIX.h"
 #include "../levels/PrinterEtherNetRAW.h"
@@ -27,9 +28,11 @@ using namespace std;
 
 static ParserEtherNet *generateParseTree()
 {
-	PrinterIPv4 *printerIPV4 = new PrinterIPv4();
+//	PrinterIPv4 *printerIPV4 = new PrinterIPv4();
+	PrinterPacketIPv4 *printerPacketIPV4 = new PrinterPacketIPv4();
 
 	ParserPacketIPv4 *parserPacketIPv4 = new ParserPacketIPv4();
+	parserPacketIPv4->AddFollower(printerPacketIPV4);
 
 	ParserIPv4 *parserIPv4 = new ParserIPv4();
 //	parserIPv4->AddFollower(printerIPV4);
@@ -92,6 +95,7 @@ static void registerParsers () {
 	collection->Register((Processor *)new ParserEtherNet802LLC());
 	collection->Register((Processor *)new ParserIPv4());
 	collection->Register((Processor *)new PrinterIPv4());
+	collection->Register((Processor *)new PrinterPacketIPv4());
 	collection->Register((Processor *)new ParserPacketIPv4());
 	collection->Register((Processor *)new PrinterEtherNetDIX());
 	collection->Register((Processor *)new PrinterEtherNetRAW());

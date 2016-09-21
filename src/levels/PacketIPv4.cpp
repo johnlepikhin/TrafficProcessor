@@ -11,29 +11,35 @@ PacketIPv4::PacketIPv4(ChunkIPv4 *chunk)
 	, ExpectedSize(0)
 {
 	AddChunk(chunk);
+	chunk->IncrRefs(1);
 }
 
 PacketIPv4::~PacketIPv4()
 {
+	Parent->DecrRefs(1);
+	if (!Parent->RefCounter) {
+		delete Parent;
+	}
 }
 
 bool PacketIPv4::AddChunk(ChunkIPv4 *chunk)
 {
 	QuiltSew *sew = (QuiltSew *)ContainedData;
 
-	sew->SewWithHole(chunk->ContainedData, chunk->FragmentOffset, chunk->PktLength);
+	sew->SewWithHole(chunk->ContainedData, chunk->FragmentOffset, chunk->PayloadLength);
 
 	if ( ! chunk->FlagIsFragmented) {
 		if (0 == chunk->FragmentOffset) {
 			IsComplete = true;
-			ExpectedSize = chunk->PktLength;
-			ReceivedSize = chunk->PktLength;
+			ExpectedSize = chunk->PayloadLength;
+			ReceivedSize = chunk->PayloadLength;
 			return (true);
 		} else {
-			ExpectedSize = chunk->FragmentOffset + chunk->PktLength;
+			ExpectedSize = chunk->FragmentOffset + chunk->PayloadLength;
+			ReceivedSize += chunk->PayloadLength;
 		}
 	} else {
-		ReceivedSize += chunk->PktLength;
+		ReceivedSize += chunk->PayloadLength;
 	}
 
 	if (ReceivedSize == ExpectedSize) {

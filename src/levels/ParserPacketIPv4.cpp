@@ -29,10 +29,11 @@ PacketIPv4 *IPPairMap::AddChunk(ChunkIPv4 *chunk)
 		return (pkt);
 	} else {
 		IPPacketMap *IDMap = new IPPacketMap();
-		emplace(pair, IDMap);
 
 		PacketIPv4 *pkt = new PacketIPv4(chunk);
 		IDMap->push_back(pkt);
+
+		emplace(pair, IDMap);
 
 		return (pkt);
 	}

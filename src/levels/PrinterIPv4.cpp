@@ -8,7 +8,7 @@ std::string PrinterIPv4::ID()
 
 std::string PrinterIPv4::Description()
 {
-	return (std::string("IPv4 packet printer"));
+	return (std::string("IPv4 chunk printer"));
 }
 
 ChunkIPv4 *PrinterIPv4::Process(Quilt *data, Chunk *p)

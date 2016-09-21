@@ -60,6 +60,7 @@ bool Processor::Recursive(Quilt *data, Chunk *parent)
 {
 	Chunk *result = this->Process(data, parent);
 	if (NULL != result) {
+		result->IncrRefs(1);
 		try {
 			for (std::vector<Processor *>::iterator i = Followers.begin(); i != Followers.end(); ++i) {
 				bool found = (*i)->Recursive(result->ContainedData, result);
@@ -70,6 +71,7 @@ bool Processor::Recursive(Quilt *data, Chunk *parent)
 			DestroyChunk(result);
 			throw;
 		}
+		result->DecrRefs(1);
 		if (!result->RefCounter)
 			DestroyChunk(result);
 

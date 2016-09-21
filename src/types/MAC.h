@@ -7,37 +7,18 @@
 /**
  * MAC address container and reader
  */
-class MAC {
-public:
-
+namespace MAC {
 	/**
 	 * Create MAC from Data
 	 * @param data Pointer to Data, buffer must point to position from where MAC to read
 	 */
-	MAC(const Quilt &data, size_t offset);
+	unsigned long long Make(const Quilt &data, const size_t offset);
 
 	/**
 	 * Human readable representation
 	 * @return Human readable representation
 	 */
-	std::string asString() const;
-
-	/**
-	 * Compare with other MAC address
-	 * @param other MAC address to compare with
-	 * @return Returns an integer < 0 if this MAC is ordered before 'other'
-	 *  0 if their values are equivalent, or > 0 if this MAC is ordered after 'other'
-	 */
-	int compare(const MAC *other) const;
-
-	/**
-	 * Binary representation
-	 * @return Binary representation
-	 */
-	unsigned long long asBinary() const;
-
-private:
-	unsigned long long Binary;
+	std::string asString(const unsigned long long mac);
 };
 
 #endif /* MAC_H_ */

@@ -22,8 +22,8 @@ Chunk *PrinterEtherNetRAW::Process(Quilt *data, Chunk *p)
 		const ChunkEtherNet *ethernet = dynamic_cast<const ChunkEtherNet *>(parent->Parent);
 		const ChunkEtherNetRAW *raw = dynamic_cast<const ChunkEtherNetRAW *>(parent);
 		if (ethernet) {
-			std::cout << "EtherNetRAW " << ethernet->SourceMAC->asString()
-					<< " -> " << ethernet->DestinationMAC->asString()
+			std::cout << "EtherNetRAW " << MAC::asString(ethernet->SourceMAC)
+					<< " -> " << MAC::asString(ethernet->DestinationMAC)
 					<< " payload_length=" << raw->PayloadLength
 					<< "   Data: captured=" << ethernet->Data->CoveredSize << ", size=" << ethernet->Data->Length
 					<< "\n";

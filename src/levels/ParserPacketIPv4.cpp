@@ -1,9 +1,9 @@
 
 #include "ParserPacketIPv4.h"
 
-unsigned long long pair_of_IPv4(const ChunkIPv4 *chunk)
+inline unsigned long long pair_of_IPv4(const ChunkIPv4 *chunk)
 {
-	return (((unsigned long long)chunk->SrcIP->Binary << 32) + chunk->DstIP->Binary);
+	return (((unsigned long long)chunk->SrcIP << 32) + chunk->DstIP);
 }
 
 PacketIPv4 *IPPairMap::AddChunk(ChunkIPv4 *chunk)
@@ -59,10 +59,10 @@ void ParserPacketIPv4::DestroyChunk(Chunk *c)
 		}
 
 		// TODO: check+remove periodically
-		if (IDMap->empty()) {
-			delete it->second;
-			IPCollector.erase(it);
-		}
+//		if (IDMap->empty()) {
+//			delete IDMap;
+//			IPCollector.erase(it);
+//		}
 	}
 
 	if (packet->RefCounter)

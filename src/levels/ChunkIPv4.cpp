@@ -5,8 +5,8 @@ ChunkIPv4::ChunkIPv4(Quilt *data
 		, Quilt *containedData
 		, ChunkEtherNetDIX *parent
 		, unsigned char iHL32bit
-		, const IPv4Addr *srcIP
-		, const IPv4Addr *dstIP
+		, const unsigned long srcIP
+		, const unsigned long dstIP
 		, unsigned short pktLength
 		, unsigned short payloadLength
 		, unsigned char protocol
@@ -28,10 +28,4 @@ ChunkIPv4::ChunkIPv4(Quilt *data
 	, FragmentOffset(fragmentOffset)
 	, TTL(ttl)
 {
-}
-
-ChunkIPv4::~ChunkIPv4()
-{
-	delete SrcIP;
-	delete DstIP;
 }

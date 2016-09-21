@@ -22,8 +22,8 @@ Chunk *PrinterEtherNet802LLC::Process(Quilt *data, Chunk *p)
 		const ChunkEtherNet *ethernet = dynamic_cast<const ChunkEtherNet *>(parent->Parent);
 		const ChunkEtherNet802LLC *chunk = dynamic_cast<const ChunkEtherNet802LLC *>(parent);
 		if (ethernet) {
-			std::cout << "EtherNet802LLC " << ethernet->SourceMAC->asString()
-					<< " -> " << ethernet->DestinationMAC->asString()
+			std::cout << "EtherNet802LLC " << MAC::asString(ethernet->SourceMAC)
+					<< " -> " << MAC::asString(ethernet->DestinationMAC)
 					<< " payload_length=" << chunk->PayloadLength
 					<< " control=" << (int)chunk->Control
 					<< " DSAP=" << (int)chunk->DSAP

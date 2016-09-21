@@ -22,8 +22,8 @@ Chunk *PrinterEtherNetSNAP::Process(Quilt *data, Chunk *p)
 		const ChunkEtherNet *ethernet = dynamic_cast<const ChunkEtherNet *>(parent->Parent);
 		const ChunkEtherNetSNAP *snap = dynamic_cast<const ChunkEtherNetSNAP *>(parent);
 		if (ethernet) {
-			std::cout << "EtherNetSNAP " << ethernet->SourceMAC->asString()
-					<< " -> " << ethernet->DestinationMAC->asString()
+			std::cout << "EtherNetSNAP " << MAC::asString(ethernet->SourceMAC)
+					<< " -> " << MAC::asString(ethernet->DestinationMAC)
 					<< " payload_length=" << snap->PayloadLength
 					<< " OUI=" << snap->OUI
 					<< " PID=" << snap->PID

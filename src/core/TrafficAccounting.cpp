@@ -32,11 +32,11 @@ static ParserEtherNet *generateParseTree()
 	ParserPacketIPv4 *parserPacketIPv4 = new ParserPacketIPv4();
 
 	ParserIPv4 *parserIPv4 = new ParserIPv4();
-	parserIPv4->AddFollower(printerIPV4);
+//	parserIPv4->AddFollower(printerIPV4);
 	parserIPv4->AddFollower(parserPacketIPv4);
 
 	ParserEtherNetDIX *etherNetDIX = new ParserEtherNetDIX();
-	etherNetDIX->AddFollower(new PrinterEtherNetDIX());
+//	etherNetDIX->AddFollower(new PrinterEtherNetDIX());
 	etherNetDIX->AddFollower(parserIPv4);
 //	ethernetDIX->AddFollower(new ParserIPv6());
 

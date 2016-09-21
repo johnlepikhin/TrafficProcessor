@@ -30,8 +30,8 @@ public:
 			, Quilt *containedData
 			, ChunkEtherNetDIX *parent
 			, unsigned char iHL32bit
-			, const IPv4Addr *srcIP
-			, const IPv4Addr *dstIP
+			, const unsigned long srcIP
+			, const unsigned long dstIP
 			, unsigned short pktLength
 			, unsigned short payloadLength
 			, unsigned char protocol
@@ -41,8 +41,6 @@ public:
 			, unsigned short fragmentOffset
 			, unsigned short ttl);
 
-	~ChunkIPv4();
-
 	/**
 	 * Header length in 32-bit words
 	 */
@@ -51,12 +49,12 @@ public:
 	/**
 	 * Source IP address
 	 */
-	const IPv4Addr *SrcIP;
+	const unsigned long SrcIP;
 
 	/**
 	 * Destination IP address
 	 */
-	const IPv4Addr *DstIP;
+	const unsigned long DstIP;
 
 	/**
 	 * Full packet length

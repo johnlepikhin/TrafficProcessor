@@ -23,21 +23,19 @@ public:
 	 */
 	ChunkEtherNet(Quilt *data,
 			Quilt *containedData,
-			const MAC *destinationMAC,
-			const MAC *sourceMAC,
+			const unsigned long long destinationMAC,
+			const unsigned long long sourceMAC,
 			const unsigned short ethernetType);
-
-	~ChunkEtherNet();
 
 	/**
 	 * Reference to destination MAC address
 	 */
-	const MAC *DestinationMAC;
+	const unsigned long long DestinationMAC;
 
 	/**
 	 * Reference to source MAC address
 	 */
-	const MAC *SourceMAC;
+	const unsigned long long SourceMAC;
 
 	/**
 	 * 2-byte value at offset 13, ethernet type or payload length

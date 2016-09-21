@@ -24,8 +24,8 @@ ChunkIPv4 *ParserIPv4::Process(Quilt *data, Chunk *p)
 			unsigned char IHL32bit = data->GetCharOrFail(0);
 			IHL32bit = IHL32bit & 0xf;
 
-			IPv4Addr *SrcIP = new IPv4Addr(*data, 12);
-			IPv4Addr *DstIP = new IPv4Addr(*data, 16);
+			unsigned long SrcIP = IPv4Addr::Make(*data, 12);
+			unsigned long DstIP = IPv4Addr::Make(*data, 16);
 
 			unsigned short PktLength = data->GetShortLEOrFail(2);
 			PktLength = (short)((PktLength>>8) | (PktLength<<8));

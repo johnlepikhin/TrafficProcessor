@@ -17,8 +17,8 @@ std::string ParserEtherNet::Description()
 
 ChunkEtherNet *ParserEtherNet::Process(Quilt *data, Chunk *parent)
 {
-	const MAC *DA = new MAC(*data, 0);
-	const MAC *SA = new MAC(*data, 6);
+	unsigned long long DA = MAC::Make(*data, 0);
+	unsigned long long SA = MAC::Make(*data, 6);
 
 	unsigned short eType = data->GetShortBEOrFail(12);
 	Quilt *containedData = new QuiltCut(data, 14);

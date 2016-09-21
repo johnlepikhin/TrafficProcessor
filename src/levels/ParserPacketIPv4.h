@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include "PacketIPv4.h"
 
-typedef int IPv4PacketID;
+typedef unsigned int IPv4PacketID;
 
 //class IPPacketMap : public std::unordered_map<IPv4PacketID, PacketIPv4 *> {
 //};

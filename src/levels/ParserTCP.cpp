@@ -21,7 +21,6 @@ ChunkTCP *ParserTCP::Process(Quilt *data, Chunk *p)
 		unsigned short pktLength = ip->ExpectedSize;
 
 		unsigned int sourcePort = data->GetShortBEOrFail(0);
-//		std::cout << "\n\n\source = " << sourcePort << "\n\n\n";
 
 		unsigned short destinationPort = data->GetShortBEOrFail(2);
 
@@ -33,7 +32,7 @@ ChunkTCP *ParserTCP::Process(Quilt *data, Chunk *p)
 
 		unsigned short headerLength = (data->GetCharOrFail(12) >> 4) << 2;
 
-		unsigned char flags = data->GetCharOrFail(14) >> 1;
+		unsigned char flags = data->GetCharOrFail(14);
 
 		unsigned short windowSize = data->GetShortBEOrFail(15);
 
@@ -44,6 +43,10 @@ ChunkTCP *ParserTCP::Process(Quilt *data, Chunk *p)
 				, pktLength
 				, headerLength
 				, pktLength-headerLength
+				, flags
+				, windowSize
+				, seqNumber
+				, confirmNumber
 				, sourcePort
 				, destinationPort
 		);

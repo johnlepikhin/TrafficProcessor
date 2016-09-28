@@ -14,23 +14,15 @@ std::string PrinterEtherNetSNAP::Description()
 PrinterEtherNetSNAP::PrinterEtherNetSNAP() {
 }
 
-Chunk *PrinterEtherNetSNAP::Process(Quilt *data, Chunk *p)
+ChunkRaw *PrinterEtherNetSNAP::Process(ChunkEtherNetSNAP *snap)
 {
-	ChunkEtherNetSNAP *parent = dynamic_cast<ChunkEtherNetSNAP *>(p);
-
-	if (parent) {
-		const ChunkEtherNet *ethernet = dynamic_cast<const ChunkEtherNet *>(parent->Parent);
-		const ChunkEtherNetSNAP *snap = dynamic_cast<const ChunkEtherNetSNAP *>(parent);
-		if (ethernet) {
-			std::cout << "EtherNetSNAP " << MAC::asString(ethernet->SourceMAC)
-					<< " -> " << MAC::asString(ethernet->DestinationMAC)
-					<< " payload_length=" << snap->PayloadLength
-					<< " OUI=" << snap->OUI
-					<< " PID=" << snap->PID
-					<< "   Data: captured=" << ethernet->Data->CoveredSize << ", size=" << ethernet->Data->Length
-					<< "\n";
-		}
-	}
+	std::cout << "EtherNetSNAP " << MAC::asString(snap->Parent->SourceMAC)
+		<< " -> " << MAC::asString(snap->Parent->DestinationMAC)
+		<< " payload_length=" << snap->PayloadLength
+		<< " OUI=" << snap->OUI
+		<< " PID=" << snap->PID
+		<< "   Data: captured=" << snap->BaseData->CoveredSize << ", size=" << snap->BaseData->Length
+		<< "\n";
 
 	return (0);
 }

@@ -8,7 +8,7 @@
 /**
  * Container for RAW EtherNet frame
  */
-class ChunkEtherNetRAW: public Chunk {
+class ChunkEtherNetRAW: public Chunk<ChunkEtherNet> {
 public:
 	/**
 	 * Constructor for RAW
@@ -16,8 +16,8 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @param length Length of payload
 	 */
-	ChunkEtherNetRAW(Quilt *data
-			, Quilt *containedData
+	ChunkEtherNetRAW(BaseQuilt *baseData
+			, PayloadQuilt *payload
 			, ChunkEtherNet *parent
 			, const unsigned short length);
 

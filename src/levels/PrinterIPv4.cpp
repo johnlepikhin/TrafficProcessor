@@ -11,20 +11,20 @@ std::string PrinterIPv4::Description()
 	return (std::string("IPv4 chunk printer"));
 }
 
-ChunkIPv4 *PrinterIPv4::Process(Quilt *data, Chunk *p)
+ChunkRaw *PrinterIPv4::Process(ChunkIPv4 *ipv4)
 {
-	ChunkIPv4 *parent = dynamic_cast<ChunkIPv4 *>(p);
+	std::string srcIP = IPv4Addr::asString(ipv4->SrcIP);
+	std::string dstIP = IPv4Addr::asString(ipv4->DstIP);
+	std::cout << "IPv4 " << srcIP
+		<< " " << dstIP
+		<< " packetLength=" << ipv4->PktLength
+		<< " dontFragment=" << ipv4->FlagDontFragment
+		<< " isFragmented=" << ipv4->FlagIsFragmented
+		<< " ID=" << ipv4->ID
+		<< " fragmentOffset=" << ipv4->FragmentOffset
+		<< " TTL=" << ipv4->TTL
+		<< "\n";
 
-	if (parent) {
-		std::cout << "IPv4 " << IPv4Addr::asString(parent->SrcIP)
-				<< " " << IPv4Addr::asString(parent->DstIP)
-				<< " packetLength=" << parent->PktLength
-				<< " dontFragment=" << parent->FlagDontFragment
-				<< " isFragmented=" << parent->FlagIsFragmented
-				<< " ID=" << parent->ID
-				<< " fragmentOffset=" << parent->FragmentOffset
-				<< " TTL=" << parent->TTL
-				<< "\n";
-	}
+
 	return (0);
 }

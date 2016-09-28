@@ -13,32 +13,30 @@ std::string ParserTCP::Description()
 	return (std::string("TCP fragment"));
 }
 
-ChunkTCP *ParserTCP::Process(Quilt *data, Chunk *p)
+ChunkTCP *ParserTCP::Process(PacketIPv4 *packet)
 {
-	PacketIPv4 *ip = dynamic_cast<PacketIPv4 *>(p);
+	if (6 == packet->Parent->Protocol) {
+		unsigned short pktLength = packet->ExpectedSize;
 
-	if (ip && 6 == ((ChunkIPv4 *)ip->Parent)->Protocol) {
-		unsigned short pktLength = ip->ExpectedSize;
+		unsigned int sourcePort = packet->Payload->GetShortBEOrFail(0);
 
-		unsigned int sourcePort = data->GetShortBEOrFail(0);
-
-		unsigned short destinationPort = data->GetShortBEOrFail(2);
+		unsigned short destinationPort = packet->Payload->GetShortBEOrFail(2);
 
 		unsigned short seqNumber(0);
-		data->CopyBytesOrFail((char *)&seqNumber, 4, 4);
+		packet->Payload->CopyBytesOrFail((char *)&seqNumber, 4, 4);
 
 		unsigned short confirmNumber(0);
-		data->CopyBytesOrFail((char *)&confirmNumber, 8, 4);
+		packet->Payload->CopyBytesOrFail((char *)&confirmNumber, 8, 4);
 
-		unsigned short headerLength = (data->GetCharOrFail(12) >> 4) << 2;
+		unsigned short headerLength = (packet->Payload->GetCharOrFail(12) >> 4) << 2;
 
-		unsigned char flags = data->GetCharOrFail(14);
+		unsigned char flags = packet->Payload->GetCharOrFail(14);
 
-		unsigned short windowSize = data->GetShortBEOrFail(15);
+		unsigned short windowSize = packet->Payload->GetShortBEOrFail(15);
 
-		QuiltCut *payload = new QuiltCut(data, headerLength);
+		PayloadQuilt *payload = new PayloadQuilt(packet->Payload, headerLength);
 
-		ChunkTCP *r = new ChunkTCP(data
+		ChunkTCP *r = new ChunkTCP(packet->BaseData
 				, payload
 				, pktLength
 				, headerLength

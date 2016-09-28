@@ -3,7 +3,7 @@
 
 ProcessorsCollection *ProcessorsCollection::p_instance = 0;
 
-std::vector<Processor *> ProcessorsCollection::AsVector() const
+std::vector<ProcessorTraits *> ProcessorsCollection::AsVector() const
 {
 	return (collection);
 }

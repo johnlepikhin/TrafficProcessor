@@ -15,8 +15,9 @@ unsigned long Make(const Quilt &data, const std::streamoff offset)
 
 std::string asString(unsigned long addr)
 {
-	char r[16];
-	snprintf(r, sizeof(r), "%i.%i.%i.%i",
+	std::string r;
+	r.resize(16, 0);
+	snprintf(&(r.at(0)), 16, "%i.%i.%i.%i",
 			(int)(addr & 0xff),
 			(int)((addr >> 8) & 0xff),
 			(int)((addr >> 16) & 0xff),

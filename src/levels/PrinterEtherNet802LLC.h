@@ -3,11 +3,11 @@
 #define SRC_LEVELS_PRINTERETHERNET802LLC_H_
 
 #include "ChunkEtherNet802LLC.h"
-#include "../types/Chunk.h"
-#include <string>
+#include "ChunkEtherNet.h"
+#include "../types/Processor.h"
 
 
-class PrinterEtherNet802LLC: public Processor {
+class PrinterEtherNet802LLC: public Processor<ChunkEtherNet802LLC, ChunkRaw> {
 public:
 	PrinterEtherNet802LLC();
 
@@ -17,7 +17,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */
-	Chunk *Process(Quilt *data, Chunk *parent);
+	ChunkRaw *Process(ChunkEtherNet802LLC *parent);
 
 	/**
 	 * Returns unique ID for this Printer

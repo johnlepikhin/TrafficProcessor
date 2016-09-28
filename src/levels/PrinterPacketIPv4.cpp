@@ -11,19 +11,16 @@ std::string PrinterPacketIPv4::Description()
 	return (std::string("IPv4 packet printer"));
 }
 
-Chunk *PrinterPacketIPv4::Process(Quilt *data, Chunk *p)
+ChunkRaw *PrinterPacketIPv4::Process(PacketIPv4 *packet)
 {
-	PacketIPv4 *parent = dynamic_cast<PacketIPv4 *>(p);
-
-	if (parent && parent->IsComplete) {
-		ChunkIPv4 *hdr = (ChunkIPv4 *)parent->Parent;
-		std::cout << "IPv4_Packet " << IPv4Addr::asString(hdr->SrcIP)
-				<< " " << IPv4Addr::asString(hdr->DstIP)
-				<< " ID=" << hdr->ID
-				<< " Protocol=" << (int)hdr->Protocol
-				<< " packetLength=" << parent->ExpectedSize
-				<< " dataLength=" << parent->ReceivedSize
-				<< " isComplete=" << parent->IsComplete
+	if (packet->IsComplete) {
+		std::cout << "IPv4_Packet " << IPv4Addr::asString(packet->Parent->SrcIP)
+				<< " " << IPv4Addr::asString(packet->Parent->DstIP)
+				<< " ID=" << packet->Parent->ID
+				<< " Protocol=" << (int)packet->Parent->Protocol
+				<< " packetLength=" << packet->ExpectedSize
+				<< " dataLength=" << packet->ReceivedSize
+				<< " isComplete=" << packet->IsComplete
 				<< "\n";
 	}
 	return (0);

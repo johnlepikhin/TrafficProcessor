@@ -14,24 +14,16 @@ std::string PrinterEtherNet802LLC::Description()
 PrinterEtherNet802LLC::PrinterEtherNet802LLC() {
 }
 
-Chunk *PrinterEtherNet802LLC::Process(Quilt *data, Chunk *p)
+ChunkRaw *PrinterEtherNet802LLC::Process(ChunkEtherNet802LLC *llc)
 {
-	ChunkEtherNet802LLC *parent = dynamic_cast<ChunkEtherNet802LLC *>(p);
-
-	if (parent) {
-		const ChunkEtherNet *ethernet = dynamic_cast<const ChunkEtherNet *>(parent->Parent);
-		const ChunkEtherNet802LLC *chunk = dynamic_cast<const ChunkEtherNet802LLC *>(parent);
-		if (ethernet) {
-			std::cout << "EtherNet802LLC " << MAC::asString(ethernet->SourceMAC)
-					<< " -> " << MAC::asString(ethernet->DestinationMAC)
-					<< " payload_length=" << chunk->PayloadLength
-					<< " control=" << (int)chunk->Control
-					<< " DSAP=" << (int)chunk->DSAP
-					<< " SSAP=" << (int)chunk->SSAP
-					<< "   Data: captured=" << ethernet->Data->CoveredSize << ", size=" << ethernet->Data->Length
-					<< "\n";
-		}
-	}
+	std::cout << "EtherNet802LLC " << MAC::asString(llc->Parent->SourceMAC)
+		<< " -> " << MAC::asString(llc->Parent->DestinationMAC)
+		<< " payload_length=" << llc->PayloadLength
+		<< " control=" << (int)llc->Control
+		<< " DSAP=" << (int)llc->DSAP
+		<< " SSAP=" << (int)llc->SSAP
+		<< "   Data: captured=" << llc->BaseData->CoveredSize << ", size=" << llc->BaseData->Length
+		<< "\n";
 
 	return (0);
 }

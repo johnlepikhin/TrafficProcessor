@@ -3,15 +3,17 @@
 #define SRC_LEVELS_PRINTERTCP_H_
 
 #include "ChunkTCP.h"
+#include "ChunkRaw.h"
+#include "../types/Processor.h"
 
-class PrinterTCP: public Processor {
+class PrinterTCP: public Processor<ChunkTCP, ChunkRaw> {
 	/**
 	 * Basic printer for TCP
 	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */
-	Chunk *Process(Quilt *data, Chunk *parent);
+	ChunkRaw *Process(ChunkTCP *chunk);
 
 	/**
 	 * Returns unique ID for this Printer

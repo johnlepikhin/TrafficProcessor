@@ -5,11 +5,12 @@
 #include "../types/IPv6Addr.h"
 #include "../types/Chunk.h"
 #include "ChunkEtherNetDIX.h"
+#include "ChunkIPTraits.h"
 
 /**
  * Container for IPv6 chunk
  */
-class ChunkIPv6: public Chunk {
+class ChunkIPv6: public Chunk<ChunkEtherNetDIX>, public ChunkIPTraits {
 public:
 	/**
 	 * Constructor
@@ -18,8 +19,8 @@ public:
 	 * @param srcIP Source IP address
 	 * @param dstIP Destination IP address
 	 */
-	ChunkIPv6(Quilt *data
-			, Quilt *containedData
+	ChunkIPv6(BaseQuilt *baseData
+			, PayloadQuilt *payload
 			, ChunkEtherNetDIX *parent
 			, IPv6Addr *srcIP
 			, IPv6Addr *dstIP);
@@ -35,10 +36,6 @@ public:
 	 * Destination IP address
 	 */
 	IPv6Addr *DstIP;
-	/**
-	 * Next protocol ID
-	 */
-	unsigned char Protocol;
 };
 
 #endif /* SRC_LEVELS_CHUNKIPv6_H_ */

@@ -2,16 +2,15 @@
 #ifndef SRC_LEVELS_PARSERIPv6_H_
 #define SRC_LEVELS_PARSERIPv6_H_
 
+#include "../types/Chunk.h"
 #include "ChunkIPv6.h"
-#include "ChunkEtherNetDIX.h"
-#include "../types/Processor.h"
 
 /**
  * Parser for IPv6 protocol
  */
 //lint -sem(ParserIPv6::Process, 1p)
 //lint -sem(ParserIPv6::Process, 2p)
-class ParserIPv6: public Processor<ChunkEtherNetDIX, ChunkIPv6> {
+class ParserIPv6: public Processor {
 public:
 	/**
 	 * Try to get IPv6 from data.
@@ -19,7 +18,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkIPv6 *Process(ChunkEtherNetDIX *parent);
+	ChunkIPv6 *Process(Data *data, Chunk *parent);
 
 	/**
 	 * Returns unique ID for this Parser

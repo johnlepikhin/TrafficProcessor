@@ -3,11 +3,9 @@
 #define SRC_LEVELS_PRINTERETHERNETRAW_H_
 
 #include "ChunkEtherNetRAW.h"
-#include "../types/Chunk.h"
-#include <string>
+#include "../types/Processor.h"
 
-
-class PrinterEtherNetRAW: public Processor {
+class PrinterEtherNetRAW: public Processor<ChunkEtherNetRAW, ChunkRaw> {
 public:
 	PrinterEtherNetRAW();
 
@@ -17,7 +15,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */
-	Chunk *Process(Quilt *data, Chunk *parent);
+	ChunkRaw *Process(ChunkEtherNetRAW *parent);
 
 	/**
 	 * Returns unique ID for this Printer

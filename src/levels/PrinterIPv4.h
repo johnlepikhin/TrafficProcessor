@@ -3,8 +3,9 @@
 #define SRC_LEVELS_PRINTERIPV4_H_
 
 #include "ChunkIPv4.h"
+#include "../types/Processor.h"
 
-class PrinterIPv4: public Processor {
+class PrinterIPv4: public Processor<ChunkIPv4, ChunkRaw> {
 public:
 	/**
 	 * Basic printer for ChunkIPv4
@@ -12,7 +13,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */
-	ChunkIPv4 *Process(Quilt *data, Chunk *parent);
+	ChunkRaw *Process(ChunkIPv4 *parent);
 
 	/**
 	 * Returns unique ID for this Printer

@@ -1,8 +1,8 @@
 
 #include "ChunkTCP.h"
 
-ChunkTCP::ChunkTCP(Quilt *data
-		, Quilt *containedData
+ChunkTCP::ChunkTCP(BaseQuilt *baseData
+		, PayloadQuilt *payload
 		, const unsigned int pktLength
 		, const unsigned int headerLength
 		, const unsigned int payloadLength
@@ -12,7 +12,7 @@ ChunkTCP::ChunkTCP(Quilt *data
 		, const unsigned short confirmNumber
 		, const unsigned int sourcePort
 		, const unsigned int destinationPort)
-	: Chunk(data, containedData)
+	: Chunk<ChunkIPTraits>(baseData, payload)
 	, PktLength(pktLength)
 	, HeaderLength(headerLength)
 	, PayloadLength(payloadLength)

@@ -5,11 +5,12 @@
 #include "../types/IPv4Addr.h"
 #include "../types/Chunk.h"
 #include "ChunkEtherNetDIX.h"
+#include "ChunkIPTraits.h"
 
 /**
  * Container for IPv4 chunk
  */
-class ChunkIPv4: public Chunk {
+class ChunkIPv4: public Chunk<ChunkEtherNetDIX>, public ChunkIPTraits {
 public:
 	/**
 	 * Constructor
@@ -26,8 +27,8 @@ public:
 	 * @param fragmentOffset offset of this fragment in bytes
 	 * @param ttl TTL
 	 */
-	ChunkIPv4(Quilt *data
-			, Quilt *containedData
+	ChunkIPv4(BaseQuilt *baseData
+			, PayloadQuilt *payload
 			, ChunkEtherNetDIX *parent
 			, unsigned char iHL32bit
 			, const unsigned long srcIP
@@ -67,11 +68,6 @@ public:
 	unsigned short PayloadLength;
 
 	/**
-	 * Next protocol ID
-	 */
-	unsigned char Protocol;
-
-	/**
 	 * True if DontFragment flag is set
 	 */
 	bool FlagDontFragment;
@@ -95,6 +91,9 @@ public:
 	 * TTL
 	 */
 	unsigned short TTL;
+
+	std::string StringOfSrcIP();
+	std::string StringOfDstIP();
 };
 
 #endif /* SRC_LEVELS_CHUNKIPV4_H_ */

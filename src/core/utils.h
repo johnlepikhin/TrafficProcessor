@@ -4,7 +4,7 @@
 
 #include <istream>
 
-#include "sparsed-ropes/Quilt.h"
+#include "../types/PhantomQuilt.h"
 
 /**
  * Uncategorized functions
@@ -59,7 +59,7 @@ namespace util {
 
 	ssize_t skipBytesInFD(int fd, size_t count);
 
-	Quilt *quiltOfPcap(int fd);
+	BaseQuilt *quiltOfPcap(int fd);
 }
 
 #endif /* UTILS_H_ */

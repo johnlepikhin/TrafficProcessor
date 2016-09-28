@@ -1,11 +1,11 @@
 
 #include "ChunkEtherNetDIX.h"
 
-ChunkEtherNetDIX::ChunkEtherNetDIX(Quilt *data
-		, Quilt *containedData
+ChunkEtherNetDIX::ChunkEtherNetDIX(BaseQuilt *baseData
+		, PayloadQuilt *payload
 		, ChunkEtherNet *parent
 		, const unsigned short etherType)
-	: Chunk(data, containedData, parent)
+	: Chunk<ChunkEtherNet>(baseData, payload, parent)
 	, EtherNetType(etherType)
 
 {

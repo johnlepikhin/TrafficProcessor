@@ -1,8 +1,5 @@
 
-#include <typeinfo>
-
 #include "ParserEtherNetRAW.h"
-#include "PrinterEtherNetRAW.h"
 
 std::string ParserEtherNetRAW::ID()
 {
@@ -14,15 +11,13 @@ std::string ParserEtherNetRAW::Description()
 	return (std::string("Ethernet RAW(IPX) frame"));
 }
 
-ChunkEtherNetRAW *ParserEtherNetRAW::Process(Quilt *data, Chunk *p)
+ChunkEtherNetRAW *ParserEtherNetRAW::Process(ChunkEtherNet *ethernet)
 {
-	ChunkEtherNet *parent = dynamic_cast<ChunkEtherNet *>(p);
-
-	if (parent && parent->EtherNetType <= 1500) {
-		unsigned short b2 = data->GetShortLEOrFail(0);
+	if (ethernet->EtherNetType <= 1500) {
+		unsigned short b2 = ethernet->Payload->GetShortLEOrFail(0);
 		if (0xffff == b2) {
-			Quilt *containedData = new QuiltCut(data, 0);
-			return (new ChunkEtherNetRAW(data, containedData, parent, parent->EtherNetType));
+			PayloadQuilt *payload = new PayloadQuilt(ethernet->Payload, 0);
+			return (new ChunkEtherNetRAW(ethernet->BaseData, payload, ethernet, ethernet->EtherNetType));
 		}
 	}
 

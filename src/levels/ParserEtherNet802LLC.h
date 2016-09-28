@@ -2,7 +2,8 @@
 #ifndef SRC_LEVELS_PARSERETHERNET802LLC_H_
 #define SRC_LEVELS_PARSERETHERNET802LLC_H_
 
-#include "../types/Chunk.h"
+#include "../types/Processor.h"
+#include "ChunkEtherNet.h"
 #include "ChunkEtherNet802LLC.h"
 
 /**
@@ -10,7 +11,7 @@
  */
 //lint -sem(ParserEtherNet802LLC::Process, 1p)
 //lint -sem(ParserEtherNet802LLC::Process, 2p)
-class ParserEtherNet802LLC: public Processor {
+class ParserEtherNet802LLC: public Processor<ChunkEtherNet, ChunkEtherNet802LLC> {
 public:
 	/**
 	 * Try to get EtherNet 802.3 LLC frame from data.
@@ -18,7 +19,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkEtherNet802LLC *Process(Quilt *data, Chunk *parent);
+	ChunkEtherNet802LLC *Process(ChunkEtherNet *parent);
 
 	/**
 	 * Returns unique ID for this Parser

@@ -8,7 +8,7 @@
 /**
  * Container for 802.3 LLC EtherNet frame
  */
-class ChunkEtherNet802LLC : public Chunk {
+class ChunkEtherNet802LLC : public Chunk<ChunkEtherNet> {
 public:
 	/**
 	 * Constructor for 802.3 LLC
@@ -19,8 +19,8 @@ public:
 	 * @param ssap Source Service Access Point
 	 * @param control Control
 	 */
-	ChunkEtherNet802LLC(Quilt *data
-			, Quilt *containedData
+	ChunkEtherNet802LLC(BaseQuilt *baseData
+			, PayloadQuilt *payload
 			, ChunkEtherNet *parent
 			, const unsigned short length
 			, const unsigned char dsap

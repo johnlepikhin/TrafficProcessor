@@ -2,16 +2,18 @@
 #ifndef SRC_LEVELS_PARSERTCP_H_
 #define SRC_LEVELS_PARSERTCP_H_
 
+#include "PacketIPv4.h"
 #include "ChunkTCP.h"
+#include "../types/Processor.h"
 
-class ParserTCP: public Processor {
+class ParserTCP: public Processor<PacketIPv4, ChunkTCP> {
 	/**
 	 * Try to get TCP from data.
 	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkTCP *Process(Quilt *data, Chunk *parent);
+	ChunkTCP *Process(PacketIPv4 *parent);
 
 	/**
 	 * Returns unique ID for this Parser

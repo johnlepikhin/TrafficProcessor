@@ -5,11 +5,37 @@
 #include <string>
 #include <vector>
 #include <sparsed-ropes/Quilt.h>
+#include "PhantomQuilt.h"
+
+class ChunkTraits {
+public:
+	ChunkTraits(BaseQuilt *baseData, PayloadQuilt *payload)
+		: RefCounter(0)
+		, BaseData(baseData)
+		, Payload(payload) {};
+
+	void IncrRefs(int incr);
+	int DecrRefs(int decr);
+
+	int RefCounter;
+
+	/**
+	 * Reference to original data piece
+	 */
+	BaseQuilt *BaseData;
+
+	/**
+	 * Reference to containing data piece
+	 */
+	PayloadQuilt *Payload;
+
+};
 
 /**
  * Base class for all types of packets
  */
-class Chunk {
+template <typename PARENT>
+class Chunk : public ChunkTraits {
 public:
 	/**
 	 * Construct Chunk from Data and parent Chunk
@@ -17,101 +43,28 @@ public:
 	 * @param containedData Reference to contained data piece
 	 * @param parent Reference to parent Chunk
 	 */
-	Chunk(Quilt *data, Quilt *containedData, Chunk *parent);
+	Chunk(BaseQuilt *baseData, PayloadQuilt *payload, PARENT *parent)
+		: ChunkTraits(baseData, payload)
+		, Parent(parent) {}
 
 	/**
 	 * Construct Chunk from Data and NULL parent
 	 * @param data Reference to data (original Pcap)
 	 */
-	Chunk(Quilt *data, Quilt *containedData);
+	Chunk(BaseQuilt *baseData, PayloadQuilt *payload)
+		: ChunkTraits(baseData, payload)
+		, Parent(NULL) {}
 
-	virtual ~Chunk();
-
-	void IncrRefs(int incr);
-	int DecrRefs(int decr);
-
-	/**
-	 * Reference to original data piece
-	 */
-	Quilt *Data;
-
-	/**
-	 * Reference to containing data piece
-	 */
-	Quilt *ContainedData;
+	virtual ~Chunk()
+	{
+		if (Payload)
+			delete Payload;
+	}
 
 	/**
 	 * Pointer to parent Chunk
 	 */
-	Chunk *Parent;
-
-	int RefCounter;
-};
-
-/**
- * Base class for processors of all types
- */
-class Processor {
-private:
-	std::vector<Processor *> Followers;
-public:
-	/**
-	 * Template for constructor of new processors
-	 */
-	Processor();
-
-	/**
-	 * Base destructor for all processors
-	 */
-	virtual ~Processor();
-
-	/**
-	 * Call Process() and all followers recursively
-	 * @param data
-	 * @param parent
-	 */
-	bool Recursive(Quilt *data, Chunk *parent);
-
-	/**
-	 * Parser of chunk. Must return NULL if it was unable to detect format
-	 * @param data Reference to Data
-	 * @param parent Optional reference to parent Chunk
-	 * @return NULL or Chunk
-	 */
-	virtual Chunk *Process(Quilt *data, Chunk *parent) = 0;
-
-	virtual void DestroyChunk(Chunk *);
-
-	/**
-	 * Returns unique ID for this Processor
-	 * @return ID
-	 */
-	virtual std::string ID() = 0;
-
-	/**
-	 * Returns description for the Processor
-	 * @return Description
-	 */
-	virtual std::string Description() = 0;
-
-
-	/**
-	 * Add follower for this processor
-	 * @param follower
-	 */
-	void AddFollower(Processor *follower);
-
-	/**
-	 * Returns reference to the vector of following processors
-	 * @return Vector of followers
-	 */
-	const std::vector<Processor *> &GetFollowers() const;
-
-	/**
-	 * Sets new value for vector of followers. Old vector is deleted.
-	 * @param followers Reference to new vector
-	 */
-	void SetFollowers(std::vector<Processor *> &followers);
+	PARENT *Parent;
 };
 
 #endif /* SRC_CORE_CHUNK_H_ */

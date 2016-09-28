@@ -2,9 +2,8 @@
 #include <typeinfo>
 
 #include "ParserEtherNetDIX.h"
-#include "ParserIPv4.h"
-#include "ParserIPv6.h"
-#include "PrinterEtherNetDIX.h"
+//#include "ParserIPv4.h"
+//#include "ParserIPv6.h"
 
 std::string ParserEtherNetDIX::ID()
 {
@@ -16,13 +15,11 @@ std::string ParserEtherNetDIX::Description()
 	return (std::string("Ethernet DIX frame"));
 }
 
-ChunkEtherNetDIX *ParserEtherNetDIX::Process(Quilt *data, Chunk *p)
+ChunkEtherNetDIX *ParserEtherNetDIX::Process(ChunkEtherNet *parent)
 {
-	ChunkEtherNet *parent = dynamic_cast<ChunkEtherNet *>(p);
-
-	if (parent && parent->EtherNetType > 1500) {
-		Quilt *containedData = new QuiltCut(data, 0);
-		return (new ChunkEtherNetDIX(data, containedData, parent, parent->EtherNetType));
+	if (parent->EtherNetType > 1500) {
+		PayloadQuilt *payload = new PayloadQuilt(parent->Payload, 0);
+		return (new ChunkEtherNetDIX(parent->BaseData, payload, parent, parent->EtherNetType));
 	}
 
 	return (NULL);

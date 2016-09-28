@@ -4,14 +4,16 @@
 
 #include "../types/Chunk.h"
 
-PacketIPv4::PacketIPv4(ChunkIPv4 *chunk)
-	: Chunk(NULL, new QuiltSew(), chunk)
+PacketIPv4::PacketIPv4(BaseQuilt *baseData
+		, PayloadQuilt *payload
+		, ChunkIPv4 *parent)
+	: Chunk(baseData, payload, parent)
 	, IsComplete(false)
 	, ReceivedSize(0)
 	, ExpectedSize(0)
 {
-	AddChunk(chunk);
-	chunk->IncrRefs(1);
+	AddChunk(parent);
+	parent->IncrRefs(1);
 }
 
 PacketIPv4::~PacketIPv4()
@@ -24,9 +26,7 @@ PacketIPv4::~PacketIPv4()
 
 bool PacketIPv4::AddChunk(ChunkIPv4 *chunk)
 {
-	QuiltSew *sew = (QuiltSew *)ContainedData;
-
-	sew->SewWithHole(chunk->ContainedData, chunk->FragmentOffset, chunk->PayloadLength);
+	Payload->SewWithHole(chunk->Payload, chunk->FragmentOffset, chunk->PayloadLength);
 
 	if ( ! chunk->FlagIsFragmented) {
 		if (0 == chunk->FragmentOffset) {

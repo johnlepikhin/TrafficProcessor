@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <sstream>
 #include <stdexcept>
-#include <sparsed-ropes/Quilt.h>
+#include "../types/PhantomQuilt.h"
 #include <unistd.h>
 
 namespace util {
@@ -83,7 +83,7 @@ namespace util {
 		IS->resize(captured);
 		readToBuffer(fd, &(IS->at(0)), captured);
 
-		Quilt *r = new QuiltSnippet(IS, size);
+		BaseQuilt *r = new BaseQuilt(IS, size);
 
 		return (r);
 	}

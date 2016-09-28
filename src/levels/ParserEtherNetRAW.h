@@ -2,15 +2,16 @@
 #ifndef SRC_LEVELS_PARSERETHERNETRAW_H_
 #define SRC_LEVELS_PARSERETHERNETRAW_H_
 
-#include "../types/Chunk.h"
 #include "ChunkEtherNetRAW.h"
+#include "ChunkEtherNet.h"
+#include "../types/Processor.h"
 
 /**
  * Parser of RAW EtherNet frame
  */
 //lint -sem(ParserEtherNetRAW::Process, 1p)
 //lint -sem(ParserEtherNetRAW::Process, 2p)
-class ParserEtherNetRAW: public Processor {
+class ParserEtherNetRAW: public Processor<ChunkEtherNet, ChunkEtherNetRAW> {
 public:
 	/**
 	 * Try to get EtherNet DIX frame from data.
@@ -18,7 +19,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkEtherNetRAW *Process(Quilt *data, Chunk *parent);
+	ChunkEtherNetRAW *Process(ChunkEtherNet *parent);
 
 	/**
 	 * Returns unique ID for this Parser

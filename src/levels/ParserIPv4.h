@@ -2,15 +2,16 @@
 #ifndef SRC_LEVELS_PARSERIPV4_H_
 #define SRC_LEVELS_PARSERIPV4_H_
 
-#include "../types/Chunk.h"
 #include "ChunkIPv4.h"
+#include "ChunkEtherNetDIX.h"
+#include "../types/Processor.h"
 
 /**
  * Parser for IPv4 protocol
  */
 //lint -sem(ParserIPv4::Process, 1p)
 //lint -sem(ParserIPv4::Process, 2p)
-class ParserIPv4: public Processor {
+class ParserIPv4: public Processor<ChunkEtherNetDIX, ChunkIPv4> {
 public:
 	/**
 	 * Try to get IPv4 from data.
@@ -18,7 +19,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkIPv4 *Process(Quilt *data, Chunk *parent);
+	ChunkIPv4 *Process(ChunkEtherNetDIX *parent);
 
 	/**
 	 * Returns unique ID for this Parser

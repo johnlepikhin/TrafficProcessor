@@ -2,12 +2,13 @@
 #ifndef SRC_LEVELS_PACKETIPV4_H_
 #define SRC_LEVELS_PACKETIPV4_H_
 
-#include "../types/Chunk.h"
 #include "ChunkIPv4.h"
 
-class PacketIPv4: public Chunk {
+class PacketIPv4: public Chunk<ChunkIPv4> {
 public:
-	PacketIPv4(ChunkIPv4 *chunk);
+	PacketIPv4(BaseQuilt *baseData
+			, PayloadQuilt *payload
+			, ChunkIPv4 *parent);
 	~PacketIPv4();
 	bool AddChunk(ChunkIPv4 *chunk);
 

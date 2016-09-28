@@ -7,7 +7,7 @@
 /**
  * Container for DIX EtherNet frame
  */
-class ChunkEtherNetDIX: public Chunk {
+class ChunkEtherNetDIX: public Chunk<ChunkEtherNet> {
 public:
 	/**
 	 * Constructor for DIX
@@ -15,8 +15,8 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @param etherType EtherNet type (OSI level 3 type)
 	 */
-	ChunkEtherNetDIX(Quilt *data
-			, Quilt *containedData
+	ChunkEtherNetDIX(BaseQuilt *baseData
+			, PayloadQuilt *payload
 			, ChunkEtherNet *parent
 			, const unsigned short etherType);
 

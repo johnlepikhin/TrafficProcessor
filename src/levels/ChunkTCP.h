@@ -3,11 +3,12 @@
 #define SRC_LEVELS_CHUNKTCP_H_
 
 #include "../types/Chunk.h"
+#include "ChunkIPTraits.h"
 
-class ChunkTCP: public Chunk {
+class ChunkTCP: public Chunk<ChunkIPTraits> {
 public:
-	ChunkTCP(Quilt *data
-			, Quilt *containedData
+	ChunkTCP(BaseQuilt *baseData
+			, PayloadQuilt *payload
 			, const unsigned int pktLength
 			, const unsigned int headerLength
 			, const unsigned int payloadLength

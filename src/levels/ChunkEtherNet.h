@@ -2,8 +2,7 @@
 #ifndef SRC_LEVELS_CHUNKETHERNET_H_
 #define SRC_LEVELS_CHUNKETHERNET_H_
 
-#include "../types/Data.h"
-#include "../types/Chunk.h"
+#include "ChunkRaw.h"
 #include "../types/MAC.h"
 
 /**
@@ -12,7 +11,7 @@
 //lint -sem(ChunkEtherNet::ChunkEtherNet, 1p)
 //lint -sem(ChunkEtherNet::ChunkEtherNet, 3p, custodial(3))
 //lint -sem(ChunkEtherNet::ChunkEtherNet, 4p, custodial(4))
-class ChunkEtherNet : public Chunk {
+class ChunkEtherNet : public Chunk<BaseQuilt> {
 public:
 	/**
 	 * Constructor
@@ -21,8 +20,8 @@ public:
 	 * @param sourceMAC Reference to source MAC address
 	 * @param ethernetType 2-byte value at offset 13 in ethernet frame (ethernet type or payload length)
 	 */
-	ChunkEtherNet(Quilt *data,
-			Quilt *containedData,
+	ChunkEtherNet(BaseQuilt *baseData,
+			PayloadQuilt *payload,
 			const unsigned long long destinationMAC,
 			const unsigned long long sourceMAC,
 			const unsigned short ethernetType);

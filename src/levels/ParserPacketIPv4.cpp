@@ -23,14 +23,16 @@ PacketIPv4 *IPPairMap::AddChunk(ChunkIPv4 *chunk)
 			}
 		}
 
-		PacketIPv4 *pkt = new PacketIPv4(chunk);
+		PayloadQuilt *payload = new PayloadQuilt();
+		PacketIPv4 *pkt = new PacketIPv4(chunk->BaseData, payload, chunk);
 		IDMap->push_back(pkt);
 
 		return (pkt);
 	} else {
 		IPPacketMap *IDMap = new IPPacketMap();
 
-		PacketIPv4 *pkt = new PacketIPv4(chunk);
+		PayloadQuilt *payload = new PayloadQuilt();
+		PacketIPv4 *pkt = new PacketIPv4(chunk->BaseData, payload, chunk);
 		IDMap->push_back(pkt);
 
 		emplace(pair, IDMap);
@@ -39,12 +41,9 @@ PacketIPv4 *IPPairMap::AddChunk(ChunkIPv4 *chunk)
 	}
 }
 
-void ParserPacketIPv4::DestroyChunk(Chunk *c)
+void ParserPacketIPv4::DestroyChunk(PacketIPv4 *packet)
 {
-	PacketIPv4 *packet = dynamic_cast<PacketIPv4 *>(c);
-	const ChunkIPv4 *chunk = dynamic_cast<const ChunkIPv4 *>(packet->Parent);
-
-	unsigned long long pair = pair_of_IPv4(chunk);
+	unsigned long long pair = pair_of_IPv4(packet->Parent);
 
 	std::unordered_map<unsigned long long, IPPacketMap *>::const_iterator it = IPCollector.find(pair);
 
@@ -53,7 +52,7 @@ void ParserPacketIPv4::DestroyChunk(Chunk *c)
 
 		for (auto p_it = IDMap->rbegin(); p_it != IDMap->rend(); ++p_it) {
 			ChunkIPv4 *ipv4_chunk = (ChunkIPv4 *)(*p_it)->Parent;
-			if (ipv4_chunk->ID == chunk->ID) {
+			if (ipv4_chunk->ID == packet->Parent->ID) {
 				IDMap->erase((++p_it).base());
 				break;
 			}
@@ -84,10 +83,8 @@ ParserPacketIPv4::~ParserPacketIPv4()
 	}
 }
 
-PacketIPv4 *ParserPacketIPv4::Process(Quilt *data, Chunk *p)
+PacketIPv4 *ParserPacketIPv4::Process(ChunkIPv4 *parent)
 {
-	ChunkIPv4 *parent = dynamic_cast<ChunkIPv4 *>(p);
-
 	PacketIPv4 *r = IPCollector.AddChunk(parent);
 	if (!r->IsComplete) {
 		r->IncrRefs(1);

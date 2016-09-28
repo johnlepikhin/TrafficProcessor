@@ -2,15 +2,16 @@
 #ifndef SRC_LEVELS_PARSERETHERNETSNAP_H_
 #define SRC_LEVELS_PARSERETHERNETSNAP_H_
 
-#include "../types/Chunk.h"
 #include "ChunkEtherNetSNAP.h"
+#include "ChunkEtherNet.h"
+#include "../types/Processor.h"
 
 /**
  * Parser of SNAP EtherNet frame
  */
 //lint -sem(ParserEtherNetSNAP::Process, 1p)
 //lint -sem(ParserEtherNetSNAP::Process, 2p)
-class ParserEtherNetSNAP: public Processor {
+class ParserEtherNetSNAP: public Processor<ChunkEtherNet, ChunkEtherNetSNAP> {
 public:
 	/**
 	 * Try to get EtherNet SNAP frame from data.
@@ -18,7 +19,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	ChunkEtherNetSNAP *Process(Quilt *data, Chunk *parent);
+	ChunkEtherNetSNAP *Process(ChunkEtherNet *parent);
 
 	/**
 	 * Returns unique ID for this Parser

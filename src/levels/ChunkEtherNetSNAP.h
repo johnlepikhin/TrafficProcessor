@@ -8,7 +8,7 @@
 /**
  * Container for SNAP EtherNet frame
  */
-class ChunkEtherNetSNAP: public Chunk {
+class ChunkEtherNetSNAP: public Chunk<ChunkEtherNet> {
 public:
 	/**
 	 * Constructor for SNAP
@@ -18,8 +18,8 @@ public:
 	 * @param oui OUI
 	 * @param pid PID
 	 */
-	ChunkEtherNetSNAP(Quilt *data
-			, Quilt *containedData
+	ChunkEtherNetSNAP(BaseQuilt *baseData
+			, PayloadQuilt *payload
 			, ChunkEtherNet *parent
 			, const unsigned short length
 			, const unsigned int oui

@@ -12,20 +12,19 @@ std::string PrinterTCP::Description()
 	return (std::string("TCP printer"));
 }
 
-Chunk *PrinterTCP::Process(Quilt *data, Chunk *p)
+ChunkRaw *PrinterTCP::Process(ChunkTCP *chunk)
 {
-	ChunkTCP *parent = dynamic_cast<ChunkTCP *>(p);
+	try {
+		std::string *payload = chunk->Payload->GetSubStringOrFail(0, 20);
+		std::cout << "TCP " << chunk->SourcePort
+				<< " " << chunk->DestinationPort
+				<< " length=" << chunk->PayloadLength
+				<< " content=" << payload[0]
+				<< "\n";
 
-	if (parent) {
-		try {
-			std::cout << "TCP " << parent->SourcePort
-					<< " " << parent->DestinationPort
-					<< " length=" << parent->PayloadLength
-					<< " content=" << (parent->ContainedData->GetSubStringOrFail(0, 20)[0])
-					<< "\n";
-		} catch (...) {
+		delete payload;
+	} catch (...) {
 
-		}
 	}
 	return (0);
 }

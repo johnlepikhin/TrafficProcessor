@@ -5,6 +5,7 @@
 
 #include <unordered_map>
 #include "PacketIPv4.h"
+#include "../types/Processor.h"
 
 typedef unsigned int IPv4PacketID;
 
@@ -19,7 +20,7 @@ public:
 	PacketIPv4 *AddChunk(ChunkIPv4 *chunk);
 };
 
-class ParserPacketIPv4: public Processor {
+class ParserPacketIPv4: public Processor<ChunkIPv4, PacketIPv4> {
 public:
 	~ParserPacketIPv4();
 
@@ -29,9 +30,9 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	PacketIPv4 *Process(Quilt *data, Chunk *parent);
+	PacketIPv4 *Process(ChunkIPv4 *parent);
 
-	void DestroyChunk(Chunk *chunk);
+	void DestroyChunk(PacketIPv4 *chunk);
 
 	/**
 	 * Returns unique ID for this Parser

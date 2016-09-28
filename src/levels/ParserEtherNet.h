@@ -2,22 +2,16 @@
 #ifndef SRC_LEVELS_PARSERETHERNET_H_
 #define SRC_LEVELS_PARSERETHERNET_H_
 
+#include "../types/Processor.h"
 #include "ChunkEtherNet.h"
 
 /**
  * Parser of base EtherNet frame
  */
 //lint -sem(ParserEtherNet::Process, 1p)
-class ParserEtherNet : public Processor {
+class ParserEtherNet : public Processor<BaseQuilt, ChunkEtherNet> {
 public:
-
-	/**
-	 * Try to get EtherNet frame from data.
-	 * @param data Reference to Data from where chunk was read
-	 * @param parent Optional reference to parent Chunk
-	 * @return NULL or parsed chunk
-	 */
-	ChunkEtherNet *Process(Quilt *data, Chunk *parent);
+	ChunkEtherNet *Process(BaseQuilt *payload);
 
 	/**
 	 * Returns unique ID for this Parser

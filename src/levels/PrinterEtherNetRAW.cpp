@@ -14,21 +14,13 @@ std::string PrinterEtherNetRAW::Description()
 PrinterEtherNetRAW::PrinterEtherNetRAW() {
 }
 
-Chunk *PrinterEtherNetRAW::Process(Quilt *data, Chunk *p)
+ChunkRaw *PrinterEtherNetRAW::Process(ChunkEtherNetRAW *raw)
 {
-	ChunkEtherNetRAW *parent = dynamic_cast<ChunkEtherNetRAW *>(p);
-
-	if (parent) {
-		const ChunkEtherNet *ethernet = dynamic_cast<const ChunkEtherNet *>(parent->Parent);
-		const ChunkEtherNetRAW *raw = dynamic_cast<const ChunkEtherNetRAW *>(parent);
-		if (ethernet) {
-			std::cout << "EtherNetRAW " << MAC::asString(ethernet->SourceMAC)
-					<< " -> " << MAC::asString(ethernet->DestinationMAC)
-					<< " payload_length=" << raw->PayloadLength
-					<< "   Data: captured=" << ethernet->Data->CoveredSize << ", size=" << ethernet->Data->Length
-					<< "\n";
-		}
-	}
+	std::cout << "EtherNetRAW " << MAC::asString(raw->Parent->SourceMAC)
+		<< " -> " << MAC::asString(raw->Parent->DestinationMAC)
+		<< " payload_length=" << raw->PayloadLength
+		<< "   Data: captured=" << raw->BaseData->CoveredSize << ", size=" << raw->BaseData->Length
+		<< "\n";
 
 	return (0);
 }

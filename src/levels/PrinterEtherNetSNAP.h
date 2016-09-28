@@ -3,11 +3,10 @@
 #define SRC_LEVELS_PRINTERETHERNETSNAP_H_
 
 #include "ChunkEtherNetSNAP.h"
-#include "../types/Chunk.h"
-#include <string>
+#include "../types/Processor.h"
 
 
-class PrinterEtherNetSNAP: public Processor {
+class PrinterEtherNetSNAP: public Processor<ChunkEtherNetSNAP, ChunkRaw> {
 public:
 	PrinterEtherNetSNAP();
 
@@ -17,7 +16,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */
-	Chunk *Process(Quilt *data, Chunk *parent);
+	ChunkRaw *Process(ChunkEtherNetSNAP *parent);
 
 	/**
 	 * Returns unique ID for this Printer

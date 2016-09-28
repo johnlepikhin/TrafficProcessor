@@ -1,13 +1,13 @@
 
 #include "ChunkEtherNetSNAP.h"
 
-ChunkEtherNetSNAP::ChunkEtherNetSNAP(Quilt *data
-		, Quilt *containedData
+ChunkEtherNetSNAP::ChunkEtherNetSNAP(BaseQuilt *baseData
+		, PayloadQuilt *payload
 		, ChunkEtherNet *parent
 		, const unsigned short length
 		, const unsigned int oui
 		, const unsigned short pid)
-	: Chunk(data, containedData, parent)
+	: Chunk(baseData, payload, parent)
 	, PayloadLength(length)
 	, OUI(oui)
 	, PID(pid)

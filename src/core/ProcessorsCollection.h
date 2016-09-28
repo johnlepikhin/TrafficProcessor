@@ -3,14 +3,15 @@
 #define SRC_CORE_PARSERSCOLLECTION_H_
 
 #include <vector>
-#include "../types/Chunk.h"
+
+#include "../types/Processor.h"
 
 /**
  * Stores collection of Processors (singleton)
  */
 class ProcessorsCollection {
 private:
-    std::vector<Processor *> collection;
+    std::vector<ProcessorTraits *> collection;
 
     static ProcessorsCollection * p_instance;
     ProcessorsCollection() {};
@@ -33,7 +34,7 @@ public:
 	 * Adds new Processor to the collection
 	 * @param processor Processor to register
 	 */
-	void Register(Processor *processor) {
+	void Register(ProcessorTraits *processor) {
 		collection.push_back(processor);
 	}
 
@@ -41,7 +42,7 @@ public:
 	 * Returns the collection as std::vector
 	 * @return Vector
 	 */
-	std::vector<Processor *> AsVector() const;
+	std::vector<ProcessorTraits *> AsVector() const;
 };
 
 #endif /* SRC_CORE_PARSERSCOLLECTION_H_ */

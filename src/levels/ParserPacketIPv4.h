@@ -27,7 +27,7 @@ public:
 	 */
 	std::shared_ptr<PacketIPv4> Process(std::shared_ptr<ChunkIPv4> parent);
 
-	void DestroyChunk(std::shared_ptr<PacketIPv4> chunk);
+	void AfterRecursionHook(std::shared_ptr<PacketIPv4> chunk, std::exception *exn, bool found);
 
 	/**
 	 * Returns unique ID for this Parser

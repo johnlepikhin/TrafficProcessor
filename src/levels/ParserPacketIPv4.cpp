@@ -41,8 +41,11 @@ std::shared_ptr<PacketIPv4> IPPairMap::AddChunk(std::shared_ptr<ChunkIPv4> chunk
 	}
 }
 
-void ParserPacketIPv4::DestroyChunk(std::shared_ptr<PacketIPv4> packet)
+void ParserPacketIPv4::AfterRecursionHook(std::shared_ptr<PacketIPv4> packet, std::exception *exn, bool found)
 {
+	if (!packet->IsComplete)
+		return;
+
 	unsigned long long pair = pair_of_IPv4(packet->Parent);
 
 	std::unordered_map<unsigned long long, std::shared_ptr<IPPacketMap> >::const_iterator it = IPCollector.find(pair);

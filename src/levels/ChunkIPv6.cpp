@@ -2,9 +2,9 @@
 #include "ChunkIPv6.h"
 #include "ChunkIPTraits.h"
 
-ChunkIPv6::ChunkIPv6(BaseQuilt *baseData
-		, PayloadQuilt *payload
-		, ChunkEtherNetDIX *parent
+ChunkIPv6::ChunkIPv6(BaseQuilt baseData
+		, PayloadQuilt payload
+		, std::shared_ptr<ChunkEtherNetDIX> parent
 		, IPv6Addr *srcIP
 		, IPv6Addr *dstIP)
 	: Chunk<ChunkEtherNetDIX>(baseData, payload, parent)

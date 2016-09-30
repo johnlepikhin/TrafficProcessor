@@ -14,7 +14,7 @@ std::string ParserEtherNetSNAP::Description()
 	return (std::string("Ethernet SNAP frame"));
 }
 
-ChunkEtherNetSNAP *ParserEtherNetSNAP::Process(ChunkEtherNet *ethernet)
+std::shared_ptr<ChunkEtherNetSNAP> ParserEtherNetSNAP::Process(std::shared_ptr<ChunkEtherNet> ethernet)
 {
 	if (ethernet->EtherNetType <= 1500) {
 		unsigned int b3 = ethernet->Payload->GetShortLEOrFail(3);
@@ -23,18 +23,18 @@ ChunkEtherNetSNAP *ParserEtherNetSNAP::Process(ChunkEtherNet *ethernet)
 			ethernet->Payload->CopyBytesOrFail((char *)&oui+1, 2, 3);
 			unsigned short pid = ethernet->Payload->GetShortLEOrFail(5);
 
-			PayloadQuilt *payload = new PayloadQuilt(ethernet->Payload, 8);
+			PayloadQuilt payload(new CPayloadQuilt(ethernet->Payload, 8));
 
-			ChunkEtherNetSNAP *r = new ChunkEtherNetSNAP(
+			std::shared_ptr<ChunkEtherNetSNAP> r(new ChunkEtherNetSNAP(
 					ethernet->BaseData,
 					payload,
 					ethernet,
 					ethernet->EtherNetType,
 					oui,
-					pid);
+					pid));
 			return (r);
 		}
 	}
 
-	return (NULL);
+	return (std::shared_ptr<ChunkEtherNetSNAP>(nullptr));
 }

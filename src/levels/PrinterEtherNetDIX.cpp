@@ -11,14 +11,14 @@ std::string PrinterEtherNetDIX::Description()
 	return (std::string("EtherNetDIX frame printer"));
 }
 
-ChunkRaw *PrinterEtherNetDIX::Process(ChunkEtherNetDIX *dix)
+std::shared_ptr<ChunkRaw> PrinterEtherNetDIX::Process(std::shared_ptr<ChunkEtherNetDIX> dix)
 {
-	const ChunkEtherNet *ethernet = dix->Parent;
+	const std::shared_ptr<ChunkEtherNet> ethernet = dix->Parent;
 	std::cout << "EtherNetDIX " << MAC::asString(ethernet->SourceMAC)
 		<< " -> " << MAC::asString(ethernet->DestinationMAC)
 		<< " type=" << dix->EtherNetType
 		<< "   Data: captured=" << dix->BaseData->CoveredSize << ", size=" << dix->BaseData->Length
 		<< "\n";
 
-	return (NULL);
+	return (std::shared_ptr<ChunkRaw>(nullptr));
 }

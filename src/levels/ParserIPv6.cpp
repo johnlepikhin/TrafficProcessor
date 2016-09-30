@@ -41,5 +41,5 @@ ChunkIPv6 *ParserIPv6::Process(Data *data, Chunk *p)
 		}
 	}
 
-	return (NULL);
+	return (std::shared_ptr<ChunkIPv6>(nullptr));
 }

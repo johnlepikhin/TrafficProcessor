@@ -1,8 +1,8 @@
 
 #include "ChunkTCP.h"
 
-ChunkTCP::ChunkTCP(BaseQuilt *baseData
-		, PayloadQuilt *payload
+ChunkTCP::ChunkTCP(BaseQuilt baseData
+		, PayloadQuilt payload
 		, const unsigned int pktLength
 		, const unsigned int headerLength
 		, const unsigned int payloadLength

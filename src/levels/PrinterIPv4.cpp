@@ -11,7 +11,7 @@ std::string PrinterIPv4::Description()
 	return (std::string("IPv4 chunk printer"));
 }
 
-ChunkRaw *PrinterIPv4::Process(ChunkIPv4 *ipv4)
+std::shared_ptr<ChunkRaw> PrinterIPv4::Process(std::shared_ptr<ChunkIPv4> ipv4)
 {
 	std::string srcIP = IPv4Addr::asString(ipv4->SrcIP);
 	std::string dstIP = IPv4Addr::asString(ipv4->DstIP);
@@ -25,6 +25,5 @@ ChunkRaw *PrinterIPv4::Process(ChunkIPv4 *ipv4)
 		<< " TTL=" << ipv4->TTL
 		<< "\n";
 
-
-	return (0);
+	return (std::shared_ptr<ChunkRaw>(nullptr));
 }

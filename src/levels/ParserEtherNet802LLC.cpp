@@ -14,7 +14,7 @@ std::string ParserEtherNet802LLC::Description()
 	return (std::string("Ethernet 802.3 LLC frame"));
 }
 
-ChunkEtherNet802LLC *ParserEtherNet802LLC::Process(ChunkEtherNet *ethernet)
+std::shared_ptr<ChunkEtherNet802LLC> ParserEtherNet802LLC::Process(std::shared_ptr<ChunkEtherNet> ethernet)
 {
 	if (ethernet->EtherNetType <= 1500) {
 		unsigned short b2 = ethernet->Payload->GetShortLEOrFail(0);
@@ -22,18 +22,19 @@ ChunkEtherNet802LLC *ParserEtherNet802LLC::Process(ChunkEtherNet *ethernet)
 			unsigned char dsap = b2 >> 8;
 			unsigned char ssap = b2 & 0xff;
 			unsigned char control = ethernet->Payload->GetCharOrFail(1);
-			PayloadQuilt *payload = new PayloadQuilt(ethernet->Payload, 3);
-			ChunkEtherNet802LLC *r = new ChunkEtherNet802LLC(
+			PayloadQuilt payload(new CPayloadQuilt(ethernet->Payload, 3));
+			std::shared_ptr<ChunkEtherNet802LLC> r(new ChunkEtherNet802LLC(
 					ethernet->BaseData,
 					payload,
 					ethernet,
 					ethernet->EtherNetType,
 					dsap,
 					ssap,
-					control);
+					control));
+
 			return (r);
 		}
 	}
 
-	return (NULL);
+	return (std::shared_ptr<ChunkEtherNet802LLC>(nullptr));
 }

@@ -2,7 +2,7 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
-#include <istream>
+#include <memory>
 
 #include "../types/PhantomQuilt.h"
 
@@ -59,7 +59,7 @@ namespace util {
 
 	ssize_t skipBytesInFD(int fd, size_t count);
 
-	BaseQuilt *quiltOfPcap(int fd);
+	BaseQuilt quiltOfPcap(int fd);
 }
 
 #endif /* UTILS_H_ */

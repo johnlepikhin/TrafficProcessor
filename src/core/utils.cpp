@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include "../types/PhantomQuilt.h"
 #include <unistd.h>
+#include <memory>
 
 namespace util {
 	void exitFatal (const char *msg) {
@@ -71,7 +72,7 @@ namespace util {
 		return (readToBuffer(fd, buffer, count));
 	}
 
-	Quilt *quiltOfPcap(int fd)
+	BaseQuilt quiltOfPcap(int fd)
 	{
 		unsigned int size, captured;
 
@@ -79,11 +80,11 @@ namespace util {
 		readToBuffer (fd, (char *)&captured, sizeof (captured));
 		readToBuffer (fd, (char *)&size, sizeof (size));
 
-		std::string *IS = new std::string;
+		std::shared_ptr<std::string> IS(new std::string);
 		IS->resize(captured);
 		readToBuffer(fd, &(IS->at(0)), captured);
 
-		BaseQuilt *r = new BaseQuilt(IS, size);
+		BaseQuilt r(new CBaseQuilt(IS, size));
 
 		return (r);
 	}

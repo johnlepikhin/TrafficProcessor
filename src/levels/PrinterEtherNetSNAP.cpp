@@ -11,10 +11,7 @@ std::string PrinterEtherNetSNAP::Description()
 	return (std::string("EtherNetSNAP frame printer"));
 }
 
-PrinterEtherNetSNAP::PrinterEtherNetSNAP() {
-}
-
-ChunkRaw *PrinterEtherNetSNAP::Process(ChunkEtherNetSNAP *snap)
+std::shared_ptr<ChunkRaw> PrinterEtherNetSNAP::Process(std::shared_ptr<ChunkEtherNetSNAP> snap)
 {
 	std::cout << "EtherNetSNAP " << MAC::asString(snap->Parent->SourceMAC)
 		<< " -> " << MAC::asString(snap->Parent->DestinationMAC)
@@ -24,5 +21,5 @@ ChunkRaw *PrinterEtherNetSNAP::Process(ChunkEtherNetSNAP *snap)
 		<< "   Data: captured=" << snap->BaseData->CoveredSize << ", size=" << snap->BaseData->Length
 		<< "\n";
 
-	return (0);
+	return (std::shared_ptr<ChunkRaw>(nullptr));
 }

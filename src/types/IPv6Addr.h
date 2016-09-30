@@ -3,7 +3,6 @@
 #define IPV6ADDR_H_
 
 #include <string>
-#include "Data.h"
 
 /**
  * IPv6 address container and reader

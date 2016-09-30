@@ -14,7 +14,7 @@ std::string PrinterEtherNet802LLC::Description()
 PrinterEtherNet802LLC::PrinterEtherNet802LLC() {
 }
 
-ChunkRaw *PrinterEtherNet802LLC::Process(ChunkEtherNet802LLC *llc)
+std::shared_ptr<ChunkRaw> PrinterEtherNet802LLC::Process(std::shared_ptr<ChunkEtherNet802LLC> llc)
 {
 	std::cout << "EtherNet802LLC " << MAC::asString(llc->Parent->SourceMAC)
 		<< " -> " << MAC::asString(llc->Parent->DestinationMAC)
@@ -25,5 +25,5 @@ ChunkRaw *PrinterEtherNet802LLC::Process(ChunkEtherNet802LLC *llc)
 		<< "   Data: captured=" << llc->BaseData->CoveredSize << ", size=" << llc->BaseData->Length
 		<< "\n";
 
-	return (0);
+	return (std::shared_ptr<ChunkRaw>(nullptr));
 }

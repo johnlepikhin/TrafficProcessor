@@ -11,10 +11,7 @@ std::string PrinterEtherNetRAW::Description()
 	return (std::string("EtherNetRAW frame printer"));
 }
 
-PrinterEtherNetRAW::PrinterEtherNetRAW() {
-}
-
-ChunkRaw *PrinterEtherNetRAW::Process(ChunkEtherNetRAW *raw)
+std::shared_ptr<ChunkRaw> PrinterEtherNetRAW::Process(std::shared_ptr<ChunkEtherNetRAW> raw)
 {
 	std::cout << "EtherNetRAW " << MAC::asString(raw->Parent->SourceMAC)
 		<< " -> " << MAC::asString(raw->Parent->DestinationMAC)
@@ -22,5 +19,5 @@ ChunkRaw *PrinterEtherNetRAW::Process(ChunkEtherNetRAW *raw)
 		<< "   Data: captured=" << raw->BaseData->CoveredSize << ", size=" << raw->BaseData->Length
 		<< "\n";
 
-	return (0);
+	return (std::shared_ptr<ChunkRaw>(nullptr));
 }

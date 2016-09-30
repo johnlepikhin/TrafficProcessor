@@ -16,9 +16,9 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @param length Length of payload
 	 */
-	ChunkEtherNetRAW(BaseQuilt *baseData
-			, PayloadQuilt *payload
-			, ChunkEtherNet *parent
+	ChunkEtherNetRAW(BaseQuilt baseData
+			, PayloadQuilt payload
+			, std::shared_ptr<ChunkEtherNet> parent
 			, const unsigned short length);
 
 	/**

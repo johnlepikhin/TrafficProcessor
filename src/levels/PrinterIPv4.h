@@ -13,7 +13,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */
-	ChunkRaw *Process(ChunkIPv4 *parent);
+	std::shared_ptr<ChunkRaw> Process(std::shared_ptr<ChunkIPv4> parent);
 
 	/**
 	 * Returns unique ID for this Printer

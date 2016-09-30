@@ -1,9 +1,9 @@
 
 #include "ChunkIPv4.h"
 
-ChunkIPv4::ChunkIPv4(BaseQuilt *baseData
-		, PayloadQuilt *payload
-		, ChunkEtherNetDIX *parent
+ChunkIPv4::ChunkIPv4(BaseQuilt baseData
+		, PayloadQuilt payload
+		, std::shared_ptr<ChunkEtherNetDIX> parent
 		, unsigned char iHL32bit
 		, const unsigned long srcIP
 		, const unsigned long dstIP

@@ -9,30 +9,25 @@
 
 typedef unsigned int IPv4PacketID;
 
-//class IPPacketMap : public std::unordered_map<IPv4PacketID, PacketIPv4 *> {
-//};
-
-class IPPacketMap : public std::vector<PacketIPv4 *> {
+class IPPacketMap : public std::vector<std::shared_ptr<PacketIPv4> > {
 };
 
-class IPPairMap : public std::unordered_map<unsigned long long, IPPacketMap *> {
+class IPPairMap : public std::unordered_map<unsigned long long, std::shared_ptr<IPPacketMap> > {
 public:
-	PacketIPv4 *AddChunk(ChunkIPv4 *chunk);
+	std::shared_ptr<PacketIPv4> AddChunk(std::shared_ptr<ChunkIPv4> chunk);
 };
 
 class ParserPacketIPv4: public Processor<ChunkIPv4, PacketIPv4> {
 public:
-	~ParserPacketIPv4();
-
 	/**
 	 * Collect and build IPv4 packet from chunks.
 	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	PacketIPv4 *Process(ChunkIPv4 *parent);
+	std::shared_ptr<PacketIPv4> Process(std::shared_ptr<ChunkIPv4> parent);
 
-	void DestroyChunk(PacketIPv4 *chunk);
+	void DestroyChunk(std::shared_ptr<PacketIPv4> chunk);
 
 	/**
 	 * Returns unique ID for this Parser

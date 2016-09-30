@@ -29,33 +29,34 @@
 
 using namespace std;
 
-static ParserEtherNet *generateParseTree()
+static ParserEtherNet generateParseTree()
 {
 	PrinterTCP *printerTCP = new PrinterTCP();
 	ParserTCP *parserTCP = new ParserTCP();
-	parserTCP->AddFollower(ASFOLLOWER(ChunkTCP)printerTCP);
+	parserTCP->AddFollower(printerTCP->AsFollower());
 
 //	PrinterIPv4 *printerIPV4 = new PrinterIPv4();
-	PrinterPacketIPv4 *printerPacketIPV4 = new PrinterPacketIPv4();
-
+//	PrinterPacketIPv4 *printerPacketIPV4 = new PrinterPacketIPv4();
+//
 	ParserPacketIPv4 *parserPacketIPv4 = new ParserPacketIPv4();
-	parserPacketIPv4->AddFollower(ASFOLLOWER(PacketIPv4)printerPacketIPV4);
-	parserPacketIPv4->AddFollower(ASFOLLOWER(PacketIPv4)parserTCP);
+//	parserPacketIPv4->AddFollower(ASFOLLOWER(PacketIPv4)printerPacketIPV4);
+	parserPacketIPv4->AddFollower(parserTCP->AsFollower());
 
 	ParserIPv4 *parserIPv4 = new ParserIPv4();
-//	parserIPv4->AddFollower(ASFOLLOWER(ChunkIPv4)printerIPV4);
-	parserIPv4->AddFollower(ASFOLLOWER(ChunkIPv4)parserPacketIPv4);
+//	parserIPv4->AddFollower(printerIPV4->AsFollower());
+	parserIPv4->AddFollower(parserPacketIPv4->AsFollower());
 
 	ParserEtherNetDIX *etherNetDIX = new ParserEtherNetDIX();
-//	etherNetDIX->AddFollower(ASFOLLOWER(ChunkEtherNetDIX)new PrinterEtherNetDIX());
-	etherNetDIX->AddFollower(ASFOLLOWER(ChunkEtherNetDIX)parserIPv4);
+	etherNetDIX->AddFollower((new PrinterEtherNetDIX())->AsFollower());
+	etherNetDIX->AddFollower(parserIPv4->AsFollower());
 //	ethernetDIX->AddFollower(new ParserIPv6());
 
-	ParserEtherNet *etherNet = new ParserEtherNet();
-	etherNet->AddFollower(ASFOLLOWER(ChunkEtherNet)etherNetDIX);
-//	etherNet->AddFollower(new ParserEtherNet802LLC());
-//	etherNet->AddFollower(new ParserEtherNetRAW());
-//	etherNet->AddFollower(new ParserEtherNetSNAP());
+	ParserEtherNet etherNet;
+
+	etherNet.AddFollower(etherNetDIX->AsFollower());
+//	etherNet.AddFollower(new ParserEtherNet802LLC());
+//	etherNet.AddFollower(new ParserEtherNetRAW());
+//	etherNet.AddFollower(new ParserEtherNetSNAP());
 
 	return (etherNet);
 }
@@ -76,44 +77,39 @@ public:
 	void ReadPackets ()
 	{
 		bool done = false;
-		ParserEtherNet *parser = generateParseTree();
+		ParserEtherNet parser = generateParseTree();
 
 		util::skipBytesInFD(FD, sizeof (pcap_file_header));
 
-		BaseQuilt *InputData;
 		while (!done) {
 			try {
-				InputData = util::quiltOfPcap(FD);
-				parser->Recursive(InputData);
-				delete InputData;
+				auto InputData = util::quiltOfPcap(FD);
+				parser.Recursive(InputData);
 			} catch (...) {
-				delete InputData;
 				done = true;
 			}
 		}
-
-		delete parser;
 	}
 };
 
 static void registerParsers () {
-	ProcessorsCollection *collection = ProcessorsCollection::getInstance();
-	collection->Register((ProcessorTraits *)new ParserEtherNet());
-	collection->Register((ProcessorTraits *)new ParserEtherNetDIX());
-	collection->Register((ProcessorTraits *)new ParserEtherNetRAW());
-	collection->Register((ProcessorTraits *)new ParserEtherNetSNAP());
-	collection->Register((ProcessorTraits *)new ParserEtherNet802LLC());
-	collection->Register((ProcessorTraits *)new ParserIPv4());
-	collection->Register((ProcessorTraits *)new PrinterIPv4());
-	collection->Register((ProcessorTraits *)new PrinterPacketIPv4());
-	collection->Register((ProcessorTraits *)new ParserPacketIPv4());
-	collection->Register((ProcessorTraits *)new PrinterEtherNetDIX());
-	collection->Register((ProcessorTraits *)new PrinterEtherNetRAW());
-	collection->Register((ProcessorTraits *)new PrinterEtherNetSNAP());
-	collection->Register((ProcessorTraits *)new PrinterEtherNet802LLC());
-
-	collection->Register((ProcessorTraits *)new PrinterTCP());
-	collection->Register((ProcessorTraits *)new ParserTCP());
+//	ProcessorsCollection *collection = ProcessorsCollection::getInstance();
+//	collection->Register((ProcessorTraits *)new ParserEtherNet());
+//	collection->Register((ProcessorTraits *)new ParserEtherNetDIX());
+//	collection->Register((ProcessorTraits *)new ParserEtherNetRAW());
+//	collection->Register((ProcessorTraits *)new ParserEtherNetSNAP());
+//	collection->Register((ProcessorTraits *)new ParserEtherNet802LLC());
+//	collection->Register((ProcessorTraits *)new ParserIPv4());
+//	collection->Register((ProcessorTraits *)new PrinterIPv4());
+//	collection->Register((ProcessorTraits *)new PrinterPacketIPv4());
+//	collection->Register((ProcessorTraits *)new ParserPacketIPv4());
+//	collection->Register((ProcessorTraits *)new PrinterEtherNetDIX());
+//	collection->Register((ProcessorTraits *)new PrinterEtherNetRAW());
+//	collection->Register((ProcessorTraits *)new PrinterEtherNetSNAP());
+//	collection->Register((ProcessorTraits *)new PrinterEtherNet802LLC());
+//
+//	collection->Register((ProcessorTraits *)new PrinterTCP());
+//	collection->Register((ProcessorTraits *)new ParserTCP());
 }
 
 static void releaseParsers () {

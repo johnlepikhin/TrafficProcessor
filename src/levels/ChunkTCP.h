@@ -7,8 +7,8 @@
 
 class ChunkTCP: public Chunk<ChunkIPTraits> {
 public:
-	ChunkTCP(BaseQuilt *baseData
-			, PayloadQuilt *payload
+	ChunkTCP(BaseQuilt baseData
+			, PayloadQuilt payload
 			, const unsigned int pktLength
 			, const unsigned int headerLength
 			, const unsigned int payloadLength

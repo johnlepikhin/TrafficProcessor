@@ -13,7 +13,7 @@ class PrinterTCP: public Processor<ChunkTCP, ChunkRaw> {
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */
-	ChunkRaw *Process(ChunkTCP *chunk);
+	std::shared_ptr<ChunkRaw> Process(std::shared_ptr<ChunkTCP> chunk);
 
 	/**
 	 * Returns unique ID for this Printer

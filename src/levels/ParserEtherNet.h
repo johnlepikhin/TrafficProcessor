@@ -8,10 +8,9 @@
 /**
  * Parser of base EtherNet frame
  */
-//lint -sem(ParserEtherNet::Process, 1p)
-class ParserEtherNet : public Processor<BaseQuilt, ChunkEtherNet> {
+class ParserEtherNet : public Processor<CBaseQuilt, ChunkEtherNet> {
 public:
-	ChunkEtherNet *Process(BaseQuilt *payload);
+	std::shared_ptr<ChunkEtherNet> Process(BaseQuilt payload);
 
 	/**
 	 * Returns unique ID for this Parser
@@ -25,6 +24,5 @@ public:
 	 */
 	std::string Description();
 };
-
 
 #endif /* SRC_LEVELS_PARSERETHERNET_H_ */

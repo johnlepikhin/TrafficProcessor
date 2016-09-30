@@ -13,7 +13,7 @@ std::string ParserTCP::Description()
 	return (std::string("TCP fragment"));
 }
 
-ChunkTCP *ParserTCP::Process(PacketIPv4 *packet)
+std::shared_ptr<ChunkTCP> ParserTCP::Process(std::shared_ptr<PacketIPv4> packet)
 {
 	if (6 == packet->Parent->Protocol) {
 		unsigned short pktLength = packet->ExpectedSize;
@@ -34,9 +34,9 @@ ChunkTCP *ParserTCP::Process(PacketIPv4 *packet)
 
 		unsigned short windowSize = packet->Payload->GetShortBEOrFail(15);
 
-		PayloadQuilt *payload = new PayloadQuilt(packet->Payload, headerLength);
+		PayloadQuilt payload(new CPayloadQuilt(packet->Payload, headerLength));
 
-		ChunkTCP *r = new ChunkTCP(packet->BaseData
+		std::shared_ptr<ChunkTCP> r(new ChunkTCP(packet->BaseData
 				, payload
 				, pktLength
 				, headerLength
@@ -47,10 +47,10 @@ ChunkTCP *ParserTCP::Process(PacketIPv4 *packet)
 				, confirmNumber
 				, sourcePort
 				, destinationPort
-		);
+		));
 
 		return (r);
 	}
 
-	return (0);
+	return (std::shared_ptr<ChunkTCP>(nullptr));
 }

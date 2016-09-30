@@ -1,9 +1,9 @@
 
 #include "ChunkEtherNet802LLC.h"
 
-ChunkEtherNet802LLC::ChunkEtherNet802LLC(BaseQuilt *baseData
-		, PayloadQuilt *payload
-		, ChunkEtherNet *parent
+ChunkEtherNet802LLC::ChunkEtherNet802LLC(BaseQuilt baseData
+		, PayloadQuilt payload
+		, std::shared_ptr<ChunkEtherNet> parent
 		, const unsigned short length
 		, const unsigned char dsap
 		, const unsigned char ssap

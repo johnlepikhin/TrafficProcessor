@@ -4,30 +4,25 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include <sparsed-ropes/Quilt.h>
 #include "PhantomQuilt.h"
 
 class ChunkTraits {
 public:
-	ChunkTraits(BaseQuilt *baseData, PayloadQuilt *payload)
-		: RefCounter(0)
-		, BaseData(baseData)
+	ChunkTraits(BaseQuilt baseData, PayloadQuilt payload)
+		: BaseData(baseData)
 		, Payload(payload) {};
-
-	void IncrRefs(int incr);
-	int DecrRefs(int decr);
-
-	int RefCounter;
 
 	/**
 	 * Reference to original data piece
 	 */
-	BaseQuilt *BaseData;
+	BaseQuilt BaseData;
 
 	/**
 	 * Reference to containing data piece
 	 */
-	PayloadQuilt *Payload;
+	PayloadQuilt Payload;
 
 };
 
@@ -43,7 +38,7 @@ public:
 	 * @param containedData Reference to contained data piece
 	 * @param parent Reference to parent Chunk
 	 */
-	Chunk(BaseQuilt *baseData, PayloadQuilt *payload, PARENT *parent)
+	Chunk(BaseQuilt baseData, PayloadQuilt payload, std::shared_ptr<PARENT> parent)
 		: ChunkTraits(baseData, payload)
 		, Parent(parent) {}
 
@@ -51,20 +46,14 @@ public:
 	 * Construct Chunk from Data and NULL parent
 	 * @param data Reference to data (original Pcap)
 	 */
-	Chunk(BaseQuilt *baseData, PayloadQuilt *payload)
+	Chunk(BaseQuilt baseData, PayloadQuilt payload)
 		: ChunkTraits(baseData, payload)
-		, Parent(NULL) {}
-
-	virtual ~Chunk()
-	{
-		if (Payload)
-			delete Payload;
-	}
+		, Parent(std::shared_ptr<PARENT>(nullptr)) {}
 
 	/**
 	 * Pointer to parent Chunk
 	 */
-	PARENT *Parent;
+	std::shared_ptr<PARENT> Parent;
 };
 
 #endif /* SRC_CORE_CHUNK_H_ */

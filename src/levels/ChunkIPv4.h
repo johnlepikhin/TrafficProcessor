@@ -27,9 +27,9 @@ public:
 	 * @param fragmentOffset offset of this fragment in bytes
 	 * @param ttl TTL
 	 */
-	ChunkIPv4(BaseQuilt *baseData
-			, PayloadQuilt *payload
-			, ChunkEtherNetDIX *parent
+	ChunkIPv4(BaseQuilt baseData
+			, PayloadQuilt payload
+			, std::shared_ptr<ChunkEtherNetDIX> parent
 			, unsigned char iHL32bit
 			, const unsigned long srcIP
 			, const unsigned long dstIP

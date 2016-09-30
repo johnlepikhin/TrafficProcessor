@@ -19,9 +19,9 @@ public:
 	 * @param srcIP Source IP address
 	 * @param dstIP Destination IP address
 	 */
-	ChunkIPv6(BaseQuilt *baseData
-			, PayloadQuilt *payload
-			, ChunkEtherNetDIX *parent
+	ChunkIPv6(BaseQuilt baseData
+			, PayloadQuilt payload
+			, std::shared_ptr<ChunkEtherNetDIX> parent
 			, IPv6Addr *srcIP
 			, IPv6Addr *dstIP);
 

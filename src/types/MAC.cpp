@@ -6,10 +6,10 @@
 
 namespace MAC {
 
-unsigned long long Make(const Quilt &data, const size_t offset)
+unsigned long long Make(std::shared_ptr<Quilt> data, const size_t offset)
 {
 	unsigned long long mac(0);
-	data.CopyBytesOrFail((char *)(&mac), offset, 6);
+	data->CopyBytesOrFail((char *)(&mac), offset, 6);
 
 	return (mac);
 }

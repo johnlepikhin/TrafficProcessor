@@ -17,7 +17,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */
-	ChunkRaw *Process(ChunkEtherNet802LLC *parent);
+	std::shared_ptr<ChunkRaw> Process(std::shared_ptr<ChunkEtherNet802LLC> parent);
 
 	/**
 	 * Returns unique ID for this Printer

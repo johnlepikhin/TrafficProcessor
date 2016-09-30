@@ -18,9 +18,9 @@ public:
 	 * @param oui OUI
 	 * @param pid PID
 	 */
-	ChunkEtherNetSNAP(BaseQuilt *baseData
-			, PayloadQuilt *payload
-			, ChunkEtherNet *parent
+	ChunkEtherNetSNAP(BaseQuilt baseData
+			, PayloadQuilt payload
+			, std::shared_ptr<ChunkEtherNet> parent
 			, const unsigned short length
 			, const unsigned int oui
 			, const unsigned short pid);

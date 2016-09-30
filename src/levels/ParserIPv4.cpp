@@ -13,7 +13,7 @@ std::string ParserIPv4::Description()
 	return (std::string("IPv4 packet fragment"));
 }
 
-ChunkIPv4 *ParserIPv4::Process(ChunkEtherNetDIX *dix)
+std::shared_ptr<ChunkIPv4> ParserIPv4::Process(std::shared_ptr<ChunkEtherNetDIX> dix)
 {
 	if (dix->Parent->EtherNetType == 0x800) {
 		unsigned char IHL32bit = dix->Payload->GetCharOrFail(0);
@@ -42,9 +42,9 @@ ChunkIPv4 *ParserIPv4::Process(ChunkEtherNetDIX *dix)
 
 		Protocol = dix->Payload->GetCharOrFail(9);
 
-		PayloadQuilt *payload = new PayloadQuilt(dix->Payload, IHL32bit*4);
+		PayloadQuilt payload(new CPayloadQuilt(dix->Payload, IHL32bit*4));
 
-		ChunkIPv4 *r = new ChunkIPv4(
+		std::shared_ptr<ChunkIPv4> r(new ChunkIPv4(
 				dix->BaseData,
 				payload,
 				dix,
@@ -58,9 +58,9 @@ ChunkIPv4 *ParserIPv4::Process(ChunkEtherNetDIX *dix)
 				FlagIsFragmented,
 				ID,
 				FragmentOffset,
-				TTL);
+				TTL));
 		return (r);
 	}
 
-	return (NULL);
+	return (std::shared_ptr<ChunkIPv4>(nullptr));
 }

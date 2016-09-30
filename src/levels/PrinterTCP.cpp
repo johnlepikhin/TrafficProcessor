@@ -12,7 +12,7 @@ std::string PrinterTCP::Description()
 	return (std::string("TCP printer"));
 }
 
-ChunkRaw *PrinterTCP::Process(ChunkTCP *chunk)
+std::shared_ptr<ChunkRaw> PrinterTCP::Process(std::shared_ptr<ChunkTCP> chunk)
 {
 	try {
 		std::string *payload = chunk->Payload->GetSubStringOrFail(0, 20);
@@ -26,5 +26,6 @@ ChunkRaw *PrinterTCP::Process(ChunkTCP *chunk)
 	} catch (...) {
 
 	}
-	return (0);
+
+	return (std::shared_ptr<ChunkRaw>(nullptr));
 }

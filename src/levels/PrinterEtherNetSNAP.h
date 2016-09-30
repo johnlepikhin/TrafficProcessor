@@ -8,15 +8,13 @@
 
 class PrinterEtherNetSNAP: public Processor<ChunkEtherNetSNAP, ChunkRaw> {
 public:
-	PrinterEtherNetSNAP();
-
 	/**
 	 * Basic printer for ChunkEtherNetSNAP
 	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */
-	ChunkRaw *Process(ChunkEtherNetSNAP *parent);
+	std::shared_ptr<ChunkRaw> Process(std::shared_ptr<ChunkEtherNetSNAP> parent);
 
 	/**
 	 * Returns unique ID for this Printer

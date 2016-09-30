@@ -15,12 +15,13 @@ std::string ParserEtherNetDIX::Description()
 	return (std::string("Ethernet DIX frame"));
 }
 
-ChunkEtherNetDIX *ParserEtherNetDIX::Process(ChunkEtherNet *parent)
+std::shared_ptr<ChunkEtherNetDIX> ParserEtherNetDIX::Process(std::shared_ptr<ChunkEtherNet> parent)
 {
 	if (parent->EtherNetType > 1500) {
-		PayloadQuilt *payload = new PayloadQuilt(parent->Payload, 0);
-		return (new ChunkEtherNetDIX(parent->BaseData, payload, parent, parent->EtherNetType));
+		PayloadQuilt payload(new CPayloadQuilt(parent->Payload, 0));
+		std::shared_ptr<ChunkEtherNetDIX> r(new ChunkEtherNetDIX(parent->BaseData, payload, parent, parent->EtherNetType));
+		return (r);
 	}
 
-	return (NULL);
+	return (std::shared_ptr<ChunkEtherNetDIX>(nullptr));
 }

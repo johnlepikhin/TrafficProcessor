@@ -30,7 +30,7 @@ std::shared_ptr<ChunkTCP> ParserTCP::Process(std::shared_ptr<PacketIPv4> packet)
 
 		unsigned short headerLength = (packet->Payload->GetCharOrFail(12) >> 4) << 2;
 
-		unsigned char flags = packet->Payload->GetCharOrFail(14);
+		unsigned char flags = packet->Payload->GetCharOrFail(13) & 0b111111;
 
 		unsigned short windowSize = packet->Payload->GetShortBEOrFail(15);
 

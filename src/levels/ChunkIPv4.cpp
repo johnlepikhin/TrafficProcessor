@@ -41,13 +41,14 @@ std::string ChunkIPv4::StringOfDstIP()
 	return (IPv4Addr::asString(DstIP));
 }
 
-char *ChunkIPv4::BinaryOfIP(unsigned long ip)
+std::string ChunkIPv4::BinaryOfIP(unsigned long ip)
 {
-	char *r = (char *)util::mallocOrFatal(16);
-	r[12]=(ip >> 24) & 0xff;
-	r[13]=(ip >> 16) & 0xff;
-	r[14]=(ip >> 8) & 0xff;
-	r[15]=ip & 0xff;
+	std::string r;
+	r.resize(4);
+	r[0]=(ip >> 24) & 0xff;
+	r[1]=(ip >> 16) & 0xff;
+	r[2]=(ip >> 8) & 0xff;
+	r[3]=ip & 0xff;
 
 	return (r);
 }

@@ -26,7 +26,7 @@ public:
 
 	InboxT Inbox;
 	PayloadQuilt Payload;
-	std::shared_ptr<std::shared_ptr<ChunkTCP> > FirstChunk;
+	std::shared_ptr<ChunkTCP> FirstChunk;
 	unsigned long long PayloadBytes;
 	unsigned long long RawIfaceBytes;
 	unsigned long LastSeq;

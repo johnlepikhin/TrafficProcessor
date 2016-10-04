@@ -11,9 +11,9 @@ public:
 	bool IsComplete;
 	unsigned int RawIfaceLength;
 
-	virtual char *BinaryOfSrcIP () const = 0;
-	virtual char *BinaryOfDstIP () const = 0;
-	virtual bool CompareSrcIP(const std::shared_ptr<PacketIPTraits> &other) const = 0;
+	virtual std::string BinaryOfSrcIP () const = 0;
+	virtual std::string BinaryOfDstIP () const = 0;
+//	virtual bool CompareSrcIP(const std::shared_ptr<PacketIPTraits> &other) const = 0;
 };
 
 #endif /* SRC_LEVELS_PACKETIPTRAITS_H_ */

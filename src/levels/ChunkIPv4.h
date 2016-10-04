@@ -94,10 +94,10 @@ public:
 
 	std::string StringOfSrcIP();
 	std::string StringOfDstIP();
-	inline char *BinaryOfSrcIP() { return (BinaryOfIP(SrcIP)); };
-	inline char *BinaryOfDstIP() { return (BinaryOfIP(DstIP)); };
+	inline std::string BinaryOfSrcIP() { return (BinaryOfIP(SrcIP)); };
+	inline std::string BinaryOfDstIP() { return (BinaryOfIP(DstIP)); };
 private:
-	char *BinaryOfIP(unsigned long ip);
+	std::string BinaryOfIP(unsigned long ip);
 };
 
 #endif /* SRC_LEVELS_CHUNKIPV4_H_ */

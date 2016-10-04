@@ -21,6 +21,7 @@ Flow::Flow(std::shared_ptr<ChunkTCP> chunk)
 	, RawIfaceBytes(chunk->BaseData->Length)
 	, LastSeq(chunk->SeqNumber)
 {
+	std::cout << "Create flow\n";
 }
 
 void SessionTCP::ProcessFlowInbox(std::shared_ptr<Flow> flow)
@@ -79,14 +80,14 @@ void SessionTCP::SwapFlows()
 }
 
 SessionTCP::SessionTCP(BaseQuilt baseData
-		, PayloadQuilt payload
 		, std::shared_ptr<ChunkTCP> parent)
-	: Chunk(baseData, payload, parent)
+	: Chunk(baseData, nullptr, parent)
 	, State(TCP_CLOSED)
 	, ClientFlow(nullptr)
 	, ServerFlow(nullptr)
 	, DirectionDetected(false)
 {
+	std::cout << "Create TCP session\n";
 	AddChunk(parent);
 }
 

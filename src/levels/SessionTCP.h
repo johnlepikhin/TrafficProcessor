@@ -42,7 +42,6 @@ private:
 	}
 public:
 	SessionTCP(BaseQuilt baseData
-			, PayloadQuilt payload
 			, std::shared_ptr<ChunkTCP> parent);
 
 	void AddChunk(std::shared_ptr<ChunkTCP> chunk);

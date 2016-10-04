@@ -9,6 +9,7 @@ class ChunkTCP: public Chunk<PacketIPTraits> {
 public:
 	ChunkTCP(BaseQuilt baseData
 			, PayloadQuilt payload
+			, std::shared_ptr<PacketIPTraits> parent
 			, const unsigned int pktLength
 			, const unsigned int headerLength
 			, const unsigned int payloadLength

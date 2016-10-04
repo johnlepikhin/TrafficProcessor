@@ -3,6 +3,7 @@
 
 ChunkTCP::ChunkTCP(BaseQuilt baseData
 		, PayloadQuilt payload
+		, std::shared_ptr<PacketIPTraits> parent
 		, const unsigned int pktLength
 		, const unsigned int headerLength
 		, const unsigned int payloadLength
@@ -12,7 +13,7 @@ ChunkTCP::ChunkTCP(BaseQuilt baseData
 		, const unsigned short confirmNumber
 		, const unsigned int sourcePort
 		, const unsigned int destinationPort)
-	: Chunk<PacketIPTraits>(baseData, payload)
+	: Chunk<PacketIPTraits>(baseData, payload, parent)
 	, PktLength(pktLength)
 	, HeaderLength(headerLength)
 	, PayloadLength(payloadLength)

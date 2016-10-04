@@ -38,6 +38,7 @@ std::shared_ptr<ChunkTCP> ParserTCP::Process(std::shared_ptr<PacketIPv4> packet)
 
 		std::shared_ptr<ChunkTCP> r(new ChunkTCP(packet->BaseData
 				, payload
+				, packet
 				, pktLength
 				, headerLength
 				, pktLength-headerLength

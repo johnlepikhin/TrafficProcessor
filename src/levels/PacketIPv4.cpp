@@ -8,18 +8,18 @@ PacketIPv4::PacketIPv4(BaseQuilt baseData
 		, PayloadQuilt payload
 		, std::shared_ptr<ChunkIPv4> parent)
 	: Chunk(baseData, payload, parent)
-	, IsComplete(false)
 	, ReceivedSize(0)
 	, ExpectedSize(0)
-	, IFaceSize(0)
 {
+	IsComplete=false;
+	RawIfaceLength=0;
 	AddChunk(parent);
 }
 
 bool PacketIPv4::AddChunk(std::shared_ptr<ChunkIPv4> chunk)
 {
 	Payload->SewWithHole(chunk->Payload, chunk->FragmentOffset, chunk->PayloadLength);
-	IFaceSize += chunk->BaseData->Length;
+	RawIfaceLength += chunk->BaseData->Length;
 
 	if ( ! chunk->FlagIsFragmented) {
 		if (0 == chunk->FragmentOffset) {

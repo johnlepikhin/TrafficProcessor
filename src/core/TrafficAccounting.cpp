@@ -31,15 +31,15 @@ using namespace std;
 
 static ParserEtherNet generateParseTree()
 {
-	PrinterTCP *printerTCP = new PrinterTCP();
+//	PrinterTCP *printerTCP = new PrinterTCP();
 	ParserTCP *parserTCP = new ParserTCP();
-	parserTCP->AddFollower(printerTCP->AsFollower());
+//	parserTCP->AddFollower(printerTCP->AsFollower());
 
 //	PrinterIPv4 *printerIPV4 = new PrinterIPv4();
 //	PrinterPacketIPv4 *printerPacketIPV4 = new PrinterPacketIPv4();
 //
 	ParserPacketIPv4 *parserPacketIPv4 = new ParserPacketIPv4();
-//	parserPacketIPv4->AddFollower(ASFOLLOWER(PacketIPv4)printerPacketIPV4);
+//	parserPacketIPv4->AddFollower(printerPacketIPV4->AsFollower());
 	parserPacketIPv4->AddFollower(parserTCP->AsFollower());
 
 	ParserIPv4 *parserIPv4 = new ParserIPv4();
@@ -47,7 +47,7 @@ static ParserEtherNet generateParseTree()
 	parserIPv4->AddFollower(parserPacketIPv4->AsFollower());
 
 	ParserEtherNetDIX *etherNetDIX = new ParserEtherNetDIX();
-	etherNetDIX->AddFollower((new PrinterEtherNetDIX())->AsFollower());
+//	etherNetDIX->AddFollower((new PrinterEtherNetDIX())->AsFollower());
 	etherNetDIX->AddFollower(parserIPv4->AsFollower());
 //	ethernetDIX->AddFollower(new ParserIPv6());
 

@@ -12,7 +12,7 @@ ChunkTCP::ChunkTCP(BaseQuilt baseData
 		, const unsigned short confirmNumber
 		, const unsigned int sourcePort
 		, const unsigned int destinationPort)
-	: Chunk<ChunkIPTraits>(baseData, payload)
+	: Chunk<PacketIPTraits>(baseData, payload)
 	, PktLength(pktLength)
 	, HeaderLength(headerLength)
 	, PayloadLength(payloadLength)

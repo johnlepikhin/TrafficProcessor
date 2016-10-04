@@ -1,5 +1,6 @@
 
 #include "ChunkIPv4.h"
+#include "../core/utils.h"
 
 ChunkIPv4::ChunkIPv4(BaseQuilt baseData
 		, PayloadQuilt payload
@@ -38,4 +39,15 @@ std::string ChunkIPv4::StringOfSrcIP()
 std::string ChunkIPv4::StringOfDstIP()
 {
 	return (IPv4Addr::asString(DstIP));
+}
+
+char *ChunkIPv4::BinaryOfIP(unsigned long ip)
+{
+	char *r = (char *)util::mallocOrFatal(16);
+	r[12]=(ip >> 24) & 0xff;
+	r[13]=(ip >> 16) & 0xff;
+	r[14]=(ip >> 8) & 0xff;
+	r[15]=ip & 0xff;
+
+	return (r);
 }

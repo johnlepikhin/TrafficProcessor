@@ -20,7 +20,7 @@ std::shared_ptr<ChunkRaw> PrinterPacketIPv4::Process(std::shared_ptr<PacketIPv4>
 				<< " Protocol=" << (int)packet->Parent->Protocol
 				<< " packetLength=" << packet->ExpectedSize
 				<< " dataLength=" << packet->ReceivedSize
-				<< " ifaceLength=" << packet->IFaceSize
+				<< " ifaceLength=" << packet->RawIfaceLength
 				<< " isComplete=" << packet->IsComplete
 				<< "\n";
 	}

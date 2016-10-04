@@ -3,9 +3,9 @@
 #define SRC_LEVELS_CHUNKTCP_H_
 
 #include "../types/Chunk.h"
-#include "ChunkIPTraits.h"
+#include "PacketIPTraits.h"
 
-class ChunkTCP: public Chunk<ChunkIPTraits> {
+class ChunkTCP: public Chunk<PacketIPTraits> {
 public:
 	ChunkTCP(BaseQuilt baseData
 			, PayloadQuilt payload

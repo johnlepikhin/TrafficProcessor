@@ -16,6 +16,9 @@ public:
 
 	virtual std::string StringOfSrcIP () = 0;
 	virtual std::string StringOfDstIP () = 0;
+
+	virtual char *BinaryOfSrcIP () = 0;
+	virtual char *BinaryOfDstIP () = 0;
 };
 
 #endif /* SRC_LEVELS_CHUNKIPTRAITS_H_ */

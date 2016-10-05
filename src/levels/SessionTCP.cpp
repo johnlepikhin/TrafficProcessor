@@ -20,6 +20,11 @@ inline unsigned long prevSeq(unsigned long seq)
 	}
 }
 
+inline unsigned long distance(unsigned long v1, unsigned long v2)
+{
+	return ((v1 > v2) ? v1-v2 : v2-v1);
+}
+
 inline bool isSameSource(const std::shared_ptr<Flow> flow, const std::shared_ptr<ChunkTCP> chunk)
 {
 	return (flow != nullptr
@@ -111,6 +116,29 @@ SessionTCP::SessionTCP(BaseQuilt baseData
 	AddChunk(parent, lastInternalID);
 }
 
+void SessionTCP::CutFlowToNextChunk(std::shared_ptr<Flow> flow)
+{
+	unsigned long candidateDistance = 0xffffffff;
+	std::shared_ptr<ChunkTCP> candidate(nullptr);
+	for (auto it : flow->Inbox) {
+		unsigned long thisDistance = distance(it.second->SeqNumber, flow->LastSeq);
+		if (thisDistance < candidateDistance) {
+			candidate = it.second;
+			candidateDistance = thisDistance;
+		}
+	}
+	if (candidate != nullptr)
+		flow->LastSeq = prevSeq(candidate->SeqNumber);
+}
+
+void SessionTCP::CheckFlowTimeOut(std::shared_ptr<Flow> flow)
+{
+	if (flow != nullptr && flow->Inbox.size() > 10) {
+		CutFlowToNextChunk(flow);
+		ProcessFlowInbox(flow);
+	}
+}
+
 void SessionTCP::AddChunk(std::shared_ptr<ChunkTCP> chunk, unsigned long long newLastInternalID)
 {
 	bool addedToServer = true;
@@ -152,4 +180,7 @@ void SessionTCP::AddChunk(std::shared_ptr<ChunkTCP> chunk, unsigned long long ne
 			}
 		}
 	}
+
+	CheckFlowTimeOut(ServerFlow);
+	CheckFlowTimeOut(ClientFlow);
 }

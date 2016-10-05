@@ -58,7 +58,7 @@ void ParserSessionTCP::GarbageCollector()
 {
 	auto it = SessionsCollector.begin();
 	while (it != SessionsCollector.end()) {
-		unsigned long long diff = IDGenerator.Diff(it->second->LastInternalID);
+		unsigned long long diff = IDGenerator.Distance(it->second->LastInternalID);
 		if (it->second->State == TCP_CLOSED) {
 			if (diff > DeleteClosedAfter) {
 				it = SessionsCollector.erase(it);

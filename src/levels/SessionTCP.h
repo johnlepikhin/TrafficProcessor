@@ -47,8 +47,12 @@ public:
 
 	void AddChunk(std::shared_ptr<ChunkTCP> chunk, unsigned long long newLastInternalID);
 
-	// public because following processors can also detect direction and swap flows
+	// public because followers can also detect direction and swap flows
 	void SwapFlows();
+
+
+	void CutFlowToNextChunk(std::shared_ptr<Flow> flow);
+	void CheckFlowTimeOut(std::shared_ptr<Flow> flow);
 
 	inline bool HasServerPayload() const {
 		return (ServerFlow != nullptr && ServerFlow->Payload != nullptr);

@@ -15,8 +15,8 @@ public:
 			, const unsigned int payloadLength
 			, const unsigned char flags
 			, const unsigned short windowSize
-			, const unsigned short seqNumber
-			, const unsigned short confirmNumber
+			, const unsigned long seqNumber
+			, const unsigned long confirmNumber
 			, const unsigned int sourcePort
 			, const unsigned int destinationPort);
 
@@ -34,9 +34,9 @@ public:
 
 	unsigned short WindowSize;
 
-	unsigned short SeqNumber;
+	unsigned long SeqNumber;
 
-	unsigned short ConfirmNumber;
+	unsigned long ConfirmNumber;
 };
 
 #endif /* SRC_LEVELS_CHUNKTCP_H_ */

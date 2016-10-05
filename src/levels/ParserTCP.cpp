@@ -22,10 +22,10 @@ std::shared_ptr<ChunkTCP> ParserTCP::Process(std::shared_ptr<PacketIPv4> packet)
 
 		unsigned short destinationPort = packet->Payload->GetShortBEOrFail(2);
 
-		unsigned short seqNumber(0);
+		unsigned long seqNumber(0);
 		packet->Payload->CopyBytesOrFail((char *)&seqNumber, 4, 4);
 
-		unsigned short confirmNumber(0);
+		unsigned long confirmNumber(0);
 		packet->Payload->CopyBytesOrFail((char *)&confirmNumber, 8, 4);
 
 		unsigned short headerLength = (packet->Payload->GetCharOrFail(12) >> 4) << 2;

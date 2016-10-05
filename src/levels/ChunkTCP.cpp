@@ -9,8 +9,8 @@ ChunkTCP::ChunkTCP(BaseQuilt baseData
 		, const unsigned int payloadLength
 		, const unsigned char flags
 		, const unsigned short windowSize
-		, const unsigned short seqNumber
-		, const unsigned short confirmNumber
+		, const unsigned long seqNumber
+		, const unsigned long confirmNumber
 		, const unsigned int sourcePort
 		, const unsigned int destinationPort)
 	: Chunk<PacketIPTraits>(baseData, payload, parent)

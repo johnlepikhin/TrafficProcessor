@@ -45,21 +45,46 @@ std::shared_ptr<SessionTCP> ParserSessionTCP::Process(std::shared_ptr<ChunkTCP> 
 	SessionID key(parent);
 	auto it = SessionsCollector.find(key);
 	if (it != SessionsCollector.end()) {
-		it->second->AddChunk(parent);
+		it->second->AddChunk(parent, IDGenerator.Next());
 		return (it->second);
 	} else {
-		std::shared_ptr<SessionTCP> sessionTCP(new SessionTCP(parent->BaseData, parent));
+		std::shared_ptr<SessionTCP> sessionTCP(new SessionTCP(parent->BaseData, parent, IDGenerator.Next()));
 		SessionsCollector.insert(std::make_pair(key, sessionTCP));
 		return (sessionTCP);
 	}
 }
 
+void ParserSessionTCP::GarbageCollector()
+{
+	auto it = SessionsCollector.begin();
+	while (it != SessionsCollector.end()) {
+		unsigned long long diff = IDGenerator.Diff(it->second->LastInternalID);
+		if (it->second->State == TCP_CLOSED) {
+			if (diff > DeleteClosedAfter) {
+				it = SessionsCollector.erase(it);
+			} else {
+				it++;
+			}
+		} else if (it->second->State == TCP_BYE) {
+			if (diff > DeleteClosingAfter) {
+				it = SessionsCollector.erase(it);
+			} else {
+				it++;
+			}
+		} else {
+			if (diff > DeleteInactiveAfter) {
+				it = SessionsCollector.erase(it);
+			} else {
+				it++;
+			}
+		}
+	}
+}
+
 void ParserSessionTCP::AfterRecursionHook(std::shared_ptr<SessionTCP> session, std::exception *exn, bool found)
 {
-	// TODO cleanup session only after a while
-	if (session->State == TCP_CLOSED) {
-		SessionID key(session->Parent);
-		SessionsCollector.erase(key);
+	if (IDGenerator.Get() % 1000 == 0) {
+		GarbageCollector();
 	}
 }
 

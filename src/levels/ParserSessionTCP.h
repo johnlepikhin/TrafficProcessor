@@ -7,6 +7,7 @@
 #include "ChunkTCP.h"
 #include "SessionTCP.h"
 #include "../types/Processor.h"
+#include "../types/Counter.h"
 
 class SessionID {
 public:
@@ -57,8 +58,14 @@ class ParserSessionTCP: public Processor<ChunkTCP, SessionTCP> {
 	 */
 	std::string Description();
 
+	void GarbageCollector();
+
+	unsigned long long DeleteClosedAfter = 1000;
+	unsigned long long DeleteClosingAfter = 1000;
+	unsigned long long DeleteInactiveAfter = 20000;
 private:
 	SessionsMap SessionsCollector;
+	Counter IDGenerator;
 };
 
 #endif /* SRC_LEVELS_PARSERSESSIONTCP_H_ */

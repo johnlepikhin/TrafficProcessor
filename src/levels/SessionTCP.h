@@ -42,9 +42,10 @@ private:
 	}
 public:
 	SessionTCP(BaseQuilt baseData
-			, std::shared_ptr<ChunkTCP> parent);
+			, std::shared_ptr<ChunkTCP> parent
+			, unsigned long long lastInternalID);
 
-	void AddChunk(std::shared_ptr<ChunkTCP> chunk);
+	void AddChunk(std::shared_ptr<ChunkTCP> chunk, unsigned long long newLastInternalID);
 
 	// public because following processors can also detect direction and swap flows
 	void SwapFlows();
@@ -63,6 +64,8 @@ public:
 	std::shared_ptr<Flow> ServerFlow;
 
 	bool DirectionDetected;
+
+	unsigned long long LastInternalID;
 };
 
 #endif /* SRC_LEVELS_SESSIONTCP_H_ */

@@ -99,19 +99,23 @@ void SessionTCP::SwapFlows()
 }
 
 SessionTCP::SessionTCP(BaseQuilt baseData
-		, std::shared_ptr<ChunkTCP> parent)
+		, std::shared_ptr<ChunkTCP> parent
+		, unsigned long long lastInternalID)
 	: Chunk(baseData, nullptr, parent)
 	, State(TCP_INITIAL)
 	, ClientFlow(nullptr)
 	, ServerFlow(nullptr)
 	, DirectionDetected(false)
+	, LastInternalID(lastInternalID)
 {
-	AddChunk(parent);
+	AddChunk(parent, lastInternalID);
 }
 
-void SessionTCP::AddChunk(std::shared_ptr<ChunkTCP> chunk)
+void SessionTCP::AddChunk(std::shared_ptr<ChunkTCP> chunk, unsigned long long newLastInternalID)
 {
 	bool addedToServer = true;
+
+	LastInternalID = newLastInternalID;
 
 	if (ServerFlow == nullptr && ClientFlow == nullptr) {
 		ClientFlow = std::make_shared<Flow>(Flow(chunk));

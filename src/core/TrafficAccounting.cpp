@@ -26,12 +26,16 @@
 #include "../levels/ParserTCP.h"
 #include "../levels/PrinterTCP.h"
 #include "../levels/ParserSessionTCP.h"
+#include "../levels/PrinterSessionTCP.h"
 
 using namespace std;
 
 static ParserEtherNet generateParseTree()
 {
+	PrinterSessionTCP *printerSessionTCP = new PrinterSessionTCP();
+
 	ParserSessionTCP *parserSessionTCP = new ParserSessionTCP();
+	parserSessionTCP->AddFollower(printerSessionTCP->AsFollower());
 
 //	PrinterTCP *printerTCP = new PrinterTCP();
 	ParserTCP *parserTCP = new ParserTCP();

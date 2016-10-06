@@ -6,7 +6,8 @@ inline unsigned long long pair_of_IPv4(const std::shared_ptr<ChunkIPv4> chunk)
 	return (((unsigned long long)chunk->SrcIP << 32) + chunk->DstIP);
 }
 
-std::shared_ptr<PacketIPv4> IPPairMap::AddChunk(std::shared_ptr<ChunkIPv4> chunk)
+std::shared_ptr<PacketIPv4> IPPairMap::AddChunk(std::shared_ptr<ChunkIPv4> chunk
+		, unsigned long long newLastInternalId)
 {
 	unsigned long long pair = pair_of_IPv4(chunk);
 
@@ -14,6 +15,8 @@ std::shared_ptr<PacketIPv4> IPPairMap::AddChunk(std::shared_ptr<ChunkIPv4> chunk
 
 	if (it != end()) {
 		std::shared_ptr<IPPacketMap> IDMap = (*it).second;
+
+		IDMap->LastInternalID = newLastInternalId;
 
 		for (auto p_it = IDMap->rbegin(); p_it != IDMap->rend(); ++p_it) {
 			std::shared_ptr<ChunkIPv4> ipv4_chunk = (*p_it)->Parent;
@@ -34,6 +37,7 @@ std::shared_ptr<PacketIPv4> IPPairMap::AddChunk(std::shared_ptr<ChunkIPv4> chunk
 		PayloadQuilt payload(new CPayloadQuilt());
 		std::shared_ptr<PacketIPv4> pkt(new PacketIPv4(chunk->BaseData, payload, chunk));
 		IDMap->push_back(pkt);
+		IDMap->LastInternalID = newLastInternalId;
 
 		emplace(pair, IDMap);
 
@@ -41,8 +45,26 @@ std::shared_ptr<PacketIPv4> IPPairMap::AddChunk(std::shared_ptr<ChunkIPv4> chunk
 	}
 }
 
+void ParserPacketIPv4::GarbageCollector()
+{
+	auto it = IPCollector.begin();
+	while (it != IPCollector.end()) {
+		if (IDGenerator.Distance(it->second->LastInternalID) > DeleteInactiveAfter) {
+			// TODO do not drop partially received IP packet but process it!
+			// (modifications to RecursiveDelegator required
+			it = IPCollector.erase(it);
+		} else {
+			it ++;
+		}
+	}
+}
+
 void ParserPacketIPv4::AfterRecursionHook(std::shared_ptr<PacketIPv4> packet, std::exception *exn, bool found)
 {
+	if (IDGenerator.Get() % 10000 == 0) {
+		GarbageCollector();
+	}
+
 	if (!packet->IsComplete)
 		return;
 
@@ -61,9 +83,9 @@ void ParserPacketIPv4::AfterRecursionHook(std::shared_ptr<PacketIPv4> packet, st
 			}
 		}
 
-		// TODO: check+remove periodically
+		// Leave empty IDMaps in IPCollector for future inserts with the same IP pairs.
+		// Unused for a long time IDMaps will be erased by GarbageCollector.
 //		if (IDMap->empty()) {
-//			delete IDMap;
 //			IPCollector.erase(it);
 //		}
 	}
@@ -71,7 +93,7 @@ void ParserPacketIPv4::AfterRecursionHook(std::shared_ptr<PacketIPv4> packet, st
 
 std::shared_ptr<PacketIPv4> ParserPacketIPv4::Process(std::shared_ptr<ChunkIPv4> parent)
 {
-	std::shared_ptr<PacketIPv4> r = IPCollector.AddChunk(parent);
+	std::shared_ptr<PacketIPv4> r = IPCollector.AddChunk(parent, IDGenerator.Next());
 	return (r);
 }
 

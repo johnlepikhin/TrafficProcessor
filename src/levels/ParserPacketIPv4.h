@@ -6,15 +6,19 @@
 #include <unordered_map>
 #include "PacketIPv4.h"
 #include "../types/Processor.h"
+#include "../types/Counter.h"
 
 typedef unsigned int IPv4PacketID;
 
 class IPPacketMap : public std::vector<std::shared_ptr<PacketIPv4> > {
+public:
+	unsigned long long LastInternalID;
 };
 
 class IPPairMap : public std::unordered_map<unsigned long long, std::shared_ptr<IPPacketMap> > {
 public:
-	std::shared_ptr<PacketIPv4> AddChunk(std::shared_ptr<ChunkIPv4> chunk);
+	std::shared_ptr<PacketIPv4> AddChunk(std::shared_ptr<ChunkIPv4> chunk
+			, unsigned long long newInternalId);
 };
 
 class ParserPacketIPv4: public Processor<ChunkIPv4, PacketIPv4> {
@@ -41,9 +45,12 @@ public:
 	 */
 	std::string Description();
 
+	void GarbageCollector();
 
 private:
 	IPPairMap IPCollector;
+	unsigned long long DeleteInactiveAfter = 10000;
+	Counter IDGenerator;
 };
 
 #endif /* SRC_LEVELS_PARSERPACKETIPV4_H_ */

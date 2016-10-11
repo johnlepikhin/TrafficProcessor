@@ -39,8 +39,8 @@ static ParserEtherNet generateParseTree()
 
 //	PrinterTCP *printerTCP = new PrinterTCP();
 	ParserTCP *parserTCP = new ParserTCP();
-	parserTCP->AddFollower(parserSessionTCP->AsFollower());
 //	parserTCP->AddFollower(printerTCP->AsFollower());
+	parserTCP->AddFollower(parserSessionTCP->AsFollower());
 
 //	PrinterIPv4 *printerIPV4 = new PrinterIPv4();
 //	PrinterPacketIPv4 *printerPacketIPV4 = new PrinterPacketIPv4();

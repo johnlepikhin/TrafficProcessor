@@ -22,8 +22,13 @@ typedef std::shared_ptr<ChunkTCP> chunkptr;
 
 class EndPoint
 {
+private:
+	std::shared_ptr<std::string> PayloadPreview;
+	bool PreviewCreated = false;
 public:
 	EndPoint();
+	void ResetPayload();
+	std::shared_ptr<std::string> GetPayloadPreview();
 
 	PayloadQuilt Payload;
 	chunkptr LastChunk;

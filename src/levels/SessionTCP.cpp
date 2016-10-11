@@ -40,6 +40,25 @@ EndPoint::EndPoint()
 {
 }
 
+void EndPoint::ResetPayload()
+{
+	Payload = nullptr;
+	PreviewCreated = false;
+}
+
+std::shared_ptr<std::string> EndPoint::GetPayloadPreview()
+{
+	if (Payload == nullptr) {
+		return (std::shared_ptr<std::string>(nullptr));
+	} else {
+		if (!PreviewCreated) {
+			PreviewCreated = true;
+			PayloadPreview = std::shared_ptr<std::string>(Payload->GetMaxSubString(0, 20));
+		}
+		return (PayloadPreview);
+	}
+}
+
 chunkptr SessionTCP::PopChunk(const std::function <bool (chunkptr &candidate)> &filter)
 {
 	for (auto it : Inbox) {
@@ -119,6 +138,7 @@ void SessionTCP::AddChunk(std::shared_ptr<ChunkTCP> chunk, unsigned long long ne
 	LastInternalID = newLastInternalID;
 	FillEndPoint(chunk);
 	Inbox.insert(std::make_pair(chunk->SeqNumber, chunk));
+
 	while (1) {
 		chunkptr c;
 		int processed = 0;

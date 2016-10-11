@@ -91,8 +91,8 @@ void ParserSessionTCP::AfterRecursionHook(std::shared_ptr<SessionTCP> session, s
 {
 	if (session != nullptr) {
 		// prevent access of followers to already processed data
-		session->Client->Payload = nullptr;
-		session->Server->Payload = nullptr;
+		session->Client->ResetPayload();
+		session->Server->ResetPayload();
 
 		if (IDGenerator.Get() % 1000 == 0) {
 			GarbageCollector();

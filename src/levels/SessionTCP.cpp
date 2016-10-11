@@ -2,6 +2,26 @@
 #include "SessionTCP.h"
 #include <string.h>
 
+inline bool isSameSource(chunkptr &chunk1, chunkptr &chunk2) {
+	if (chunk1->SourcePort == chunk2->SourcePort) {
+		if (chunk1->Parent->BinaryOfSrcIP() == chunk2->Parent->BinaryOfSrcIP()) {
+			return (true);
+		} else {
+			return (false);
+		}
+	} else {
+		return (false);
+	}
+}
+
+inline bool isSameSource(chunkptr &chunk, EndPoint endpoint) {
+	if (endpoint.LastChunk != nullptr) {
+		return (isSameSource(chunk, endpoint.LastChunk));
+	} else {
+		return (false);
+	}
+}
+
 SessionTCP::SessionTCP(BaseQuilt baseData
 		, std::shared_ptr<ChunkTCP> parent
 		, unsigned long long lastInternalID)
@@ -32,21 +52,57 @@ chunkptr SessionTCP::PopChunk(const std::function <bool (chunkptr &candidate)> &
 	return (nullptr);
 }
 
-void SessionTCP::AssignEndPoints(chunkptr &chunk, EndPoint **correct, EndPoint **other)
+void SessionTCP::SwapFlows()
 {
-	if ((*correct)->LastChunk == nullptr && (*other)->LastChunk == nullptr) {
-		(*correct)->LastChunk = chunk;
-	} else if ((*correct)->LastChunk != nullptr && (*correct)->LastChunk->SourcePort != chunk->SourcePort) {
-		EndPoint **tmp = other;
-		other = correct;
-		correct = tmp;
-	} else if ((*other)->LastChunk != nullptr && (*other)->LastChunk->SourcePort == chunk->SourcePort) {
-		EndPoint **tmp = other;
-		other = correct;
-		correct = tmp;
-	}
+	EndPoint *tmp = Server;
+	Server = Client;
+	Client = tmp;
 
 	DirectionDetected = true;
+}
+
+void SessionTCP::AssignEndPoints(chunkptr &chunk, EndPoint **correct, EndPoint **other)
+{
+	if ((*correct)->LastChunk != nullptr && !isSameSource((*correct)->LastChunk, chunk)) {
+		SwapFlows();
+	} else if ((*other)->LastChunk != nullptr && isSameSource((*other)->LastChunk, chunk)) {
+		SwapFlows();
+	}
+}
+
+void SessionTCP::FillEndPoint(chunkptr &chunk)
+{
+	if (C_EP.LastChunk == nullptr && S_EP.LastChunk == nullptr) {
+		C_EP.LastChunk = chunk;
+		C_EP.PayloadBytes += chunk->PayloadLength;
+		C_EP.RawIfaceBytes += chunk->BaseData->Length;
+	} else if (C_EP.LastChunk == nullptr) {
+		if (isSameSource(S_EP.LastChunk, chunk)) {
+			S_EP.PayloadBytes += chunk->PayloadLength;
+			S_EP.RawIfaceBytes += chunk->BaseData->Length;
+		} else {
+			C_EP.LastChunk = chunk;
+			C_EP.PayloadBytes += chunk->PayloadLength;
+			C_EP.RawIfaceBytes += chunk->BaseData->Length;
+		}
+	} else if (S_EP.LastChunk == nullptr) {
+		if (isSameSource(C_EP.LastChunk, chunk)) {
+			C_EP.PayloadBytes += chunk->PayloadLength;
+			C_EP.RawIfaceBytes += chunk->BaseData->Length;
+		} else {
+			S_EP.LastChunk = chunk;
+			S_EP.PayloadBytes += chunk->PayloadLength;
+			S_EP.RawIfaceBytes += chunk->BaseData->Length;
+		}
+	} else {
+		if (isSameSource(C_EP.LastChunk, chunk)) {
+			C_EP.PayloadBytes += chunk->PayloadLength;
+			C_EP.RawIfaceBytes += chunk->BaseData->Length;
+		} else {
+			S_EP.PayloadBytes += chunk->PayloadLength;
+			S_EP.RawIfaceBytes += chunk->BaseData->Length;
+		}
+	}
 }
 
 void SessionTCP::AppendPayload(chunkptr &chunk, EndPoint *endpoint)
@@ -60,6 +116,8 @@ void SessionTCP::AppendPayload(chunkptr &chunk, EndPoint *endpoint)
 
 void SessionTCP::AddChunk(std::shared_ptr<ChunkTCP> chunk, unsigned long long newLastInternalID)
 {
+	LastInternalID = newLastInternalID;
+	FillEndPoint(chunk);
 	Inbox.insert(std::make_pair(chunk->SeqNumber, chunk));
 	while (1) {
 		chunkptr c;

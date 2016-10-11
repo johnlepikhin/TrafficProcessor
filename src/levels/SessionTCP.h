@@ -39,15 +39,11 @@ private:
 
 	InboxT Inbox;
 
-	void ProcessFlowInbox(std::shared_ptr<EndPoint> flow, std::shared_ptr<EndPoint> other);
-	void AddChunkToFlow(std::shared_ptr<EndPoint> flow
-			, std::shared_ptr<EndPoint> otherFlow
-			, chunkptr chunk);
 	chunkptr PopChunk(
 			const std::function <bool (chunkptr &candidate)> &filter);
 
 	void AssignEndPoints(chunkptr &chunk, EndPoint **correct, EndPoint **other);
-
+	void FillEndPoint(chunkptr &chunk);
 	void AppendPayload(chunkptr &chunk, EndPoint *endpoint);
 
 	EndPoint C_EP;
@@ -64,7 +60,7 @@ public:
 
 
 //	void CutFlowToNextChunk(Flow flow);
-	void CheckFlowTimeOut(EndPoint &flow, EndPoint &otherFlow);
+//	void CheckFlowTimeOut(EndPoint &flow, EndPoint &otherFlow);
 
 	tcp_session_state State = TCP_INITIAL;
 

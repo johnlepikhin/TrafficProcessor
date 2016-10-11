@@ -2,185 +2,152 @@
 #include "SessionTCP.h"
 #include <string.h>
 
-inline unsigned long nextSeq(unsigned long seq)
-{
-	if (seq == 0xffffffff) {
-		return (0);
-	} else {
-		return (seq+1);
-	}
-}
-
-inline unsigned long prevSeq(unsigned long seq)
-{
-	if (seq == 0) {
-		return (0xffffffff);
-	} else {
-		return (seq-1);
-	}
-}
-
-inline unsigned long distance(unsigned long v1, unsigned long v2)
-{
-	return ((v1 > v2) ? v1-v2 : v2-v1);
-}
-
-inline bool isSameSource(const std::shared_ptr<Flow> flow, const std::shared_ptr<ChunkTCP> chunk)
-{
-	return (flow != nullptr
-			&& flow->FirstChunk->SourcePort == chunk->SourcePort
-			&& flow->FirstChunk->Parent->BinaryOfSrcIP().compare(chunk->Parent->BinaryOfSrcIP()));
-}
-
-Flow::Flow(std::shared_ptr<ChunkTCP> chunk)
-	: FirstChunk(chunk)
-	, PayloadBytes(0)
-	, RawIfaceBytes(0)
-	, LastSeq(prevSeq(chunk->SeqNumber))
-{
-}
-
-void SessionTCP::ProcessFlowInbox(std::shared_ptr<Flow> flow)
-{
-	PayloadQuilt p(new CPayloadQuilt());
-	flow->Payload = p;
-	auto it = flow->Inbox.find(nextSeq(flow->LastSeq));
-	unsigned long next;
-	if (it != flow->Inbox.end()) {
-		do {
-			if (State != TCP_ESTABLISHED) {
-				if ((*it).second->FlagSYN) {
-					if ((*it).second->FlagACK) {
-						UpgradeState(TCP_ESTABLISHED);
-					} else {
-						UpgradeState(TCP_HELLO);
-					}
-				}
-			}
-
-			// check every packet for the case of lost packets
-			if ((*it).second->FlagFIN && (*it).second->FlagACK) {
-				UpgradeState(TCP_BYE);
-			} else {
-				if (((*it).second->FlagACK && State == TCP_BYE)) {
-					UpgradeState(TCP_CLOSED);
-				}
-			}
-
-			if ((*it).second->FlagRST)
-				UpgradeState(TCP_CLOSED);
-
-			flow->Payload->SewWithHole((*it).second->Payload, flow->Payload->Length, (*it).second->PayloadLength);
-			next = nextSeq((*it).second->SeqNumber);
-			flow->LastSeq=(*it).second->SeqNumber;
-			if (next) {
-				it = flow->Inbox.erase(it);
-			} else {
-				flow->Inbox.erase(it);
-				it = flow->Inbox.find(0);
-			}
-		} while (it != flow->Inbox.end() && (*it).second->SeqNumber == next);
-	}
-}
-
-void SessionTCP::AddChunkToFlow(std::shared_ptr<Flow> flow, std::shared_ptr<ChunkTCP> chunk)
-{
-	// prevent access of followers to already processed data
-	flow->Payload = nullptr;
-
-	flow->RawIfaceBytes+=chunk->Parent->RawIfaceLength;
-	flow->PayloadBytes+=chunk->PayloadLength;
-	flow->Inbox.insert(std::make_pair(chunk->SeqNumber, chunk));
-
-	if (nextSeq(flow->LastSeq) == chunk->SeqNumber)
-		ProcessFlowInbox(flow);
-}
-
-void SessionTCP::SwapFlows()
-{
-	std::shared_ptr<Flow> tmp = ClientFlow;
-	ClientFlow = ServerFlow;
-	ServerFlow = tmp;
-}
-
 SessionTCP::SessionTCP(BaseQuilt baseData
 		, std::shared_ptr<ChunkTCP> parent
 		, unsigned long long lastInternalID)
 	: Chunk(baseData, nullptr, parent)
 	, State(TCP_INITIAL)
-	, ClientFlow(nullptr)
-	, ServerFlow(nullptr)
-	, DirectionDetected(false)
 	, LastInternalID(lastInternalID)
 {
 	AddChunk(parent, lastInternalID);
 }
 
-void SessionTCP::CutFlowToNextChunk(std::shared_ptr<Flow> flow)
+EndPoint::EndPoint()
+	: LastChunk(nullptr)
+	, PayloadBytes(0)
+	, RawIfaceBytes(0)
+	, NextExpectedSEQ(0)
 {
-	unsigned long candidateDistance = 0xffffffff;
-	std::shared_ptr<ChunkTCP> candidate(nullptr);
-	for (auto it : flow->Inbox) {
-		unsigned long thisDistance = distance(it.second->SeqNumber, flow->LastSeq);
-		if (thisDistance < candidateDistance) {
-			candidate = it.second;
-			candidateDistance = thisDistance;
-		}
-	}
-	if (candidate != nullptr)
-		flow->LastSeq = prevSeq(candidate->SeqNumber);
 }
 
-void SessionTCP::CheckFlowTimeOut(std::shared_ptr<Flow> flow)
+chunkptr SessionTCP::PopChunk(const std::function <bool (chunkptr &candidate)> &filter)
 {
-	if (flow != nullptr && flow->Inbox.size() > 10) {
-		CutFlowToNextChunk(flow);
-		ProcessFlowInbox(flow);
+	for (auto it : Inbox) {
+		if (filter(it.second)) {
+			Inbox.erase(it.first);
+			return (it.second);
+		}
 	}
+
+	return (nullptr);
+}
+
+void SessionTCP::AssignEndPoints(chunkptr &chunk, EndPoint **correct, EndPoint **other)
+{
+	if ((*correct)->LastChunk == nullptr && (*other)->LastChunk == nullptr) {
+		(*correct)->LastChunk = chunk;
+	} else if ((*correct)->LastChunk != nullptr && (*correct)->LastChunk->SourcePort != chunk->SourcePort) {
+		EndPoint **tmp = other;
+		other = correct;
+		correct = tmp;
+	} else if ((*other)->LastChunk != nullptr && (*other)->LastChunk->SourcePort == chunk->SourcePort) {
+		EndPoint **tmp = other;
+		other = correct;
+		correct = tmp;
+	}
+
+	DirectionDetected = true;
+}
+
+void SessionTCP::AppendPayload(chunkptr &chunk, EndPoint *endpoint)
+{
+	if (endpoint->Payload == nullptr) {
+		PayloadQuilt p(new CPayloadQuilt());
+		endpoint->Payload = p;
+	}
+	endpoint->Payload->SewWithHole(chunk->Payload, endpoint->Payload->Length, chunk->PayloadLength);
 }
 
 void SessionTCP::AddChunk(std::shared_ptr<ChunkTCP> chunk, unsigned long long newLastInternalID)
 {
-	bool addedToServer = true;
+	Inbox.insert(std::make_pair(chunk->SeqNumber, chunk));
+	while (1) {
+		chunkptr c;
+		int processed = 0;
+		bool fin = false;
+		switch (State) {
+			case TCP_INITIAL:
+				c = PopChunk(
+						[](chunkptr chunk) { return (chunk->FlagSYN && !chunk->FlagACK); });
+				if (c != nullptr) {
+					State = TCP_HELLO1;
+					AssignEndPoints(chunk, &Client, &Server);
+					processed++;
+				}
+				break;
 
-	LastInternalID = newLastInternalID;
+			case TCP_HELLO1:
+				c = PopChunk(
+						[](chunkptr chunk) { return (chunk->FlagSYN && chunk->FlagACK); });
+				if (c != nullptr) {
+					State = TCP_HELLO2;
+					AssignEndPoints(chunk, &Server, &Client);
+					Client->NextExpectedSEQ = chunk->ConfirmNumber;
+					processed++;
+				}
+				break;
 
-	if (ServerFlow == nullptr && ClientFlow == nullptr) {
-		ClientFlow = std::make_shared<Flow>(Flow(chunk));
-		AddChunkToFlow(ClientFlow, chunk);
-		addedToServer = false;
-	} else if (ServerFlow == nullptr) {
-		if (isSameSource(ClientFlow, chunk)) {
-			AddChunkToFlow(ClientFlow, chunk);
-			addedToServer = false;
-		} else {
-			ServerFlow = std::make_shared<Flow>(Flow(chunk));
-			AddChunkToFlow(ServerFlow, chunk);
+			case TCP_HELLO2:
+				c = PopChunk(
+						[this](chunkptr chunk) { return (chunk->FlagACK && chunk->SeqNumber == this->Client->NextExpectedSEQ); });
+				if (c != nullptr) {
+					State = TCP_ESTABLISHED;
+					Server->NextExpectedSEQ = chunk->ConfirmNumber;
+					processed++;
+				}
+				break;
+
+			case TCP_ESTABLISHED:
+			case TCP_BYE1:
+				c = PopChunk(
+						[this](chunkptr chunk) {return (chunk->FlagACK && chunk->SeqNumber == this->Client->NextExpectedSEQ); });
+
+				if (c != nullptr) {
+					Server->NextExpectedSEQ = chunk->ConfirmNumber;
+					if (c->FlagFIN)
+						fin=true;
+					AppendPayload(c, Client);
+					processed++;
+				}
+
+				c = PopChunk(
+						[this](chunkptr chunk) { return (chunk->FlagACK && chunk->SeqNumber == this->Server->NextExpectedSEQ); });
+				if (c != nullptr) {
+					Client->NextExpectedSEQ = chunk->ConfirmNumber;
+					if (c->FlagFIN)
+						fin=true;
+					AppendPayload(c, Server);
+					processed++;
+				}
+
+				if (fin) {
+					if (State == TCP_ESTABLISHED) {
+						State = TCP_BYE1;
+					} else {
+						State = TCP_BYE2;
+					}
+				}
+				break;
+
+			case TCP_BYE2:
+				c = PopChunk(
+						[this](chunkptr chunk) {
+					return (chunk->FlagACK
+							&&
+							( chunk->SeqNumber == this->Client->NextExpectedSEQ
+							|| chunk->SeqNumber == this->Server->NextExpectedSEQ)); });
+
+				if (c != nullptr) {
+					State = TCP_CLOSED;
+					processed++;
+				}
+				break;
+
+
+			default:
+				break;
 		}
-	} else {
-		if (isSameSource(ServerFlow, chunk)) {
-			AddChunkToFlow(ServerFlow, chunk);
-		} else {
-			ClientFlow = std::make_shared<Flow>(Flow(chunk));
-			AddChunkToFlow(ClientFlow, chunk);
-			addedToServer = false;
-		}
+		if (!processed)
+			return;
 	}
-
-	if (!DirectionDetected) {
-		if (chunk->FlagSYN) {
-			if (chunk->FlagACK) {
-				// this is server's chunk
-				if (!addedToServer)
-					SwapFlows();
-			} else {
-				// this is client's chunk
-				if (addedToServer)
-					SwapFlows();
-			}
-		}
-	}
-
-	CheckFlowTimeOut(ServerFlow);
-	CheckFlowTimeOut(ClientFlow);
 }

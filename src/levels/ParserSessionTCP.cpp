@@ -44,13 +44,19 @@ std::shared_ptr<SessionTCP> ParserSessionTCP::Process(std::shared_ptr<ChunkTCP> 
 {
 	SessionID key(parent);
 	auto it = SessionsCollector.find(key);
+	std::shared_ptr<SessionTCP> r;
 	if (it != SessionsCollector.end()) {
 		it->second->AddChunk(parent, IDGenerator.Next());
-		return (it->second);
+		if ((it->second->Server->Payload != nullptr && it->second->Server->Payload->CoveredSize)
+			|| (it->second->Client->Payload != nullptr && it->second->Client->Payload->CoveredSize)) {
+			return (it->second);
+		} else {
+			return (std::shared_ptr<SessionTCP>(nullptr));
+		}
 	} else {
 		std::shared_ptr<SessionTCP> sessionTCP(new SessionTCP(parent->BaseData, parent, IDGenerator.Next()));
 		SessionsCollector.insert(std::make_pair(key, sessionTCP));
-		return (sessionTCP);
+		return (std::shared_ptr<SessionTCP>(nullptr));
 	}
 }
 
@@ -65,7 +71,7 @@ void ParserSessionTCP::GarbageCollector()
 			} else {
 				it++;
 			}
-		} else if (it->second->State == TCP_BYE) {
+		} else if (it->second->State == TCP_BYE1 || it->second->State == TCP_BYE2) {
 			if (diff > DeleteClosingAfter) {
 				it = SessionsCollector.erase(it);
 			} else {
@@ -83,8 +89,14 @@ void ParserSessionTCP::GarbageCollector()
 
 void ParserSessionTCP::AfterRecursionHook(std::shared_ptr<SessionTCP> session, std::exception *exn, bool found)
 {
-	if (IDGenerator.Get() % 1000 == 0) {
-		GarbageCollector();
+	if (session != nullptr) {
+		// prevent access of followers to already processed data
+		session->Client->Payload = nullptr;
+		session->Server->Payload = nullptr;
+
+		if (IDGenerator.Get() % 1000 == 0) {
+			GarbageCollector();
+		}
 	}
 }
 

@@ -10,64 +10,68 @@
 
 enum tcp_session_state {
 	TCP_INITIAL,
-	TCP_HELLO,
+	TCP_HELLO1,
+	TCP_HELLO2,
 	TCP_ESTABLISHED,
-	TCP_BYE,
+	TCP_BYE1,
+	TCP_BYE2,
 	TCP_CLOSED
 };
 
-class Flow
+typedef std::shared_ptr<ChunkTCP> chunkptr;
+
+class EndPoint
 {
 public:
-	Flow(std::shared_ptr<ChunkTCP> chunk);
+	EndPoint();
 
-	typedef unsigned long SeqT;
-	typedef std::map<SeqT, std::shared_ptr<ChunkTCP> > InboxT;
-
-	InboxT Inbox;
 	PayloadQuilt Payload;
-	std::shared_ptr<ChunkTCP> FirstChunk;
+	chunkptr LastChunk;
 	unsigned long long PayloadBytes;
 	unsigned long long RawIfaceBytes;
-	unsigned long LastSeq;
+	unsigned long NextExpectedSEQ;
 };
 
 class SessionTCP: public Chunk<ChunkTCP> {
 private:
-	void ProcessFlowInbox(std::shared_ptr<Flow> flow);
-	void AddChunkToFlow(std::shared_ptr<Flow> flow, std::shared_ptr<ChunkTCP> chunk);
-	inline void UpgradeState(tcp_session_state newState) {
-		if (State < newState)
-			State = newState;
-	}
+	typedef unsigned long SeqT;
+	typedef std::map<SeqT, std::shared_ptr<ChunkTCP> > InboxT;
+
+	InboxT Inbox;
+
+	void ProcessFlowInbox(std::shared_ptr<EndPoint> flow, std::shared_ptr<EndPoint> other);
+	void AddChunkToFlow(std::shared_ptr<EndPoint> flow
+			, std::shared_ptr<EndPoint> otherFlow
+			, chunkptr chunk);
+	chunkptr PopChunk(
+			const std::function <bool (chunkptr &candidate)> &filter);
+
+	void AssignEndPoints(chunkptr &chunk, EndPoint **correct, EndPoint **other);
+
+	void AppendPayload(chunkptr &chunk, EndPoint *endpoint);
+
+	EndPoint C_EP;
+	EndPoint S_EP;
 public:
 	SessionTCP(BaseQuilt baseData
-			, std::shared_ptr<ChunkTCP> parent
+			, chunkptr parent
 			, unsigned long long lastInternalID);
 
-	void AddChunk(std::shared_ptr<ChunkTCP> chunk, unsigned long long newLastInternalID);
+	void AddChunk(chunkptr chunk, unsigned long long newLastInternalID);
 
 	// public because followers can also detect direction and swap flows
 	void SwapFlows();
 
 
-	void CutFlowToNextChunk(std::shared_ptr<Flow> flow);
-	void CheckFlowTimeOut(std::shared_ptr<Flow> flow);
+//	void CutFlowToNextChunk(Flow flow);
+	void CheckFlowTimeOut(EndPoint &flow, EndPoint &otherFlow);
 
-	inline bool HasServerPayload() const {
-		return (ServerFlow != nullptr && ServerFlow->Payload != nullptr);
-	}
+	tcp_session_state State = TCP_INITIAL;
 
-	inline bool HasClientPayload() const {
-		return (ClientFlow != nullptr && ClientFlow->Payload != nullptr);
-	}
+	EndPoint *Client = &C_EP;
+	EndPoint *Server = &S_EP;
 
-	tcp_session_state State;
-
-	std::shared_ptr<Flow> ClientFlow;
-	std::shared_ptr<Flow> ServerFlow;
-
-	bool DirectionDetected;
+	bool DirectionDetected = false;
 
 	unsigned long long LastInternalID;
 };

@@ -9,10 +9,13 @@ PacketIPv4::PacketIPv4(BaseQuilt baseData
 		, std::shared_ptr<ChunkIPv4> parent)
 	: Chunk(baseData, payload, parent)
 	, ReceivedSize(0)
-	, ExpectedSize(0)
 {
 	IsComplete=false;
 	RawIfaceLength=0;
+	IPChunk = parent;
+	IPPayload = Payload;
+	IPBaseData = BaseData;
+	ExpectedSize = 0;
 	AddChunk(parent);
 }
 

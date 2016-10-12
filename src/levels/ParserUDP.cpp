@@ -11,18 +11,18 @@ std::string ParserUDP::Description()
 	return (std::string("UDP packet"));
 }
 
-std::shared_ptr<ChunkUDP> ParserUDP::Process(std::shared_ptr<PacketIPv4> packet)
+std::shared_ptr<ChunkUDP> ParserUDP::Process(std::shared_ptr<PacketIPTraits> packet)
 {
-	if (17 == packet->Parent->Protocol) {
-		unsigned int sourcePort = packet->Payload->GetShortBEOrFail(0);
+	if (17 == packet->IPChunk->Protocol) {
+		unsigned int sourcePort = packet->IPPayload->GetShortBEOrFail(0);
 
-		unsigned short destinationPort = packet->Payload->GetShortBEOrFail(2);
+		unsigned short destinationPort = packet->IPPayload->GetShortBEOrFail(2);
 
-		unsigned short pktLength = packet->Payload->GetShortBEOrFail(4);
+		unsigned short pktLength = packet->IPPayload->GetShortBEOrFail(4);
 
-		PayloadQuilt payload(new CPayloadQuilt(packet->Payload, 8));
+		PayloadQuilt payload(new CPayloadQuilt(packet->IPPayload, 8));
 
-		std::shared_ptr<ChunkUDP> r(new ChunkUDP(packet->BaseData
+		std::shared_ptr<ChunkUDP> r(new ChunkUDP(packet->IPBaseData
 				, payload
 				, packet
 				, pktLength

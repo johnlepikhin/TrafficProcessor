@@ -39,10 +39,10 @@ static ParserEtherNet generateParseTree()
 	PrinterUDP *printerUDP = new PrinterUDP();
 	parserUDP->AddFollower(printerUDP->AsFollower());
 
-//	PrinterSessionTCP *printerSessionTCP = new PrinterSessionTCP();
+	PrinterSessionTCP *printerSessionTCP = new PrinterSessionTCP();
 
 	ParserSessionTCP *parserSessionTCP = new ParserSessionTCP();
-//	parserSessionTCP->AddFollower(printerSessionTCP->AsFollower());
+	parserSessionTCP->AddFollower(printerSessionTCP->AsFollower());
 
 //	PrinterTCP *printerTCP = new PrinterTCP();
 	ParserTCP *parserTCP = new ParserTCP();
@@ -54,8 +54,8 @@ static ParserEtherNet generateParseTree()
 //
 	ParserPacketIPv4 *parserPacketIPv4 = new ParserPacketIPv4();
 //	parserPacketIPv4->AddFollower(printerPacketIPV4->AsFollower());
-	parserPacketIPv4->AddFollower(parserTCP->AsFollower());
-	parserPacketIPv4->AddFollower(parserUDP->AsFollower());
+	parserPacketIPv4->AddFollower((RecursiveDelegator::Processor<PacketIPv4, void> *)parserTCP->AsFollower());
+	parserPacketIPv4->AddFollower((RecursiveDelegator::Processor<PacketIPv4, void> *)parserUDP->AsFollower());
 
 	ParserIPv4 *parserIPv4 = new ParserIPv4();
 //	parserIPv4->AddFollower(printerIPV4->AsFollower());

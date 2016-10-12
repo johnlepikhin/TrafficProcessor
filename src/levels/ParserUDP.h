@@ -6,14 +6,14 @@
 #include "ChunkUDP.h"
 #include "../types/Processor.h"
 
-class ParserUDP: public Processor<PacketIPv4, ChunkUDP> {
+class ParserUDP: public Processor<PacketIPTraits, ChunkUDP> {
 	/**
 	 * Try to get UDP from data.
 	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	std::shared_ptr<ChunkUDP> Process(std::shared_ptr<PacketIPv4> parent);
+	std::shared_ptr<ChunkUDP> Process(std::shared_ptr<PacketIPTraits> parent);
 
 	/**
 	 * Returns unique ID for this Parser

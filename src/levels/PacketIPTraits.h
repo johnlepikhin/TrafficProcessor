@@ -3,6 +3,8 @@
 #define SRC_LEVELS_PACKETIPTRAITS_H_
 
 #include <memory>
+#include "ChunkIPTraits.h"
+#include "../types/PhantomQuilt.h"
 
 class PacketIPTraits {
 public:
@@ -10,6 +12,11 @@ public:
 
 	bool IsComplete;
 	unsigned int RawIfaceLength;
+	unsigned int ExpectedSize;
+
+	std::shared_ptr<ChunkIPTraits> IPChunk;
+	PayloadQuilt IPPayload;
+	BaseQuilt IPBaseData;
 
 	virtual std::string BinaryOfSrcIP () const = 0;
 	virtual std::string BinaryOfDstIP () const = 0;

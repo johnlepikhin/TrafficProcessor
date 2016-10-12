@@ -13,7 +13,6 @@ public:
 	bool AddChunk(std::shared_ptr<ChunkIPv4> chunk);
 
 	unsigned short int ReceivedSize;
-	unsigned int ExpectedSize;
 	inline std::string BinaryOfSrcIP() const { return (Parent->BinaryOfSrcIP()); };
 	inline std::string BinaryOfDstIP() const { return (Parent->BinaryOfDstIP()); };
 };

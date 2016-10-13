@@ -14,10 +14,16 @@
 #include "../levels/ParserEtherNetRAW.h"
 #include "../levels/ParserEtherNetSNAP.h"
 #include "../levels/ParserEtherNet802LLC.h"
+
 #include "../levels/ParserIPv4.h"
 #include "../levels/PrinterIPv4.h"
+
+#include "../levels/ParserIPv6.h"
+#include "../levels/PrinterIPv6.h"
+
 #include "../levels/PrinterPacketIPv4.h"
 #include "../levels/ParserPacketIPv4.h"
+
 #include "../levels/PrinterEtherNetDIX.h"
 #include "../levels/PrinterEtherNetRAW.h"
 #include "../levels/PrinterEtherNetSNAP.h"
@@ -57,6 +63,11 @@ static ParserEtherNet generateParseTree()
 	parserPacketIPv4->AddFollower((RecursiveDelegator::Processor<PacketIPv4, void> *)parserTCP->AsFollower());
 	parserPacketIPv4->AddFollower((RecursiveDelegator::Processor<PacketIPv4, void> *)parserUDP->AsFollower());
 
+	PrinterIPv6 *printerIPV6 = new PrinterIPv6();
+
+	ParserIPv6 *parserIPv6 = new ParserIPv6();
+	parserIPv6->AddFollower(printerIPV6->AsFollower());
+
 	ParserIPv4 *parserIPv4 = new ParserIPv4();
 //	parserIPv4->AddFollower(printerIPV4->AsFollower());
 	parserIPv4->AddFollower(parserPacketIPv4->AsFollower());
@@ -64,7 +75,7 @@ static ParserEtherNet generateParseTree()
 	ParserEtherNetDIX *etherNetDIX = new ParserEtherNetDIX();
 //	etherNetDIX->AddFollower((new PrinterEtherNetDIX())->AsFollower());
 	etherNetDIX->AddFollower(parserIPv4->AsFollower());
-//	ethernetDIX->AddFollower(new ParserIPv6());
+	etherNetDIX->AddFollower(parserIPv6->AsFollower());
 
 	ParserEtherNet etherNet;
 

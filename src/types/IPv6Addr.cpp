@@ -3,40 +3,30 @@
 #include <stdio.h>
 #include <stdexcept>
 
-//IPv6Addr::IPv6Addr(const Data *data, std::streamoff offset) {
-//	if (NULL == data) {
-//		throw std::invalid_argument("Data is NULL in IPv6 address constructor");
-//	}
-//
-//	ptr = data->getPtrAtOffset(offset);
-//}
+IPv6Addr::IPv6Addr(const Quilt &data, const std::streamoff offset)
+{
+	Data.resize(16);
+	data.CopyBytesOrFail(&(Data.at(0)), offset, 16);
+}
 
-std::string IPv6Addr::asString() const {
+std::string IPv6Addr::AsString() const {
 	char r[50];
 	snprintf(r, sizeof(r), "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x",
-			(unsigned char)ptr[0],
-			(unsigned char)ptr[1],
-			(unsigned char)ptr[2],
-			(unsigned char)ptr[3],
-			(unsigned char)ptr[4],
-			(unsigned char)ptr[5],
-			(unsigned char)ptr[6],
-			(unsigned char)ptr[7],
-			(unsigned char)ptr[8],
-			(unsigned char)ptr[9],
-			(unsigned char)ptr[10],
-			(unsigned char)ptr[11],
-			(unsigned char)ptr[12],
-			(unsigned char)ptr[13],
-			(unsigned char)ptr[14],
-			(unsigned char)ptr[15]);
+			(unsigned char)Data.at(0),
+			(unsigned char)Data.at(1),
+			(unsigned char)Data.at(2),
+			(unsigned char)Data.at(3),
+			(unsigned char)Data.at(4),
+			(unsigned char)Data.at(5),
+			(unsigned char)Data.at(6),
+			(unsigned char)Data.at(7),
+			(unsigned char)Data.at(8),
+			(unsigned char)Data.at(9),
+			(unsigned char)Data.at(10),
+			(unsigned char)Data.at(11),
+			(unsigned char)Data.at(12),
+			(unsigned char)Data.at(13),
+			(unsigned char)Data.at(14),
+			(unsigned char)Data.at(15));
 	return (r);
-}
-
-std::string IPv6Addr::asBinary() const {
-	return (std::string(ptr, 16));
-}
-
-int IPv6Addr::compare(IPv6Addr *other) {
-	return (asBinary().compare(other->asBinary()));
 }

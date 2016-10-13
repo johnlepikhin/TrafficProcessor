@@ -4,8 +4,24 @@
 
 #include "../types/IPv6Addr.h"
 #include "../types/Chunk.h"
+#include "../types/PhantomQuilt.h"
 #include "ChunkEtherNetDIX.h"
 #include "ChunkIPTraits.h"
+
+class IPv6HeaderFragment {
+public:
+	IPv6HeaderFragment(unsigned short fragmentOffset
+			, bool hasNextFragments
+			, unsigned long packetID)
+		: FragmentOffset(fragmentOffset)
+		, HasNextFragments(hasNextFragments)
+		, PacketID(packetID)
+	{ };
+
+	unsigned short FragmentOffset;
+	bool HasNextFragments;
+	unsigned long PacketID;
+};
 
 /**
  * Container for IPv6 chunk
@@ -22,20 +38,37 @@ public:
 	ChunkIPv6(BaseQuilt baseData
 			, PayloadQuilt payload
 			, std::shared_ptr<ChunkEtherNetDIX> parent
-			, IPv6Addr *srcIP
-			, IPv6Addr *dstIP);
-
-	~ChunkIPv6();
+			, IPv6Addr srcIP
+			, IPv6Addr dstIP
+			, unsigned char protocol
+			, unsigned char trafficClass
+			, unsigned long flowLabel
+			, unsigned char hopLimit
+			, std::shared_ptr<IPv6HeaderFragment> hdrFragment
+			, unsigned long payloadLength
+			);
 
 	/**
 	 * Source IP address
 	 */
-	IPv6Addr *SrcIP;
+	IPv6Addr SrcIP;
 
 	/**
 	 * Destination IP address
 	 */
-	IPv6Addr *DstIP;
+	IPv6Addr DstIP;
+
+	unsigned char TrafficClass;
+	unsigned long FlowLabel;
+	unsigned char HopLimit;
+	unsigned long PayloadLength;
+
+	std::shared_ptr<IPv6HeaderFragment> HdrFragment;
+
+	std::string StringOfSrcIP() { return (SrcIP.AsString()); };
+	std::string StringOfDstIP() { return (DstIP.AsString()); };
+	inline std::string BinaryOfSrcIP() { return (SrcIP.AsBinary()); };
+	inline std::string BinaryOfDstIP() { return (DstIP.AsBinary()); };
 };
 
 #endif /* SRC_LEVELS_CHUNKIPv6_H_ */

@@ -3,6 +3,7 @@
 #define IPV6ADDR_H_
 
 #include <string>
+#include <sparsed-ropes/Quilt.h>
 
 /**
  * IPv6 address container and reader
@@ -14,29 +15,22 @@ public:
 	 * @param data Pointer to Data
 	 * @param offset Offset from where address must be read
 	 */
-	IPv6Addr(const Data *data, std::streamoff offset);
+	IPv6Addr(const Quilt &data, const std::streamoff offset);
 
 	/**
 	 * Human readable representation
 	 * @return Human readable representation
 	 */
-	std::string asString() const;
-
-	/**
-	 * Compare with other IPv6 address
-	 * @param other IPv6 address to compare with
-	 * @return Returns an integer < 0 if this IPv6 is ordered before 'other'
-	 *  0 if their values are equivalent, or > 0 if this IPv6 is ordered after 'other'
-	 */
-	int compare(IPv6Addr *);
+	std::string AsString() const;
 
 	/**
 	 * Binary representation
 	 * @return Binary representation
 	 */
-std::string asBinary() const;
+	inline std::string AsBinary() const { return (Data); };
+	inline bool operator=(IPv6Addr &other) const { return (Data == other.AsBinary()); }
 private:
-	const char *ptr;
+	std::string Data;
 };
 
 #endif

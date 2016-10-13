@@ -37,6 +37,8 @@
 #include "../levels/ParserUDP.h"
 #include "../levels/PrinterUDP.h"
 
+#include "../levels/LeafProcessor.h"
+
 using namespace std;
 
 static ParserEtherNet generateParseTree()
@@ -72,13 +74,17 @@ static ParserEtherNet generateParseTree()
 //	parserIPv4->AddFollower(printerIPV4->AsFollower());
 	parserIPv4->AddFollower(parserPacketIPv4->AsFollower());
 
+	LeafProcessor<ChunkEtherNetDIX> *leafEtherNetDIX = new LeafProcessor<ChunkEtherNetDIX>();
 	ParserEtherNetDIX *etherNetDIX = new ParserEtherNetDIX();
+	etherNetDIX->AddFollower(leafEtherNetDIX->AsFollower());
 //	etherNetDIX->AddFollower((new PrinterEtherNetDIX())->AsFollower());
 	etherNetDIX->AddFollower(parserIPv4->AsFollower());
 	etherNetDIX->AddFollower(parserIPv6->AsFollower());
 
 	ParserEtherNet etherNet;
 
+	LeafProcessor<ChunkEtherNet> *leafEtherNet = new LeafProcessor<ChunkEtherNet>();
+	etherNet.AddFollower(leafEtherNet->AsFollower());
 	etherNet.AddFollower(etherNetDIX->AsFollower());
 //	etherNet.AddFollower(new ParserEtherNet802LLC());
 //	etherNet.AddFollower(new ParserEtherNetRAW());

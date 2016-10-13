@@ -14,7 +14,7 @@ ChunkIPv6::ChunkIPv6(BaseQuilt baseData
 		, std::shared_ptr<IPv6HeaderFragment> hdrFragment
 		, unsigned long payloadLength)
 	: Chunk<ChunkEtherNetDIX>(baseData, payload, parent)
-	, ChunkIPTraits(protocol)
+	, ChunkIPTraits(protocol, parent)
 	, SrcIP(srcIP)
 	, DstIP(dstIP)
 	, TrafficClass(trafficClass)

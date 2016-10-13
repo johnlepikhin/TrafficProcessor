@@ -8,14 +8,9 @@ PacketIPv4::PacketIPv4(BaseQuilt baseData
 		, PayloadQuilt payload
 		, std::shared_ptr<ChunkIPv4> parent)
 	: Chunk(baseData, payload, parent)
+	, PacketIPTraits(false, 0, 0, parent, Payload, BaseData)
 	, ReceivedSize(0)
 {
-	IsComplete=false;
-	RawIfaceLength=0;
-	IPChunk = parent;
-	IPPayload = Payload;
-	IPBaseData = BaseData;
-	ExpectedSize = 0;
 	AddChunk(parent);
 }
 

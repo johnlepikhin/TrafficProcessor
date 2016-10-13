@@ -17,7 +17,7 @@ ChunkIPv4::ChunkIPv4(BaseQuilt baseData
 		, unsigned short fragmentOffset
 		, unsigned short ttl)
 	: Chunk(baseData, payload, parent)
-	, ChunkIPTraits(protocol)
+	, ChunkIPTraits(protocol, parent)
 	, IHL32bit(iHL32bit)
 	, SrcIP(srcIP)
 	, DstIP(dstIP)

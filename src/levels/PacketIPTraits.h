@@ -8,6 +8,14 @@
 
 class PacketIPTraits {
 public:
+	PacketIPTraits(bool isComplete
+			, unsigned int rawIfaceLength
+			, unsigned int expectedSize
+			, std::shared_ptr<ChunkIPTraits> parent
+			, PayloadQuilt payload
+			, BaseQuilt baseData
+			);
+
 	virtual ~PacketIPTraits() {};
 
 	bool IsComplete;

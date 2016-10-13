@@ -3,15 +3,19 @@
 #define SRC_LEVELS_CHUNKIPTRAITS_H_
 
 #include <string>
-
-
+#include "ChunkEtherNetDIX.h"
 
 class ChunkIPTraits {
 public:
+	ChunkIPTraits(unsigned char protocol
+			, std::shared_ptr<ChunkEtherNetDIX> IPEtherNetDIX);
+
 	/**
 	 * Next protocol ID
 	 */
 	unsigned char Protocol;
+
+	std::shared_ptr<ChunkEtherNetDIX> IPEtherNetDIX;
 
 	ChunkIPTraits(unsigned char protocol);
 	virtual ~ChunkIPTraits() {};

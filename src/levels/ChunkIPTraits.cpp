@@ -7,4 +7,9 @@
 
 #include "ChunkIPTraits.h"
 
-ChunkIPTraits::ChunkIPTraits(unsigned char protocol) : Protocol(protocol) {}
+ChunkIPTraits::ChunkIPTraits(unsigned char protocol
+		, std::shared_ptr<ChunkEtherNetDIX> iPEtherNetDIX)
+	: Protocol(protocol)
+	, IPEtherNetDIX(iPEtherNetDIX)
+{
+}

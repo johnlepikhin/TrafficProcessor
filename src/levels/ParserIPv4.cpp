@@ -42,9 +42,9 @@ std::shared_ptr<ChunkIPv4> ParserIPv4::Process(std::shared_ptr<ChunkEtherNetDIX>
 
 		Protocol = dix->Payload->GetCharOrFail(9);
 
-		PayloadQuilt payload(new CPayloadQuilt(dix->Payload, IHL32bit*4));
+		PayloadQuilt payload = std::make_shared<CPayloadQuilt>(dix->Payload, IHL32bit*4);
 
-		std::shared_ptr<ChunkIPv4> r(new ChunkIPv4(
+		std::shared_ptr<ChunkIPv4> r = std::make_shared<ChunkIPv4>(
 				dix->BaseData,
 				payload,
 				dix,
@@ -58,7 +58,7 @@ std::shared_ptr<ChunkIPv4> ParserIPv4::Process(std::shared_ptr<ChunkEtherNetDIX>
 				FlagIsFragmented,
 				ID,
 				FragmentOffset,
-				TTL));
+				TTL);
 		return (r);
 	}
 

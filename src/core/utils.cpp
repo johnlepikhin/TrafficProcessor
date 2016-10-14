@@ -80,11 +80,11 @@ namespace util {
 		readToBuffer (fd, (char *)&captured, sizeof (captured));
 		readToBuffer (fd, (char *)&size, sizeof (size));
 
-		std::shared_ptr<std::string> IS(new std::string);
+		std::shared_ptr<std::string> IS = std::make_shared<std::string>();
 		IS->resize(captured);
 		readToBuffer(fd, &(IS->at(0)), captured);
 
-		BaseQuilt r(new CBaseQuilt(IS, size));
+		BaseQuilt r = std::make_shared<CBaseQuilt>(IS, size);
 
 		return (r);
 	}

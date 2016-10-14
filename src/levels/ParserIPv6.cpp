@@ -33,7 +33,7 @@ std::shared_ptr<ChunkIPv6> ParserIPv6::Process(std::shared_ptr<ChunkEtherNetDIX>
 			IPv6Addr srcAddr(*parent->Payload, 8);
 			IPv6Addr dstAddr(*parent->Payload, 0x18);
 
-			std::shared_ptr<IPv6HeaderFragment> hdrFragment(new IPv6HeaderFragment(0, false, 0));
+			std::shared_ptr<IPv6HeaderFragment> hdrFragment = std::make_shared<IPv6HeaderFragment>(0, false, 0);
 
 			unsigned long int hdrOffset = 0x28;
 
@@ -87,7 +87,8 @@ std::shared_ptr<ChunkIPv6> ParserIPv6::Process(std::shared_ptr<ChunkEtherNetDIX>
 					unsigned long packetID = 0;
 					parent->Payload->CopyBytesOrFail((char *)&packetID, hdrOffset+4, 4);
 
-					std::shared_ptr<IPv6HeaderFragment> newHdrFragment(new IPv6HeaderFragment(fragment_offset, has_next_fragments, packetID));
+					std::shared_ptr<IPv6HeaderFragment> newHdrFragment
+						= std::make_shared<IPv6HeaderFragment>(fragment_offset, has_next_fragments, packetID);
 					hdrFragment = newHdrFragment;
 
 					hdrOffset += 8;
@@ -106,7 +107,7 @@ std::shared_ptr<ChunkIPv6> ParserIPv6::Process(std::shared_ptr<ChunkEtherNetDIX>
 
 			PayloadQuilt payload(new CPayloadQuilt(parent->Payload, hdrOffset));
 
-			return (std::shared_ptr<ChunkIPv6>(new ChunkIPv6(parent->BaseData
+			return (std::make_shared<ChunkIPv6>(parent->BaseData
 					, payload
 					, parent
 					, srcAddr
@@ -116,7 +117,7 @@ std::shared_ptr<ChunkIPv6> ParserIPv6::Process(std::shared_ptr<ChunkEtherNetDIX>
 					, flow_label
 					, hop_limit
 					, hdrFragment
-					, payloadLength)));
+					, payloadLength));
 		} else {
 			delete tmp;
 		}

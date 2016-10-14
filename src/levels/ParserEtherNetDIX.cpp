@@ -18,8 +18,8 @@ std::string ParserEtherNetDIX::Description()
 std::shared_ptr<ChunkEtherNetDIX> ParserEtherNetDIX::Process(std::shared_ptr<ChunkEtherNet> parent)
 {
 	if (parent->EtherNetType > 1500) {
-		PayloadQuilt payload(new CPayloadQuilt(parent->Payload, 0));
-		std::shared_ptr<ChunkEtherNetDIX> r(new ChunkEtherNetDIX(parent->BaseData, payload, parent, parent->EtherNetType));
+		PayloadQuilt payload = std::make_shared<CPayloadQuilt>(parent->Payload, 0);
+		std::shared_ptr<ChunkEtherNetDIX> r = std::make_shared<ChunkEtherNetDIX>(parent->BaseData, payload, parent, parent->EtherNetType);
 		return (r);
 	}
 

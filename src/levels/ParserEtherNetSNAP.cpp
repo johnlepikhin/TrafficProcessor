@@ -23,15 +23,15 @@ std::shared_ptr<ChunkEtherNetSNAP> ParserEtherNetSNAP::Process(std::shared_ptr<C
 			ethernet->Payload->CopyBytesOrFail((char *)&oui+1, 2, 3);
 			unsigned short pid = ethernet->Payload->GetShortLEOrFail(5);
 
-			PayloadQuilt payload(new CPayloadQuilt(ethernet->Payload, 8));
+			PayloadQuilt payload = std::make_shared<CPayloadQuilt>(ethernet->Payload, 8);
 
-			std::shared_ptr<ChunkEtherNetSNAP> r(new ChunkEtherNetSNAP(
+			std::shared_ptr<ChunkEtherNetSNAP> r = std::make_shared<ChunkEtherNetSNAP>(
 					ethernet->BaseData,
 					payload,
 					ethernet,
 					ethernet->EtherNetType,
 					oui,
-					pid));
+					pid);
 			return (r);
 		}
 	}

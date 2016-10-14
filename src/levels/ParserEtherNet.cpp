@@ -17,9 +17,9 @@ std::shared_ptr<ChunkEtherNet> ParserEtherNet::Process(BaseQuilt data)
 	unsigned long long SA = MAC::Make(data, 6);
 
 	unsigned short eType = data->GetShortBEOrFail(12);
-	PayloadQuilt payload(new CPayloadQuilt(data, 14));
+	PayloadQuilt payload = std::make_shared<CPayloadQuilt>(data, 14);
 
-	std::shared_ptr<ChunkEtherNet> r(new ChunkEtherNet(data, payload, DA, SA, eType));
+	std::shared_ptr<ChunkEtherNet> r = std::make_shared<ChunkEtherNet>(data, payload, DA, SA, eType);
 
 	return (r);
 }

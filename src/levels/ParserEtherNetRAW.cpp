@@ -16,8 +16,8 @@ std::shared_ptr<ChunkEtherNetRAW> ParserEtherNetRAW::Process(std::shared_ptr<Chu
 	if (ethernet->EtherNetType <= 1500) {
 		unsigned short b2 = ethernet->Payload->GetShortLEOrFail(0);
 		if (0xffff == b2) {
-			PayloadQuilt payload(new CPayloadQuilt(ethernet->Payload, 0));
-			std::shared_ptr<ChunkEtherNetRAW> r(new ChunkEtherNetRAW(ethernet->BaseData, payload, ethernet, ethernet->EtherNetType));
+			PayloadQuilt payload = std::make_shared<CPayloadQuilt>(ethernet->Payload, 0);
+			std::shared_ptr<ChunkEtherNetRAW> r = std::make_shared<ChunkEtherNetRAW>(ethernet->BaseData, payload, ethernet, ethernet->EtherNetType);
 			return (r);
 		}
 	}

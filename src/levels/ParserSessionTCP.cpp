@@ -44,7 +44,6 @@ std::shared_ptr<SessionTCP> ParserSessionTCP::Process(std::shared_ptr<ChunkTCP> 
 {
 	SessionID key(parent);
 	auto it = SessionsCollector.find(key);
-	std::shared_ptr<SessionTCP> r;
 	if (it != SessionsCollector.end()) {
 		it->second->AddChunk(parent, IDGenerator.Next());
 		if ((it->second->Server->Payload != nullptr && it->second->Server->Payload->CoveredSize)
@@ -54,7 +53,7 @@ std::shared_ptr<SessionTCP> ParserSessionTCP::Process(std::shared_ptr<ChunkTCP> 
 			return (std::shared_ptr<SessionTCP>(nullptr));
 		}
 	} else {
-		std::shared_ptr<SessionTCP> sessionTCP(new SessionTCP(parent->BaseData, parent, IDGenerator.Next()));
+		std::shared_ptr<SessionTCP> sessionTCP = std::make_shared<SessionTCP>(parent->BaseData, parent, IDGenerator.Next());
 		SessionsCollector.insert(std::make_pair(key, sessionTCP));
 		return (std::shared_ptr<SessionTCP>(nullptr));
 	}

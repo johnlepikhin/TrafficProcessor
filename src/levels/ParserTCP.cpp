@@ -49,9 +49,9 @@ std::shared_ptr<ChunkTCP> ParserTCP::Process(std::shared_ptr<PacketIPVariant> pa
 
 		unsigned short windowSize = Payload->GetShortBEOrFail(15);
 
-		PayloadQuilt payload(new CPayloadQuilt(Payload, headerLength));
+		PayloadQuilt payload = std::make_shared<CPayloadQuilt>(Payload, headerLength);
 
-		std::shared_ptr<ChunkTCP> r(new ChunkTCP(BaseData
+		std::shared_ptr<ChunkTCP> r = std::make_shared<ChunkTCP>(BaseData
 				, payload
 				, packet
 				, pktLength
@@ -63,7 +63,7 @@ std::shared_ptr<ChunkTCP> ParserTCP::Process(std::shared_ptr<PacketIPVariant> pa
 				, confirmNumber
 				, sourcePort
 				, destinationPort
-		));
+		);
 
 		return (r);
 	}

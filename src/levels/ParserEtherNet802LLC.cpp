@@ -22,15 +22,15 @@ std::shared_ptr<ChunkEtherNet802LLC> ParserEtherNet802LLC::Process(std::shared_p
 			unsigned char dsap = b2 >> 8;
 			unsigned char ssap = b2 & 0xff;
 			unsigned char control = ethernet->Payload->GetCharOrFail(1);
-			PayloadQuilt payload(new CPayloadQuilt(ethernet->Payload, 3));
-			std::shared_ptr<ChunkEtherNet802LLC> r(new ChunkEtherNet802LLC(
+			PayloadQuilt payload = std::make_shared<CPayloadQuilt>(ethernet->Payload, 3);
+			std::shared_ptr<ChunkEtherNet802LLC> r = std::make_shared<ChunkEtherNet802LLC>(
 					ethernet->BaseData,
 					payload,
 					ethernet,
 					ethernet->EtherNetType,
 					dsap,
 					ssap,
-					control));
+					control);
 
 			return (r);
 		}

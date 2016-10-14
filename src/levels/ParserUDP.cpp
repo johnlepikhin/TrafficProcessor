@@ -35,16 +35,16 @@ std::shared_ptr<ChunkUDP> ParserUDP::Process(std::shared_ptr<PacketIPVariant> pa
 
 		unsigned short pktLength = Payload->GetShortBEOrFail(4);
 
-		PayloadQuilt payload(new CPayloadQuilt(Payload, 8));
+		PayloadQuilt payload = std::make_shared<CPayloadQuilt>(Payload, 8);
 
-		std::shared_ptr<ChunkUDP> r(new ChunkUDP(BaseData
+		std::shared_ptr<ChunkUDP> r = std::make_shared<ChunkUDP>(BaseData
 				, payload
 				, packet
 				, pktLength
 				, pktLength-8
 				, sourcePort
 				, destinationPort
-		));
+		);
 
 		return (r);
 	}

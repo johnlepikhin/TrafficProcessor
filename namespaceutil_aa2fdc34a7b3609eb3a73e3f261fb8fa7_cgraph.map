@@ -1,0 +1,5 @@
+<map id="util::mallocRead" name="util::mallocRead">
+<area shape="rect" id="node2" href="$namespaceutil.html#aa633b4f0fee855b64a8514da88436dd0" title="util::mallocOrFatal" alt="" coords="169,5,297,32"/>
+<area shape="rect" id="node3" href="$namespaceutil.html#ac8f5d5df4cf8644c09196e82b61a9fd5" title="util::exitMemoryError" alt="" coords="345,5,488,32"/>
+<area shape="rect" id="node4" href="$namespaceutil.html#a2db7bf497b5d30e2311e05f26d45c762" title="util::exitFatal" alt="" coords="536,5,633,32"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="util::mallocOrFatal" name="util::mallocOrFatal">
+<area shape="rect" id="node2" href="$namespaceutil.html#ac8f5d5df4cf8644c09196e82b61a9fd5" title="util::exitMemoryError" alt="" coords="181,5,324,32"/>
+<area shape="rect" id="node3" href="$namespaceutil.html#a2db7bf497b5d30e2311e05f26d45c762" title="util::exitFatal" alt="" coords="372,5,469,32"/>
+</map>

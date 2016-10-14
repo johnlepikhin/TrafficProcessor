@@ -1,9 +1,8 @@
 /UnitTests/
 /Debug/
 /Release/
-/Documentation/
-
 proj_files.lnt
 .project
 .cproject
 .settings
+dumps

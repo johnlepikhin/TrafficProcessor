@@ -6,7 +6,7 @@ inline unsigned long long pair_of_IPv4(const std::shared_ptr<ChunkIPv4> chunk)
 	return (((unsigned long long)chunk->SrcIP << 32) + chunk->DstIP);
 }
 
-std::shared_ptr<PacketIPv4> IPPairMap::AddChunk(std::shared_ptr<ChunkIPv4> chunk
+std::shared_ptr<PacketIPVariant> IPPairMap::AddChunk(std::shared_ptr<ChunkIPv4> chunk
 		, unsigned long long newLastInternalId)
 {
 	unsigned long long pair = pair_of_IPv4(chunk);
@@ -19,29 +19,30 @@ std::shared_ptr<PacketIPv4> IPPairMap::AddChunk(std::shared_ptr<ChunkIPv4> chunk
 		IDMap->LastInternalID = newLastInternalId;
 
 		for (auto p_it = IDMap->rbegin(); p_it != IDMap->rend(); ++p_it) {
-			std::shared_ptr<ChunkIPv4> ipv4_chunk = (*p_it)->Parent;
-			if (ipv4_chunk->ID == chunk->ID) {
-				(*p_it)->AddChunk(chunk);
+			if ((*p_it)->IPv4->Parent->ID == chunk->ID) {
+				(*p_it)->IPv4->AddChunk(chunk);
 				return (*p_it);
 			}
 		}
 
 		PayloadQuilt payload(new CPayloadQuilt());
 		std::shared_ptr<PacketIPv4> pkt(new PacketIPv4(chunk->BaseData, payload, chunk));
-		IDMap->push_back(pkt);
+		std::shared_ptr<PacketIPVariant> v(new PacketIPVariant(pkt, nullptr));
+		IDMap->push_back(v);
 
-		return (pkt);
+		return (v);
 	} else {
 		std::shared_ptr<IPPacketMap> IDMap(new IPPacketMap());
 
 		PayloadQuilt payload(new CPayloadQuilt());
 		std::shared_ptr<PacketIPv4> pkt(new PacketIPv4(chunk->BaseData, payload, chunk));
-		IDMap->push_back(pkt);
+		std::shared_ptr<PacketIPVariant> v(new PacketIPVariant(pkt, nullptr));
+		IDMap->push_back(v);
 		IDMap->LastInternalID = newLastInternalId;
 
 		emplace(pair, IDMap);
 
-		return (pkt);
+		return (v);
 	}
 }
 
@@ -59,16 +60,16 @@ void ParserPacketIPv4::GarbageCollector()
 	}
 }
 
-void ParserPacketIPv4::AfterRecursionHook(std::shared_ptr<PacketIPv4> packet, std::exception *exn, bool found)
+void ParserPacketIPv4::AfterRecursionHook(std::shared_ptr<PacketIPVariant> packet, std::exception *exn, bool found)
 {
 	if (IDGenerator.Get() % 10000 == 0) {
 		GarbageCollector();
 	}
 
-	if (!packet->IsComplete)
+	if (!packet->IPv4->IsComplete)
 		return;
 
-	unsigned long long pair = pair_of_IPv4(packet->Parent);
+	unsigned long long pair = pair_of_IPv4(packet->IPv4->Parent);
 
 	std::unordered_map<unsigned long long, std::shared_ptr<IPPacketMap> >::const_iterator it = IPCollector.find(pair);
 
@@ -76,8 +77,7 @@ void ParserPacketIPv4::AfterRecursionHook(std::shared_ptr<PacketIPv4> packet, st
 		std::shared_ptr<IPPacketMap> IDMap = (*it).second;
 
 		for (auto p_it = IDMap->rbegin(); p_it != IDMap->rend(); ++p_it) {
-			std::shared_ptr<ChunkIPv4> ipv4_chunk = (*p_it)->Parent;
-			if (ipv4_chunk->ID == packet->Parent->ID) {
+			if ((*p_it)->IPv4->Parent->ID == packet->IPv4->Parent->ID) {
 				IDMap->erase((++p_it).base());
 				break;
 			}
@@ -91,9 +91,9 @@ void ParserPacketIPv4::AfterRecursionHook(std::shared_ptr<PacketIPv4> packet, st
 	}
 }
 
-std::shared_ptr<PacketIPv4> ParserPacketIPv4::Process(std::shared_ptr<ChunkIPv4> parent)
+std::shared_ptr<PacketIPVariant> ParserPacketIPv4::Process(std::shared_ptr<ChunkIPv4> parent)
 {
-	std::shared_ptr<PacketIPv4> r = IPCollector.AddChunk(parent, IDGenerator.Next());
+	std::shared_ptr<PacketIPVariant> r = IPCollector.AddChunk(parent, IDGenerator.Next());
 	return (r);
 }
 

@@ -5,7 +5,6 @@
 #include <map>
 #include <memory>
 #include "ChunkTCP.h"
-#include "ChunkIPTraits.h"
 #include "../types/PhantomQuilt.h"
 
 enum tcp_session_state {

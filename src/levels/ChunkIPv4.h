@@ -5,12 +5,11 @@
 #include "../types/IPv4Addr.h"
 #include "../types/Chunk.h"
 #include "ChunkEtherNetDIX.h"
-#include "ChunkIPTraits.h"
 
 /**
  * Container for IPv4 chunk
  */
-class ChunkIPv4: public Chunk<ChunkEtherNetDIX>, public ChunkIPTraits {
+class ChunkIPv4: public Chunk<ChunkEtherNetDIX> {
 public:
 	/**
 	 * Constructor
@@ -91,6 +90,11 @@ public:
 	 * TTL
 	 */
 	unsigned short TTL;
+
+	/**
+	 * Protocol of next level
+	 */
+	unsigned short Protocol;
 
 	std::string StringOfSrcIP();
 	std::string StringOfDstIP();

@@ -4,24 +4,24 @@
 
 
 #include <unordered_map>
-#include "PacketIPv4.h"
+#include "PacketIPVariant.h"
 #include "../types/Processor.h"
 #include "../types/Counter.h"
 
 typedef unsigned int IPv4PacketID;
 
-class IPPacketMap : public std::vector<std::shared_ptr<PacketIPv4> > {
+class IPPacketMap : public std::vector<std::shared_ptr<PacketIPVariant> > {
 public:
 	unsigned long long LastInternalID;
 };
 
 class IPPairMap : public std::unordered_map<unsigned long long, std::shared_ptr<IPPacketMap> > {
 public:
-	std::shared_ptr<PacketIPv4> AddChunk(std::shared_ptr<ChunkIPv4> chunk
+	std::shared_ptr<PacketIPVariant> AddChunk(std::shared_ptr<ChunkIPv4> chunk
 			, unsigned long long newInternalId);
 };
 
-class ParserPacketIPv4: public Processor<ChunkIPv4, PacketIPv4> {
+class ParserPacketIPv4: public Processor<ChunkIPv4, PacketIPVariant> {
 public:
 	/**
 	 * Collect and build IPv4 packet from chunks.
@@ -29,9 +29,9 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	std::shared_ptr<PacketIPv4> Process(std::shared_ptr<ChunkIPv4> parent);
+	std::shared_ptr<PacketIPVariant> Process(std::shared_ptr<ChunkIPv4> parent);
 
-	void AfterRecursionHook(std::shared_ptr<PacketIPv4> chunk, std::exception *exn, bool found);
+	void AfterRecursionHook(std::shared_ptr<PacketIPVariant> chunk, std::exception *exn, bool found);
 
 	/**
 	 * Returns unique ID for this Parser

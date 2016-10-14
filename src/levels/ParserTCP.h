@@ -6,14 +6,14 @@
 #include "ChunkTCP.h"
 #include "../types/Processor.h"
 
-class ParserTCP: public Processor<PacketIPTraits, ChunkTCP> {
+class ParserTCP: public Processor<PacketIPVariant, ChunkTCP> {
 	/**
 	 * Try to get TCP from data.
 	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	std::shared_ptr<ChunkTCP> Process(std::shared_ptr<PacketIPTraits> parent);
+	std::shared_ptr<ChunkTCP> Process(std::shared_ptr<PacketIPVariant> parent);
 
 	/**
 	 * Returns unique ID for this Parser

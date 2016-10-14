@@ -3,13 +3,13 @@
 #define SRC_LEVELS_CHUNKTCP_H_
 
 #include "../types/Chunk.h"
-#include "PacketIPTraits.h"
+#include "PacketIPVariant.h"
 
-class ChunkTCP: public Chunk<PacketIPTraits> {
+class ChunkTCP: public Chunk<PacketIPVariant> {
 public:
 	ChunkTCP(BaseQuilt baseData
 			, PayloadQuilt payload
-			, std::shared_ptr<PacketIPTraits> parent
+			, std::shared_ptr<PacketIPVariant> parent
 			, const unsigned int pktLength
 			, const unsigned int headerLength
 			, const unsigned int payloadLength

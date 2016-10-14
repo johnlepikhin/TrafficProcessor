@@ -6,7 +6,6 @@
 #include "../types/Chunk.h"
 #include "../types/PhantomQuilt.h"
 #include "ChunkEtherNetDIX.h"
-#include "ChunkIPTraits.h"
 
 class IPv6HeaderFragment {
 public:
@@ -26,7 +25,7 @@ public:
 /**
  * Container for IPv6 chunk
  */
-class ChunkIPv6: public Chunk<ChunkEtherNetDIX>, public ChunkIPTraits {
+class ChunkIPv6: public Chunk<ChunkEtherNetDIX> {
 public:
 	/**
 	 * Constructor
@@ -64,6 +63,11 @@ public:
 	unsigned long PayloadLength;
 
 	std::shared_ptr<IPv6HeaderFragment> HdrFragment;
+
+	/**
+	 * Protocol of next level
+	 */
+	unsigned short Protocol;
 
 	std::string StringOfSrcIP() { return (SrcIP.AsString()); };
 	std::string StringOfDstIP() { return (DstIP.AsString()); };

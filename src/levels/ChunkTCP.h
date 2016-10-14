@@ -10,33 +10,33 @@ public:
 	ChunkTCP(BaseQuilt baseData
 			, PayloadQuilt payload
 			, std::shared_ptr<PacketIPVariant> parent
-			, const unsigned int pktLength
-			, const unsigned int headerLength
-			, const unsigned int payloadLength
-			, const unsigned char flags
-			, const unsigned short windowSize
-			, const unsigned long seqNumber
-			, const unsigned long confirmNumber
-			, const unsigned int sourcePort
-			, const unsigned int destinationPort);
+			, const uint16_t pktLength
+			, const uint16_t headerLength
+			, const uint16_t payloadLength
+			, const uint8_t flags
+			, const uint16_t windowSize
+			, const uint32_t seqNumber
+			, const uint32_t confirmNumber
+			, const uint16_t sourcePort
+			, const uint16_t destinationPort);
 
-	unsigned int PktLength;
+	uint16_t PktLength;
 
-	unsigned int HeaderLength;
+	uint16_t HeaderLength;
 
-	unsigned int PayloadLength;
+	uint16_t PayloadLength;
 
-	unsigned int SourcePort;
+	uint16_t SourcePort;
 
-	unsigned int DestinationPort;
+	uint16_t DestinationPort;
 
 	bool FlagURG, FlagACK, FlagPSH, FlagRST, FlagSYN, FlagFIN;
 
-	unsigned short WindowSize;
+	uint16_t WindowSize;
 
-	unsigned long SeqNumber;
+	uint32_t SeqNumber;
 
-	unsigned long ConfirmNumber;
+	uint32_t ConfirmNumber;
 };
 
 #endif /* SRC_LEVELS_CHUNKTCP_H_ */

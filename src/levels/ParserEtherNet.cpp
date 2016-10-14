@@ -13,10 +13,16 @@ std::string ParserEtherNet::Description()
 
 std::shared_ptr<ChunkEtherNet> ParserEtherNet::Process(BaseQuilt data)
 {
-	unsigned long long DA = MAC::Make(data, 0);
-	unsigned long long SA = MAC::Make(data, 6);
+	std::string buf;
+	buf.resize(14);
+	data->CopyBytesOrFail(&(buf.at(0)), 0, 14);
+	unsigned long long DA = MAC::Make(buf, 0);
+	unsigned long long SA = MAC::Make(buf, 6);
 
-	unsigned short eType = data->GetShortBEOrFail(12);
+	unsigned short eType;
+	buf.copy((char *)&eType, 2, 12);
+	eType = (eType << 8) | (eType >> 8);
+
 	PayloadQuilt payload = std::make_shared<CPayloadQuilt>(data, 14);
 
 	std::shared_ptr<ChunkEtherNet> r = std::make_shared<ChunkEtherNet>(data, payload, DA, SA, eType);

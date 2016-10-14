@@ -13,6 +13,13 @@ unsigned long Make(const Quilt &data, const std::streamoff offset)
 	return (addr);
 }
 
+unsigned long Make(const std::string &data, const std::streamoff offset)
+{
+	unsigned long addr(0);
+	data.copy((char *)&addr, 4, offset);
+	return (addr);
+}
+
 std::string asString(unsigned long addr)
 {
 	std::string r;

@@ -16,8 +16,7 @@ std::string ParserIPv4::Description()
 std::shared_ptr<ChunkIPv4> ParserIPv4::Process(std::shared_ptr<ChunkEtherNetDIX> dix)
 {
 	if (dix->Parent->EtherNetType == 0x800) {
-		unsigned char IHL32bit = dix->Payload->GetCharOrFail(0);
-		IHL32bit = IHL32bit & 0xf;
+		unsigned char IHL32bit = dix->Payload->GetCharOrFail(0) & 0xf;
 
 		unsigned long SrcIP = IPv4Addr::Make(*dix->Payload, 12);
 		unsigned long DstIP = IPv4Addr::Make(*dix->Payload, 16);

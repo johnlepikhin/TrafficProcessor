@@ -16,6 +16,8 @@ namespace IPv4Addr {
 	 */
 	unsigned long Make(const Quilt &data, const std::streamoff offset);
 
+	unsigned long Make(const std::string &data, const std::streamoff offset);
+
 	/**
 	 * Human readable representation
 	 * @return Human readable representation

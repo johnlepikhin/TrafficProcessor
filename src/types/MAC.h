@@ -15,6 +15,12 @@ namespace MAC {
 	unsigned long long Make(std::shared_ptr<Quilt> data, const size_t offset);
 
 	/**
+	 * Create MAC from substring
+	 * @param data string from where MAC to read
+	 */
+	unsigned long long Make(const std::string &data, const size_t offset);
+
+	/**
 	 * Human readable representation
 	 * @return Human readable representation
 	 */

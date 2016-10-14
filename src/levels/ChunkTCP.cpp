@@ -4,15 +4,15 @@
 ChunkTCP::ChunkTCP(BaseQuilt baseData
 		, PayloadQuilt payload
 		, std::shared_ptr<PacketIPVariant> parent
-		, const unsigned int pktLength
-		, const unsigned int headerLength
-		, const unsigned int payloadLength
-		, const unsigned char flags
-		, const unsigned short windowSize
-		, const unsigned long seqNumber
-		, const unsigned long confirmNumber
-		, const unsigned int sourcePort
-		, const unsigned int destinationPort)
+		, const uint16_t pktLength
+		, const uint16_t headerLength
+		, const uint16_t payloadLength
+		, const uint8_t flags
+		, const uint16_t windowSize
+		, const uint32_t seqNumber
+		, const uint32_t confirmNumber
+		, const uint16_t sourcePort
+		, const uint16_t destinationPort)
 	: Chunk<PacketIPVariant>(baseData, payload, parent)
 	, PktLength(pktLength)
 	, HeaderLength(headerLength)

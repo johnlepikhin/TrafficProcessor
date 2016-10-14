@@ -14,6 +14,14 @@ unsigned long long Make(std::shared_ptr<Quilt> data, const size_t offset)
 	return (mac);
 }
 
+unsigned long long Make(const std::string &data, const size_t offset)
+{
+	unsigned long long mac;
+	data.copy((char *)&mac, 6, offset);
+
+	return (mac);
+}
+
 std::string asString(const unsigned long long mac)
 {
 	char r[18];

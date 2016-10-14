@@ -15,7 +15,8 @@ class ChunkEtherNet : public Chunk<CBaseQuilt> {
 public:
 	/**
 	 * Constructor
-	 * @param data Reference to Data from where chunk was read
+	 * @param baseData Reference to Data from where chunk was read
+	 * @param payload Reference to payload of this frame
 	 * @param destinationMAC Reference to destination MAC address
 	 * @param sourceMAC Reference to source MAC address
 	 * @param ethernetType 2-byte value at offset 13 in ethernet frame (ethernet type or payload length)

@@ -6,6 +6,9 @@
 #include "ChunkRaw.h"
 #include "../types/Processor.h"
 
+/**
+ * Printer for TCP fragments
+ */
 class PrinterTCP: public Processor<ChunkTCP, ChunkRaw> {
 	/**
 	 * Basic printer for TCP

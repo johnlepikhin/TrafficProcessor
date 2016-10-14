@@ -15,7 +15,6 @@ class ParserIPv6: public Processor<ChunkEtherNetDIX, ChunkIPv6> {
 public:
 	/**
 	 * Try to get IPv6 from data.
-	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */

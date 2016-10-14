@@ -5,11 +5,13 @@
 #include "ChunkIPv6.h"
 #include "../types/Processor.h"
 
+/**
+ * Printer for IPv6 fragments
+ */
 class PrinterIPv6: public Processor<ChunkIPv6, ChunkRaw> {
 public:
 	/**
 	 * Basic printer for ChunkIPv6
-	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */

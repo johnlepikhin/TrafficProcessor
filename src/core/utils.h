@@ -57,8 +57,28 @@ namespace util {
 	 */
 	unsigned short reverse2 (unsigned short value);
 
+	/**
+	 * Read bytes into the buffer
+	 * @param fd File descriptor
+	 * @param buf Pointer to buffer
+	 * @param count Number of bytes to read
+	 * @return Amount of read bytes
+	 */
+	ssize_t readToBuffer(int fd, char *buf, size_t count);
+
+	/**
+	 * Skip bytes in fd
+	 * @param fd File descriptor
+	 * @param count Amount of bytes to skip
+	 * @return Amount of skipped bytes
+	 */
 	ssize_t skipBytesInFD(int fd, size_t count);
 
+	/**
+	 * Make PCAP quilt string for file descriptor
+	 * @param fd File descriptor
+	 * @return Quilt representation of PCAP
+	 */
 	BaseQuilt quiltOfPcap(int fd);
 }
 

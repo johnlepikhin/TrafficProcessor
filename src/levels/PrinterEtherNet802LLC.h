@@ -6,14 +6,15 @@
 #include "ChunkEtherNet.h"
 #include "../types/Processor.h"
 
-
+/**
+ * Printer for Ethernet frames of type 802LLC
+ */
 class PrinterEtherNet802LLC: public Processor<ChunkEtherNet802LLC, ChunkRaw> {
 public:
 	PrinterEtherNet802LLC();
 
 	/**
 	 * Basic printer for ChunkEtherNet802LLC
-	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */

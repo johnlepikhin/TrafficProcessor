@@ -19,6 +19,9 @@ enum tcp_session_state {
 
 typedef std::shared_ptr<ChunkTCP> chunkptr;
 
+/**
+ * Representation of endpoint node
+ */
 class EndPoint
 {
 private:
@@ -26,16 +29,48 @@ private:
 	bool PreviewCreated = false;
 public:
 	EndPoint();
+
+	/**
+	 * Reset payload. Useful when the data in the flow is processed and
+	 * new fragments will be collected
+	 */
 	void ResetPayload();
+
+	/**
+	 * Get first 20 bytes of payload. This fragment is cached, so method is very fast.
+	 * @return First 20 bytes of payload
+	 */
 	std::shared_ptr<std::string> GetPayloadPreview();
 
+	/**
+	 * Pointer to optional next data in the flow
+	 */
 	PayloadQuilt Payload;
+
+	/**
+	 * Last received TCP fragment
+	 */
 	chunkptr LastChunk;
+
+	/**
+	 * Amount of all received bytes in this TCP flow
+	 */
 	unsigned long long PayloadBytes;
+
+	/**
+	 * Amount of all received bytes in this TCP flow, including ethernet and IP headers
+	 */
 	unsigned long long RawIfaceBytes;
+
+	/**
+	 * Next expected sequence number
+	 */
 	unsigned long NextExpectedSEQ;
 };
 
+/**
+ * Representation of TCP sessions
+ */
 class SessionTCP: public Chunk<ChunkTCP> {
 private:
 	typedef unsigned long SeqT;
@@ -53,26 +88,56 @@ private:
 	EndPoint C_EP;
 	EndPoint S_EP;
 public:
+	/**
+	 * Constructor
+	 * @param baseData Pointer to base data (well, useless in TCP sessions)
+	 * @param parent Pointer to TCP fragment
+	 * @param lastInternalID Unique ID of the last event related to this session (used for garbage collection)
+	 */
 	SessionTCP(BaseQuilt baseData
 			, chunkptr parent
 			, unsigned long long lastInternalID);
 
+	/**
+	 * Add TCP fragment to this session
+	 * @param chunk TCP fragment
+	 * @param newLastInternalID Unique ID of this event
+	 */
 	void AddChunk(chunkptr chunk, unsigned long long newLastInternalID);
 
 	// public because followers can also detect direction and swap flows
+	/**
+	 * Swap Client and Server
+	 */
 	void SwapFlows();
 
 
 //	void CutFlowToNextChunk(Flow flow);
 //	void CheckFlowTimeOut(EndPoint &flow, EndPoint &otherFlow);
 
+	/**
+	 * Current state of the session
+	 */
 	tcp_session_state State = TCP_INITIAL;
 
+	/**
+	 * Reference to the Client endpoint (can be incorrect)
+	 */
 	EndPoint *Client = &C_EP;
+
+	/**
+	 * Reference to the Server endpoint (can be incorrect)
+	 */
 	EndPoint *Server = &S_EP;
 
+	/**
+	 * True if session direction is detected (Client and Server references are also become correct)
+	 */
 	bool DirectionDetected = false;
 
+	/**
+	 * Unique ID of the last event related to this session (used for garbage collection)
+	 */
 	unsigned long long LastInternalID;
 };
 

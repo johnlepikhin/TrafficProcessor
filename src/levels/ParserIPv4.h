@@ -15,7 +15,6 @@ class ParserIPv4: public Processor<ChunkEtherNetDIX, ChunkIPv4> {
 public:
 	/**
 	 * Try to get IPv4 from data.
-	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */

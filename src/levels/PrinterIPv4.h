@@ -5,11 +5,13 @@
 #include "ChunkIPv4.h"
 #include "../types/Processor.h"
 
+/**
+ * Printer for IPv4 fragments
+ */
 class PrinterIPv4: public Processor<ChunkIPv4, ChunkRaw> {
 public:
 	/**
 	 * Basic printer for ChunkIPv4
-	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */

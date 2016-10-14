@@ -6,6 +6,9 @@
 #include "ChunkTCP.h"
 #include "../types/Processor.h"
 
+/**
+ * Parser for TCP fragments
+ */
 class ParserTCP: public Processor<PacketIPVariant, ChunkTCP> {
 	/**
 	 * Try to get TCP from data.

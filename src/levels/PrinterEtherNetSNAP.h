@@ -5,12 +5,13 @@
 #include "ChunkEtherNetSNAP.h"
 #include "../types/Processor.h"
 
-
+/**
+ * Printer for ethernet frames of SNAP format
+ */
 class PrinterEtherNetSNAP: public Processor<ChunkEtherNetSNAP, ChunkRaw> {
 public:
 	/**
 	 * Basic printer for ChunkEtherNetSNAP
-	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */

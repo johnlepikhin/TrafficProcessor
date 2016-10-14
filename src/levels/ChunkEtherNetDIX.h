@@ -11,7 +11,8 @@ class ChunkEtherNetDIX: public Chunk<ChunkEtherNet> {
 public:
 	/**
 	 * Constructor for DIX
-	 * @param data Reference to Data from where chunk was read
+	 * @param baseData Reference to Data from where chunk was read
+	 * @param payload Reference to payload of this frame
 	 * @param parent Optional reference to parent Chunk
 	 * @param etherType EtherNet type (OSI level 3 type)
 	 */

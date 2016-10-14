@@ -28,6 +28,12 @@ public:
 	 * @return Binary representation
 	 */
 	inline std::string AsBinary() const { return (Data); };
+
+	/**
+	 * Compare this IPv6 address with another
+	 * @param other Reference to other address
+	 * @return True if addresses are equal
+	 */
 	inline bool operator=(IPv6Addr &other) const { return (Data == other.AsBinary()); }
 private:
 	std::string Data;

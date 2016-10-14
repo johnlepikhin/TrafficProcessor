@@ -5,11 +5,13 @@
 #include "ChunkEtherNetRAW.h"
 #include "../types/Processor.h"
 
+/**
+ * Printer for ethernet frames of raw format
+ */
 class PrinterEtherNetRAW: public Processor<ChunkEtherNetRAW, ChunkRaw> {
 public:
 	/**
 	 * Basic printer for ChunkEtherNetRAW
-	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */

@@ -15,7 +15,6 @@ class ParserEtherNet802LLC: public Processor<ChunkEtherNet, ChunkEtherNet802LLC>
 public:
 	/**
 	 * Try to get EtherNet 802.3 LLC frame from data.
-	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */

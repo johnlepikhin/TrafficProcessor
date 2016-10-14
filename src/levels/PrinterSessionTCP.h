@@ -7,11 +7,13 @@
 #include "ChunkRaw.h"
 #include "../types/Processor.h"
 
+/**
+ * Printer for TCP sessions
+ */
 class PrinterSessionTCP: public Processor<SessionTCP, ChunkRaw> {
 	/**
 	 * Basic printer for TCP sessions
-	 * @param data Reference to Data from where chunk was read
-	 * @param parent Optional reference to parent Chunk
+	 * @param parent Optional reference to TCP session. Payload in endpoints can be nullptr!
 	 * @return NULL
 	 */
 	std::shared_ptr<ChunkRaw> Process(std::shared_ptr<SessionTCP> session);

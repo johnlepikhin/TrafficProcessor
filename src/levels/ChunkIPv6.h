@@ -7,8 +7,17 @@
 #include "../types/PhantomQuilt.h"
 #include "ChunkEtherNetDIX.h"
 
+/**
+ * Representation of Fragment extra header
+ */
 class IPv6HeaderFragment {
 public:
+	/**
+	 * Constructor
+	 * @param fragmentOffset Offset of fragment in payload
+	 * @param hasNextFragments False if this is last fragment
+	 * @param packetID Packet identifier
+	 */
 	IPv6HeaderFragment(unsigned short fragmentOffset
 			, bool hasNextFragments
 			, unsigned long packetID)
@@ -17,8 +26,19 @@ public:
 		, PacketID(packetID)
 	{ };
 
+	/**
+	 * Offset of fragment
+	 */
 	unsigned short FragmentOffset;
+
+	/**
+	 * False if this is last fragment
+	 */
 	bool HasNextFragments;
+
+	/**
+	 * Packet identifier
+	 */
 	unsigned long PacketID;
 };
 
@@ -29,10 +49,17 @@ class ChunkIPv6: public Chunk<ChunkEtherNetDIX> {
 public:
 	/**
 	 * Constructor
-	 * @param data Reference to Data from where chunk was read
+	 * @param baseData Reference to Data from where chunk was read
+	 * @param payload Reference to payload of this frame
 	 * @param parent Optional reference to parent Chunk
 	 * @param srcIP Source IP address
 	 * @param dstIP Destination IP address
+	 * @param protocol Protocol of underlying layer
+	 * @param trafficClass Traffic class
+	 * @param flowLabel Flow label
+	 * @param hopLimit Hop limit
+	 * @param hdrFragment Pointer to optional Fragment extra header
+	 * @param payloadLength Length of payload
 	 */
 	ChunkIPv6(BaseQuilt baseData
 			, PayloadQuilt payload
@@ -57,11 +84,29 @@ public:
 	 */
 	IPv6Addr DstIP;
 
+	/**
+	 * Traffic class
+	 */
 	unsigned char TrafficClass;
+
+	/**
+	 * Flow label
+	 */
 	unsigned long FlowLabel;
+
+	/**
+	 * Hop limit
+	 */
 	unsigned char HopLimit;
+
+	/**
+	 * Length of payload
+	 */
 	unsigned long PayloadLength;
 
+	/**
+	 * Pointer to optional extra header Fragment
+	 */
 	std::shared_ptr<IPv6HeaderFragment> HdrFragment;
 
 	/**
@@ -69,9 +114,28 @@ public:
 	 */
 	unsigned short Protocol;
 
+	/**
+	 * Get source IP in human readable format
+	 * @return source IP address as string
+	 */
 	std::string StringOfSrcIP() { return (SrcIP.AsString()); };
+
+	/**
+	 * Get destination IP in human readable format
+	 * @return destination IP address as string
+	 */
 	std::string StringOfDstIP() { return (DstIP.AsString()); };
+
+	/**
+	 * Get source IP as bytes
+	 * @return source IP address as bytes
+	 */
 	inline std::string BinaryOfSrcIP() { return (SrcIP.AsBinary()); };
+
+	/**
+	 * Get destination IP as bytes
+	 * @return destination  IP address as bytes
+	 */
 	inline std::string BinaryOfDstIP() { return (DstIP.AsBinary()); };
 };
 

@@ -10,6 +10,11 @@
  */
 class ParserEtherNet : public Processor<CBaseQuilt, ChunkEtherNet> {
 public:
+	/**
+	 * Parser
+	 * @param payload Reference to base PCAP frame
+	 * @return ChunkEtherNet on success or nullptr
+	 */
 	std::shared_ptr<ChunkEtherNet> Process(BaseQuilt payload);
 
 	/**

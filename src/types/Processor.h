@@ -6,6 +6,9 @@
 #include <RecursiveDelegator.h>
 #include "Chunk.h"
 
+/**
+ * Traits for all public processors
+ */
 class ProcessorTraits {
 public:
 	virtual ~ProcessorTraits() {};

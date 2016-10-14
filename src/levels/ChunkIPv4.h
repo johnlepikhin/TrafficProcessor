@@ -13,12 +13,14 @@ class ChunkIPv4: public Chunk<ChunkEtherNetDIX> {
 public:
 	/**
 	 * Constructor
-	 * @param data Reference to Data from where chunk was read
+	 * @param baseData Reference to Data from where chunk was read
+	 * @param payload Reference to payload of this frame
 	 * @param parent Optional reference to parent Chunk
 	 * @param iHL32bit Header length in 32-bit words
 	 * @param srcIP Source IP address
 	 * @param dstIP Destination IP address
 	 * @param pktLength Full packet length
+	 * @param payloadLength Length of payload
 	 * @param protocol Next protocol ID
 	 * @param flagDontFragment True if packet cannot be fragmented
 	 * @param flagIsFragmented True if there are another fragments for this packet
@@ -96,9 +98,28 @@ public:
 	 */
 	unsigned short Protocol;
 
+	/**
+	 * Get source IP in human readable format
+	 * @return source IP address as string
+	 */
 	std::string StringOfSrcIP();
+
+	/**
+	 * Get destination IP in human readable format
+	 * @return destination IP address as string
+	 */
 	std::string StringOfDstIP();
+
+	/**
+	 * Get source IP as bytes
+	 * @return source IP address as bytes
+	 */
 	inline std::string BinaryOfSrcIP() { return (BinaryOfIP(SrcIP)); };
+
+	/**
+	 * Get destination IP as bytes
+	 * @return destination  IP address as bytes
+	 */
 	inline std::string BinaryOfDstIP() { return (BinaryOfIP(DstIP)); };
 private:
 	std::string BinaryOfIP(unsigned long ip);

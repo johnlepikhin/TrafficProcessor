@@ -15,7 +15,6 @@ class ParserEtherNetSNAP: public Processor<ChunkEtherNet, ChunkEtherNetSNAP> {
 public:
 	/**
 	 * Try to get EtherNet SNAP frame from data.
-	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */

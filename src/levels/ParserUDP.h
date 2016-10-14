@@ -6,6 +6,9 @@
 #include "ChunkUDP.h"
 #include "../types/Processor.h"
 
+/**
+ * Parser for UDP datagrams
+ */
 class ParserUDP: public Processor<PacketIPVariant, ChunkUDP> {
 	/**
 	 * Try to get UDP from data.

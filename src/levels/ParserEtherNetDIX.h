@@ -12,7 +12,6 @@ class ParserEtherNetDIX: public Processor<ChunkEtherNet, ChunkEtherNetDIX> {
 public:
 	/**
 	 * Try to get EtherNet DIX frame from data.
-	 * @param data Reference to Data from where chunk was read
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */

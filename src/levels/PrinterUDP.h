@@ -6,6 +6,9 @@
 #include "ChunkRaw.h"
 #include "../types/Processor.h"
 
+/**
+ * Printer for UDP datagrams
+ */
 class PrinterUDP: public Processor<ChunkUDP, ChunkRaw> {
 	/**
 	 * Basic printer for UDP

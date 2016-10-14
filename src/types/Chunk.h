@@ -8,8 +8,16 @@
 #include <sparsed-ropes/Quilt.h>
 #include "PhantomQuilt.h"
 
+/**
+ * Base traits for chunks of all levels and protocols
+ */
 class ChunkTraits {
 public:
+	/**
+	 * Construct traits
+	 * @param baseData Reference to original data chunk
+	 * @param payload Reference to payload
+	 */
 	ChunkTraits(BaseQuilt baseData, PayloadQuilt payload)
 		: BaseData(baseData)
 		, Payload(payload) {};
@@ -34,8 +42,8 @@ class Chunk : public ChunkTraits {
 public:
 	/**
 	 * Construct Chunk from Data and parent Chunk
-	 * @param data Reference to original data piece
-	 * @param containedData Reference to contained data piece
+	 * @param baseData Reference to original data piece
+	 * @param payload Reference to contained data piece
 	 * @param parent Reference to parent Chunk
 	 */
 	Chunk(BaseQuilt baseData, PayloadQuilt payload, std::shared_ptr<PARENT> parent)
@@ -44,7 +52,8 @@ public:
 
 	/**
 	 * Construct Chunk from Data and NULL parent
-	 * @param data Reference to data (original Pcap)
+	 * @param baseData Reference to original data piece
+	 * @param payload Reference to contained data piece
 	 */
 	Chunk(BaseQuilt baseData, PayloadQuilt payload)
 		: ChunkTraits(baseData, payload)

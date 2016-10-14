@@ -5,7 +5,9 @@
 #include "PacketIPv4.h"
 #include "../types/Processor.h"
 
-
+/**
+ * Printer for defragmentated IPv4 packets
+ */
 class PrinterPacketIPv4: public Processor<PacketIPv4, ChunkRaw> {
 	/**
 	 * Basic printer for PacketIPv4

@@ -12,7 +12,8 @@ class ChunkEtherNet802LLC : public Chunk<ChunkEtherNet> {
 public:
 	/**
 	 * Constructor for 802.3 LLC
-	 * @param data Reference to Data from where chunk was read
+	 * @param baseData Reference to Data from where chunk was read
+	 * @param payload Reference to payload of this frame
 	 * @param parent Optional reference to parent Chunk
 	 * @param length Length of payload
 	 * @param dsap Destination Service Access Point

@@ -12,7 +12,8 @@ class ChunkEtherNetSNAP: public Chunk<ChunkEtherNet> {
 public:
 	/**
 	 * Constructor for SNAP
-	 * @param data Reference to Data from where chunk was read
+	 * @param baseData Reference to Data from where chunk was read
+	 * @param payload Reference to payload of this frame
 	 * @param parent Optional reference to parent Chunk
 	 * @param length Length of payload
 	 * @param oui OUI

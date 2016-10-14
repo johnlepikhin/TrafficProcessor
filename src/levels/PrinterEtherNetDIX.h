@@ -8,13 +8,14 @@
 #include "../types/Processor.h"
 #include <string>
 
-
+/**
+ * Printer for ethernet frames of type DIX
+ */
 class PrinterEtherNetDIX: public Processor<ChunkEtherNetDIX, ChunkRaw> {
 public:
 	/**
 	 * Basic printer for ChunkEtherNetDIX
-	 * @param data Reference to Data from where chunk was read
-	 * @param parent Optional reference to parent Chunk
+	 * @param dix Reference to DIX chunk
 	 * @return NULL
 	 */
 	std::shared_ptr<ChunkRaw> Process(std::shared_ptr<ChunkEtherNetDIX> dix);

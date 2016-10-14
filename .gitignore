@@ -1,7 +1,7 @@
 /UnitTests/
 /Debug/
 /Release/
-Documentation/doxygen_sqlite3.db
+Documentation/
 proj_files.lnt
 .project
 .cproject

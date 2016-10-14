@@ -17,7 +17,7 @@ public:
 	/**
 	 * First IP address of the session
 	 */
-	std::string IP1
+	std::string IP1;
 
 	/**
 	 * Second IP address of the session

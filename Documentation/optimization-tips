@@ -1,0 +1,4 @@
+
+ 1. Read from string quilts by blocks, not by 2-byte shorts or chars
+ 2. Remove shared pointers where it's possible
+ 3. Optimize std::shared_ptr by std::make_shared

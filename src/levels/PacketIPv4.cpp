@@ -28,7 +28,8 @@ bool PacketIPv4::AddChunk(std::shared_ptr<ChunkIPv4> chunk)
 			ReceivedSize = chunk->PayloadLength;
 			return (true);
 		} else {
-			ExpectedSize = chunk->FragmentOffset + chunk->PayloadLength;
+			uint16_t tmp = chunk->FragmentOffset + chunk->PayloadLength;
+			ExpectedSize = (ExpectedSize > tmp) ? ExpectedSize : tmp;
 			ReceivedSize += chunk->PayloadLength;
 		}
 	} else {

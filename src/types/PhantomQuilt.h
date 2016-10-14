@@ -2,6 +2,7 @@
 #ifndef SRC_TYPES_PHANTOMQUILT_H_
 #define SRC_TYPES_PHANTOMQUILT_H_
 
+#include <memory>
 #include <sparsed-ropes/Quilt.h>
 #include "Phantom.h"
 

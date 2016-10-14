@@ -1,14 +1,6 @@
-/*
- * Counter.h
- *
- *  Created on: 5 окт. 2016 г.
- *      Author: eugene
- */
 
 #ifndef SRC_TYPES_COUNTER_H_
 #define SRC_TYPES_COUNTER_H_
-
-
 
 class Counter {
 public:

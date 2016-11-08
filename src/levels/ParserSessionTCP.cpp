@@ -86,7 +86,7 @@ void ParserSessionTCP::GarbageCollector()
 	}
 }
 
-void ParserSessionTCP::AfterRecursionHook(std::shared_ptr<SessionTCP> session, std::exception *exn, bool found)
+bool ParserSessionTCP::AfterRecursionHook(std::shared_ptr<SessionTCP> session, const std::exception *exn, bool found)
 {
 	if (session != nullptr) {
 		// prevent access of followers to already processed data
@@ -97,6 +97,8 @@ void ParserSessionTCP::AfterRecursionHook(std::shared_ptr<SessionTCP> session, s
 			GarbageCollector();
 		}
 	}
+
+	return (found);
 }
 
 std::string ParserSessionTCP::ID()

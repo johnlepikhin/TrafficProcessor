@@ -30,6 +30,13 @@ public:
  * Base class for processors of all types
  */
 template<typename PARENT, typename THIS>
-class Processor : public RecursiveDelegator::Processor<PARENT, THIS>, public ProcessorTraits { };
+class Processor
+		: public RecursiveDelegator::Processor<PARENT, THIS>
+		, public ProcessorTraits
+{
+public:
+	typedef PARENT PARENT_T;
+	typedef THIS THIS_T;
+};
 
 #endif /* SRC_TYPES_PROCESSOR_H_ */

@@ -6,7 +6,7 @@
 
 namespace IPv4Addr {
 
-unsigned long Make(const Quilt &data, const std::streamoff offset)
+unsigned long Make(Quilt &data, const patch_position offset)
 {
 	unsigned long addr(0);
 	data.CopyBytesOrFail((char *)&addr, offset, 4);

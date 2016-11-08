@@ -14,7 +14,7 @@ namespace IPv4Addr {
 	 * @param data Pointer to Quilt
 	 * @param offset Offset from where address must be read
 	 */
-	unsigned long Make(const Quilt &data, const std::streamoff offset);
+	unsigned long Make(Quilt &data, const patch_position offset);
 
 	/**
 	 * Create IPv4 from std::string

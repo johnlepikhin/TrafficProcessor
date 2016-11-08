@@ -10,6 +10,7 @@
 
 template <class THIS>
 class LeafProcessor: public Processor<THIS, ChunkRaw> {
+public:
 	std::shared_ptr<ChunkRaw> Process(std::shared_ptr<ChunkEtherNet> parent)
 	{
 		std::cout << "Ethernet!\n";
@@ -19,12 +20,14 @@ class LeafProcessor: public Processor<THIS, ChunkRaw> {
 	std::shared_ptr<ChunkRaw> Process(std::shared_ptr<ChunkEtherNetDIX> parent)
 	{
 		std::cout << "DIX!\n";
+		Process(parent->Parent);
 		return (std::shared_ptr<ChunkRaw>(nullptr));
 	}
 
 	std::shared_ptr<ChunkRaw> Process(std::shared_ptr<ChunkIPv4> parent)
 	{
 		std::cout << "IPv4!\n";
+		Process(parent->Parent);
 		return (std::shared_ptr<ChunkRaw>(nullptr));
 	}
 

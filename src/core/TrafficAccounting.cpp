@@ -44,47 +44,47 @@ using namespace std;
 static ParserEtherNet generateParseTree()
 {
 	ParserUDP *parserUDP = new ParserUDP();
-	PrinterUDP *printerUDP = new PrinterUDP();
-	parserUDP->AddFollower(printerUDP->AsFollower());
+//	PrinterUDP *printerUDP = new PrinterUDP();
+//	parserUDP->AddFollower(printerUDP->AsFollower());
 
-	PrinterSessionTCP *printerSessionTCP = new PrinterSessionTCP();
+//	PrinterSessionTCP *printerSessionTCP = new PrinterSessionTCP();
 
-	ParserSessionTCP *parserSessionTCP = new ParserSessionTCP();
-	parserSessionTCP->AddFollower(printerSessionTCP->AsFollower());
+//	ParserSessionTCP *parserSessionTCP = new ParserSessionTCP();
+//	parserSessionTCP->AddFollower(printerSessionTCP->AsFollower());
 
 //	PrinterTCP *printerTCP = new PrinterTCP();
-	ParserTCP *parserTCP = new ParserTCP();
+//	ParserTCP *parserTCP = new ParserTCP();
 //	parserTCP->AddFollower(printerTCP->AsFollower());
-	parserTCP->AddFollower(parserSessionTCP->AsFollower());
+//	parserTCP->AddFollower(parserSessionTCP->AsFollower());
 
 //	PrinterIPv4 *printerIPV4 = new PrinterIPv4();
 //	PrinterPacketIPv4 *printerPacketIPV4 = new PrinterPacketIPv4();
 //
 	ParserPacketIPv4 *parserPacketIPv4 = new ParserPacketIPv4();
 //	parserPacketIPv4->AddFollower(printerPacketIPV4->AsFollower());
-	parserPacketIPv4->AddFollower((RecursiveDelegator::Processor<PacketIPv4, void> *)parserTCP->AsFollower());
-	parserPacketIPv4->AddFollower((RecursiveDelegator::Processor<PacketIPv4, void> *)parserUDP->AsFollower());
+//	parserPacketIPv4->AddFollower(parserTCP->AsFollower());
+	parserPacketIPv4->AddFollower(parserUDP->AsFollower());
 
-	PrinterIPv6 *printerIPV6 = new PrinterIPv6();
+//	PrinterIPv6 *printerIPV6 = new PrinterIPv6();
 
 	ParserIPv6 *parserIPv6 = new ParserIPv6();
-	parserIPv6->AddFollower(printerIPV6->AsFollower());
+//	parserIPv6->AddFollower(printerIPV6->AsFollower());
 
 	ParserIPv4 *parserIPv4 = new ParserIPv4();
 //	parserIPv4->AddFollower(printerIPV4->AsFollower());
 	parserIPv4->AddFollower(parserPacketIPv4->AsFollower());
 
-	LeafProcessor<ChunkEtherNetDIX> *leafEtherNetDIX = new LeafProcessor<ChunkEtherNetDIX>();
+//	LeafProcessor<ChunkEtherNetDIX> *leafEtherNetDIX = new LeafProcessor<ChunkEtherNetDIX>();
 	ParserEtherNetDIX *etherNetDIX = new ParserEtherNetDIX();
-	etherNetDIX->AddFollower(leafEtherNetDIX->AsFollower());
+//	etherNetDIX->AddFollower(leafEtherNetDIX->AsFollower());
 //	etherNetDIX->AddFollower((new PrinterEtherNetDIX())->AsFollower());
 	etherNetDIX->AddFollower(parserIPv4->AsFollower());
 	etherNetDIX->AddFollower(parserIPv6->AsFollower());
 
 	ParserEtherNet etherNet;
 
-	LeafProcessor<ChunkEtherNet> *leafEtherNet = new LeafProcessor<ChunkEtherNet>();
-	etherNet.AddFollower(leafEtherNet->AsFollower());
+//	LeafProcessor<ChunkEtherNet> *leafEtherNet = new LeafProcessor<ChunkEtherNet>();
+//	etherNet.AddFollower(leafEtherNet->AsFollower());
 	etherNet.AddFollower(etherNetDIX->AsFollower());
 //	etherNet.AddFollower(new ParserEtherNet802LLC());
 //	etherNet.AddFollower(new ParserEtherNetRAW());

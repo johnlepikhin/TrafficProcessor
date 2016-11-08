@@ -80,6 +80,7 @@ typedef std::unordered_map<SessionID, std::shared_ptr<SessionTCP>, SessionIDHash
  * Build TCP serssions from TCP fragments
  */
 class ParserSessionTCP: public Processor<ChunkTCP, SessionTCP> {
+public:
 	/**
 	 * Collect and build TCP session from chunks.
 	 * @param data Reference to Data from where chunk was read
@@ -88,7 +89,7 @@ class ParserSessionTCP: public Processor<ChunkTCP, SessionTCP> {
 	 */
 	std::shared_ptr<SessionTCP> Process(std::shared_ptr<ChunkTCP> parent);
 
-	void AfterRecursionHook(std::shared_ptr<SessionTCP> session, std::exception *exn, bool found);
+	virtual bool AfterRecursionHook(std::shared_ptr<SessionTCP> session, const std::exception *exn, bool found);
 
 	/**
 	 * Returns unique ID for this Parser

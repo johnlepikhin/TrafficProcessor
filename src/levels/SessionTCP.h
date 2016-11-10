@@ -81,12 +81,11 @@ private:
 	chunkptr PopChunk(
 			const std::function <bool (chunkptr &candidate)> &filter);
 
-	void AssignEndPoints(chunkptr &chunk, EndPoint **correct, EndPoint **other);
+	void AssignEndPoints(chunkptr &chunk, std::shared_ptr<EndPoint> correct, std::shared_ptr<EndPoint> other);
 	void FillEndPoint(chunkptr &chunk);
-	void AppendPayload(chunkptr &chunk, EndPoint *endpoint);
+	void AppendPayload(chunkptr &chunk, std::shared_ptr<EndPoint> endpoint);
 
-	EndPoint C_EP;
-	EndPoint S_EP;
+	std::shared_ptr<EndPoint> C_EP, S_EP;
 public:
 	/**
 	 * Constructor
@@ -123,12 +122,12 @@ public:
 	/**
 	 * Reference to the Client endpoint (can be incorrect)
 	 */
-	EndPoint *Client = &C_EP;
+	std::shared_ptr<EndPoint> Client;
 
 	/**
 	 * Reference to the Server endpoint (can be incorrect)
 	 */
-	EndPoint *Server = &S_EP;
+	std::shared_ptr<EndPoint> Server;
 
 	/**
 	 * True if session direction is detected (Client and Server references are also become correct)

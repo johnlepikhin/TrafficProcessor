@@ -29,6 +29,10 @@ SessionTCP::SessionTCP(BaseQuilt baseData
 	, State(TCP_INITIAL)
 	, LastInternalID(lastInternalID)
 {
+	C_EP = std::make_shared<EndPoint>();
+	S_EP = std::make_shared<EndPoint>();
+	Server = S_EP;
+	Client = C_EP;
 	AddChunk(parent, lastInternalID);
 }
 
@@ -73,58 +77,56 @@ chunkptr SessionTCP::PopChunk(const std::function <bool (chunkptr &candidate)> &
 
 void SessionTCP::SwapFlows()
 {
-	EndPoint *tmp = Server;
-	Server = Client;
-	Client = tmp;
+	Server.swap(Client);
 
 	DirectionDetected = true;
 }
 
-void SessionTCP::AssignEndPoints(chunkptr &chunk, EndPoint **correct, EndPoint **other)
+void SessionTCP::AssignEndPoints(chunkptr &chunk, std::shared_ptr<EndPoint> correct, std::shared_ptr<EndPoint> other)
 {
-	if ((*correct)->LastChunk != nullptr && !isSameSource((*correct)->LastChunk, chunk)) {
+	if (correct->LastChunk != nullptr && !isSameSource(correct->LastChunk, chunk)) {
 		SwapFlows();
-	} else if ((*other)->LastChunk != nullptr && isSameSource((*other)->LastChunk, chunk)) {
+	} else if (other->LastChunk != nullptr && isSameSource(other->LastChunk, chunk)) {
 		SwapFlows();
 	}
 }
 
 void SessionTCP::FillEndPoint(chunkptr &chunk)
 {
-	if (C_EP.LastChunk == nullptr && S_EP.LastChunk == nullptr) {
-		C_EP.LastChunk = chunk;
-		C_EP.PayloadBytes += chunk->PayloadLength;
-		C_EP.RawIfaceBytes += chunk->BaseData->Length;
-	} else if (C_EP.LastChunk == nullptr) {
-		if (isSameSource(S_EP.LastChunk, chunk)) {
-			S_EP.PayloadBytes += chunk->PayloadLength;
-			S_EP.RawIfaceBytes += chunk->BaseData->Length;
+	if (C_EP->LastChunk == nullptr && S_EP->LastChunk == nullptr) {
+		C_EP->LastChunk = chunk;
+		C_EP->PayloadBytes += chunk->PayloadLength;
+		C_EP->RawIfaceBytes += chunk->BaseData->Length;
+	} else if (C_EP->LastChunk == nullptr) {
+		if (isSameSource(S_EP->LastChunk, chunk)) {
+			S_EP->PayloadBytes += chunk->PayloadLength;
+			S_EP->RawIfaceBytes += chunk->BaseData->Length;
 		} else {
-			C_EP.LastChunk = chunk;
-			C_EP.PayloadBytes += chunk->PayloadLength;
-			C_EP.RawIfaceBytes += chunk->BaseData->Length;
+			C_EP->LastChunk = chunk;
+			C_EP->PayloadBytes += chunk->PayloadLength;
+			C_EP->RawIfaceBytes += chunk->BaseData->Length;
 		}
-	} else if (S_EP.LastChunk == nullptr) {
-		if (isSameSource(C_EP.LastChunk, chunk)) {
-			C_EP.PayloadBytes += chunk->PayloadLength;
-			C_EP.RawIfaceBytes += chunk->BaseData->Length;
+	} else if (S_EP->LastChunk == nullptr) {
+		if (isSameSource(C_EP->LastChunk, chunk)) {
+			C_EP->PayloadBytes += chunk->PayloadLength;
+			C_EP->RawIfaceBytes += chunk->BaseData->Length;
 		} else {
-			S_EP.LastChunk = chunk;
-			S_EP.PayloadBytes += chunk->PayloadLength;
-			S_EP.RawIfaceBytes += chunk->BaseData->Length;
+			S_EP->LastChunk = chunk;
+			S_EP->PayloadBytes += chunk->PayloadLength;
+			S_EP->RawIfaceBytes += chunk->BaseData->Length;
 		}
 	} else {
-		if (isSameSource(C_EP.LastChunk, chunk)) {
-			C_EP.PayloadBytes += chunk->PayloadLength;
-			C_EP.RawIfaceBytes += chunk->BaseData->Length;
+		if (isSameSource(C_EP->LastChunk, chunk)) {
+			C_EP->PayloadBytes += chunk->PayloadLength;
+			C_EP->RawIfaceBytes += chunk->BaseData->Length;
 		} else {
-			S_EP.PayloadBytes += chunk->PayloadLength;
-			S_EP.RawIfaceBytes += chunk->BaseData->Length;
+			S_EP->PayloadBytes += chunk->PayloadLength;
+			S_EP->RawIfaceBytes += chunk->BaseData->Length;
 		}
 	}
 }
 
-void SessionTCP::AppendPayload(chunkptr &chunk, EndPoint *endpoint)
+void SessionTCP::AppendPayload(chunkptr &chunk, std::shared_ptr<EndPoint> endpoint)
 {
 	if (endpoint->Payload == nullptr) {
 		PayloadQuilt p(new CPayloadQuilt());
@@ -149,7 +151,7 @@ void SessionTCP::AddChunk(std::shared_ptr<ChunkTCP> chunk, unsigned long long ne
 						[](chunkptr chunk) { return (chunk->FlagSYN && !chunk->FlagACK); });
 				if (c != nullptr) {
 					State = TCP_HELLO1;
-					AssignEndPoints(chunk, &Client, &Server);
+					AssignEndPoints(chunk, Client, Server);
 					processed++;
 				}
 				break;
@@ -159,7 +161,7 @@ void SessionTCP::AddChunk(std::shared_ptr<ChunkTCP> chunk, unsigned long long ne
 						[](chunkptr chunk) { return (chunk->FlagSYN && chunk->FlagACK); });
 				if (c != nullptr) {
 					State = TCP_HELLO2;
-					AssignEndPoints(chunk, &Server, &Client);
+					AssignEndPoints(chunk, Server, Client);
 					Client->NextExpectedSEQ = chunk->ConfirmNumber;
 					processed++;
 				}

@@ -13,7 +13,7 @@ std::string PrinterSessionTCP::Description()
 	return (std::string("TCP session printer"));
 }
 
-void PrintFlow(EndPoint *flow, const std::string &who) {
+void PrintFlow(std::shared_ptr<EndPoint> flow, const std::string &who) {
 	try {
 		if (flow->Payload != nullptr && flow->Payload->CoveredSize) {
 			std::string *payload = flow->Payload->GetMaxSubString(0, 20000);

@@ -74,9 +74,10 @@ namespace util {
 
 	BaseQuilt quiltOfPcap(int fd)
 	{
-		unsigned int size, captured;
+		unsigned int size, captured, secs, usecs;
 
-		skipBytesInFD(fd, 8);
+		readToBuffer (fd, (char *)&secs, sizeof (secs));
+		readToBuffer (fd, (char *)&usecs, sizeof (usecs));
 		readToBuffer (fd, (char *)&captured, sizeof (captured));
 		readToBuffer (fd, (char *)&size, sizeof (size));
 
@@ -84,7 +85,7 @@ namespace util {
 		IS->resize(captured);
 		readToBuffer(fd, &(IS->at(0)), captured);
 
-		BaseQuilt r = std::make_shared<CBaseQuilt>(IS, size);
+		BaseQuilt r = std::make_shared<CBaseQuilt>(IS, size, secs, usecs);
 
 		return (r);
 	}

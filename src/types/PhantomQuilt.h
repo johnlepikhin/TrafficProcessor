@@ -12,8 +12,18 @@ class PhantomQuilt : public Phantom<Quilt, SPECIFIER>
 	using Phantom<Quilt, SPECIFIER>::Phantom;
 };
 
+class CBaseQuilt : public Quilt {
+public:
+	CBaseQuilt(std::shared_ptr<const std::string> data
+			, const patch_position length
+			, unsigned int secs
+			, unsigned int usecs);
+
+	unsigned int Seconds;
+	unsigned int USeconds;
+};
+
 struct __BaseQuilt {};
-typedef PhantomQuilt<__BaseQuilt> CBaseQuilt;
 typedef std::shared_ptr<CBaseQuilt> BaseQuilt;
 
 struct __PayloadQuilt {};

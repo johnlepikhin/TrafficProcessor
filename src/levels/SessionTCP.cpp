@@ -63,11 +63,12 @@ std::shared_ptr<std::string> EndPoint::GetPayloadPreview()
 	}
 }
 
-chunkptr SessionTCP::PopChunk(const std::function <bool (chunkptr &candidate)> &filter)
+chunkptr SessionTCP::PopChunk(const std::function <bool (chunkptr &candidate)> &filter, bool erase)
 {
 	for (auto it : Inbox) {
 		if (filter(it.second)) {
-			Inbox.erase(it.first);
+			if (erase)
+				Inbox.erase(it.first);
 			return (it.second);
 		}
 	}
@@ -153,6 +154,17 @@ void SessionTCP::AddChunk(std::shared_ptr<ChunkTCP> chunk, unsigned long long ne
 					State = TCP_HELLO1;
 					AssignEndPoints(chunk, Client, Server);
 					processed++;
+				} else {
+					if (Inbox.size() > 5) {
+						c = PopChunk(
+								[](chunkptr chunk) { return (!chunk->FlagSYN && !chunk->FlagFIN && chunk->FlagACK); }
+							, false);
+						if (c != nullptr) {
+							State = TCP_ESTABLISHED;
+							Client->NextExpectedSEQ = chunk->ConfirmNumber;
+							Server->NextExpectedSEQ = chunk->SeqNumber;
+						}
+					}
 				}
 				break;
 
@@ -198,6 +210,15 @@ void SessionTCP::AddChunk(std::shared_ptr<ChunkTCP> chunk, unsigned long long ne
 						fin=true;
 					AppendPayload(c, Server);
 					processed++;
+				} else {
+					if (Inbox.size() > 5) {
+						c = PopChunk(
+								[](chunkptr chunk) { return (!chunk->FlagSYN && !chunk->FlagFIN && chunk->FlagACK); });
+						if (c != nullptr) {
+							Client->NextExpectedSEQ = chunk->ConfirmNumber;
+							Server->NextExpectedSEQ = chunk->SeqNumber;
+						}
+					}
 				}
 
 				if (fin) {

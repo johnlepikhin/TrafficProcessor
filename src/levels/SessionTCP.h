@@ -79,7 +79,7 @@ private:
 	InboxT Inbox;
 
 	chunkptr PopChunk(
-			const std::function <bool (chunkptr &candidate)> &filter);
+			const std::function <bool (chunkptr &candidate)> &filter, bool erase = true);
 
 	void AssignEndPoints(chunkptr &chunk, std::shared_ptr<EndPoint> correct, std::shared_ptr<EndPoint> other);
 	void FillEndPoint(chunkptr &chunk);

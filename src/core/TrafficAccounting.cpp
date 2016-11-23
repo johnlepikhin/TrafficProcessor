@@ -38,13 +38,13 @@
 #include "../levels/PrinterUDP.h"
 
 #include "../levels/LeafProcessor.h"
-#include "../levels/ParserHTTPRequestRequest.h"
+#include "../levels/ParserHTTP.h"
 
 using namespace std;
 
 static ParserEtherNet generateParseTree()
 {
-	ParserHTTPRequest *parserHTTPRequestSimple = new ParserHTTPRequest();
+	ParserHTTP *parserHTTP = new ParserHTTP();
 
 
 //	ParserUDP *parserUDP = new ParserUDP();
@@ -54,7 +54,7 @@ static ParserEtherNet generateParseTree()
 //	PrinterSessionTCP *printerSessionTCP = new PrinterSessionTCP();
 
 	ParserSessionTCP *parserSessionTCP = new ParserSessionTCP();
-	parserSessionTCP->AddFollower(parserHTTPRequestSimple->AsFollower());
+	parserSessionTCP->AddFollower(parserHTTP->AsFollower());
 //	parserSessionTCP->AddFollower(printerSessionTCP->AsFollower());
 
 //	PrinterTCP *printerTCP = new PrinterTCP();

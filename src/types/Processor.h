@@ -37,6 +37,8 @@ class Processor
 public:
 	typedef PARENT PARENT_T;
 	typedef THIS THIS_T;
+
+	Processor<PARENT, void> *AsFollower() { return((Processor<PARENT, void> *)this); }
 };
 
 #endif /* SRC_TYPES_PROCESSOR_H_ */

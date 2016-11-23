@@ -80,6 +80,14 @@ namespace util {
 	 * @return Quilt representation of PCAP
 	 */
 	BaseQuilt quiltOfPcap(int fd);
+
+	/**
+	 * Case-insensitive string comparsion
+	 * @param a String 1
+	 * @param b String 2
+	 * @return True if strings are equal
+	 */
+	bool iequals(const std::string& a, const std::string& b);
 }
 
 #endif /* UTILS_H_ */

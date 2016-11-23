@@ -34,6 +34,7 @@ SessionTCP::SessionTCP(BaseQuilt baseData
 	Server = S_EP;
 	Client = C_EP;
 	AddChunk(parent, lastInternalID);
+	Follower = nullptr;
 }
 
 EndPoint::EndPoint()

@@ -1,6 +1,6 @@
 
-#ifndef SRC_LEVELS_HTTP_H_
-#define SRC_LEVELS_HTTP_H_
+#ifndef SRC_LEVELS_CHUNKHTTP_H_
+#define SRC_LEVELS_CHUNKHTTP_H_
 
 #include <unordered_map>
 #include "../types/Chunk.h"
@@ -70,7 +70,7 @@ public:
 	std::vector<std::pair<std::string, std::string> > Headers;
 };
 
-class HTTP : public Chunk<SessionTCP> {
+class ChunkHTTP : public Chunk<SessionTCP> {
 public:
 	/**
 	 * Constructor for HTTP chunks
@@ -79,7 +79,7 @@ public:
 	 * @param parent Reference to TCP session
 	 * @param request HTTP request
 	 */
-	HTTP(BaseQuilt baseData
+	ChunkHTTP(BaseQuilt baseData
 		, PayloadQuilt payload
 		, std::shared_ptr<SessionTCP> parent
 		, std::unique_ptr<HTTPRequest> request

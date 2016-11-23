@@ -1,5 +1,5 @@
 
-#include "HTTP.h"
+#include "ChunkHTTP.h"
 
 HTTPRequest::HTTPRequest(std::string host
 			, std::string method
@@ -21,7 +21,7 @@ HTTPResponse::HTTPResponse(int code
 {
 }
 
-HTTP::HTTP(BaseQuilt baseData
+ChunkHTTP::ChunkHTTP(BaseQuilt baseData
 		, PayloadQuilt payload
 		, std::shared_ptr<SessionTCP> parent
 		, std::unique_ptr<HTTPRequest> request

@@ -4,14 +4,15 @@
 
 #include "../types/Processor.h"
 #include "../types/Chunk.h"
+#include "SessionTCP.h"
 #include <pcrecpp.h>
 
-#include "HTTP.h"
+#include "ChunkHTTP.h"
 
 /**
  * Simple parser for HTTP
  */
-class ParserHTTP: public Processor<SessionTCP, HTTP> {
+class ParserHTTP: public Processor<SessionTCP, ChunkHTTP> {
 private:
 	pcrecpp::RE ReqCheckRe;
 	pcrecpp::RE ReqFirstLineRe;
@@ -19,9 +20,9 @@ private:
 	pcrecpp::RE RespFirstLineRe;
 	pcrecpp::RE HeaderLineRe;
 	bool CheckClientFlow(std::shared_ptr<EndPoint> flow);
-	std::shared_ptr<HTTP> ParseClient(std::shared_ptr<SessionTCP> session);
+	std::shared_ptr<ChunkHTTP> ParseClient(std::shared_ptr<SessionTCP> session);
 	bool CheckServerFlow(std::shared_ptr<EndPoint> flow);
-	std::shared_ptr<HTTP> ParseServer(std::shared_ptr<SessionTCP> session);
+	std::shared_ptr<ChunkHTTP> ParseServer(std::shared_ptr<SessionTCP> session);
 public:
 	ParserHTTP();
 
@@ -30,7 +31,7 @@ public:
 	 * @param session Reference to TCP session
 	 * @return NULL or parsed chunk
 	 */
-	std::shared_ptr<HTTP> Process(std::shared_ptr<SessionTCP> session);
+	std::shared_ptr<ChunkHTTP> Process(std::shared_ptr<SessionTCP> session);
 
 	/**
 	 * Returns unique ID for this Parser

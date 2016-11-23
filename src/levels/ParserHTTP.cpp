@@ -25,7 +25,7 @@ bool ParserHTTP::CheckServerFlow(std::shared_ptr<EndPoint> flow) {
 	return (false);
 }
 
-std::shared_ptr<HTTP> ParserHTTP::ParseClient(std::shared_ptr<SessionTCP> session) {
+std::shared_ptr<ChunkHTTP> ParserHTTP::ParseClient(std::shared_ptr<SessionTCP> session) {
 	std::string *payload = session->Client->Payload->GetMaxSubString(0, 20000);
 	try {
 		pcrecpp::StringPiece input(*payload);
@@ -42,21 +42,19 @@ std::shared_ptr<HTTP> ParserHTTP::ParseClient(std::shared_ptr<SessionTCP> sessio
 
 		session->Follower = this->AsFollower();
 
-		std::cout << "client: " << host << "\n";
-
 		std::unique_ptr<HTTPRequest> request(new HTTPRequest(host
 				, method
 				, uri
 				, headers));
 
-		return (std::make_shared<HTTP>(session->BaseData, session->Client->Payload, session, std::move(request), nullptr));
+		return (std::make_shared<ChunkHTTP>(session->BaseData, session->Client->Payload, session, std::move(request), nullptr));
 	} catch (...) {
 		delete payload;
-		return (std::shared_ptr<HTTP>(nullptr));
+		return (std::shared_ptr<ChunkHTTP>(nullptr));
 	}
 }
 
-std::shared_ptr<HTTP> ParserHTTP::ParseServer(
+std::shared_ptr<ChunkHTTP> ParserHTTP::ParseServer(
 		std::shared_ptr<SessionTCP> session) {
 	std::string *payload = session->Server->Payload->GetMaxSubString(0, 20000);
 	try {
@@ -72,17 +70,15 @@ std::shared_ptr<HTTP> ParserHTTP::ParseServer(
 
 		session->Follower = this->AsFollower();
 
-		std::cout << "server: " << code << " = " << message << "\n";
-
 		std::unique_ptr<HTTPResponse> response(new HTTPResponse(code, message, headers));
-		return (std::make_shared<HTTP>(session->BaseData, session->Server->Payload, session, nullptr, std::move(response)));
+		return (std::make_shared<ChunkHTTP>(session->BaseData, session->Server->Payload, session, nullptr, std::move(response)));
 	} catch (...) {
 		delete payload;
-		return (std::shared_ptr<HTTP>(nullptr));
+		return (std::shared_ptr<ChunkHTTP>(nullptr));
 	}
 }
 
-std::shared_ptr<HTTP> ParserHTTP::Process(std::shared_ptr<SessionTCP> session)
+std::shared_ptr<ChunkHTTP> ParserHTTP::Process(std::shared_ptr<SessionTCP> session)
 {
 	if (CheckClientFlow(session->Client)) {
 		return(ParseClient(session));
@@ -98,7 +94,7 @@ std::shared_ptr<HTTP> ParserHTTP::Process(std::shared_ptr<SessionTCP> session)
 	} else if (CheckServerFlow(session->Server)) {
 		return (ParseServer(session));
 	}
-	return (std::shared_ptr<HTTP>(nullptr));
+	return (std::shared_ptr<ChunkHTTP>(nullptr));
 }
 
 /**
@@ -120,7 +116,7 @@ std::string ParserHTTP::Description()
 }
 
 ParserHTTP::ParserHTTP()
-	: Processor<SessionTCP, HTTP>()
+	: Processor<SessionTCP, ChunkHTTP>()
 	, ReqCheckRe("^(GET|PUT|HEAD|POST|DELETE|TRACE|CONNECT) ", pcrecpp::RE_Options().set_caseless(true))
 	, ReqFirstLineRe("^(GET|PUT|HEAD|POST|DELETE|TRACE|CONNECT) +([^ ]+) +HTTP/[01]\\.[019]\r?\n", pcrecpp::RE_Options().set_caseless(true))
 	, RespCheckRe("^HTTP/[01]\\.[019] +\\d+ +\\S")

@@ -6,6 +6,7 @@
 #include <memory>
 #include "ChunkTCP.h"
 #include "../types/PhantomQuilt.h"
+#include "../types/Processor.h"
 
 enum tcp_session_state {
 	TCP_INITIAL,
@@ -142,7 +143,7 @@ public:
 	/**
 	 * Optional protocol processor for this session
 	 */
-	std::shared_ptr<Processor<SessionTCP, ChunkRaw> > Follower;
+	Processor<SessionTCP, void> *Follower;
 };
 
 #endif /* SRC_LEVELS_SESSIONTCP_H_ */

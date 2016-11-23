@@ -48,6 +48,10 @@ std::shared_ptr<SessionTCP> ParserSessionTCP::Process(std::shared_ptr<ChunkTCP> 
 		it->second->AddChunk(parent, IDGenerator.Next());
 		if ((it->second->Server->Payload != nullptr && it->second->Server->Payload->CoveredSize)
 			|| (it->second->Client->Payload != nullptr && it->second->Client->Payload->CoveredSize)) {
+			if (it->second->Follower != nullptr) {
+				it->second->Follower->Recursive(it->second);
+				return (std::shared_ptr<SessionTCP>(nullptr));
+			}
 			return (it->second);
 		} else {
 			return (std::shared_ptr<SessionTCP>(nullptr));

@@ -138,6 +138,11 @@ public:
 	 * Unique ID of the last event related to this session (used for garbage collection)
 	 */
 	unsigned long long LastInternalID;
+
+	/**
+	 * Optional protocol processor for this session
+	 */
+	std::shared_ptr<Processor<SessionTCP, ChunkRaw> > Follower;
 };
 
 #endif /* SRC_LEVELS_SESSIONTCP_H_ */

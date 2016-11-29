@@ -89,6 +89,7 @@ public:
 	 */
 	std::shared_ptr<SessionTCP> Process(std::shared_ptr<ChunkTCP> parent);
 
+	virtual void AfterProcess(std::shared_ptr<SessionTCP> &session);
 	virtual bool AfterRecursionHook(std::shared_ptr<SessionTCP> session, const std::exception *exn, bool found);
 
 	/**

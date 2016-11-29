@@ -15,7 +15,7 @@ std::string PrinterTCP::Description()
 std::shared_ptr<ChunkRaw> PrinterTCP::Process(std::shared_ptr<ChunkTCP> chunk)
 {
 	try {
-		std::string *payload = chunk->Payload->GetSubStringOrFail(0, 20);
+		std::string payload = chunk->Payload->GetSubStringOrFail(0, 20);
 		std::cout << "TCP srcp=" << chunk->SourcePort
 				<< " dstp=" << chunk->DestinationPort
 				<< " seq=" << chunk->SeqNumber
@@ -26,8 +26,6 @@ std::shared_ptr<ChunkRaw> PrinterTCP::Process(std::shared_ptr<ChunkTCP> chunk)
 				<< " length=" << chunk->PayloadLength
 				<< " content=" << payload[0]
 				<< "\n";
-
-		delete payload;
 	} catch (...) {
 		std::cout << "TCP srcp=" << chunk->SourcePort
 				<< " dstp=" << chunk->DestinationPort

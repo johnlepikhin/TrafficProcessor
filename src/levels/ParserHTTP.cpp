@@ -41,6 +41,7 @@ std::shared_ptr<ChunkHTTP> ParserHTTP::ParseClient(std::shared_ptr<SessionTCP> s
 		}
 
 		session->Follower = this->AsFollower();
+		session->ProtocolDetected = true;
 
 		std::unique_ptr<HTTPRequest> request(new HTTPRequest(host
 				, method
@@ -68,6 +69,7 @@ std::shared_ptr<ChunkHTTP> ParserHTTP::ParseServer(
 		}
 
 		session->Follower = this->AsFollower();
+		session->ProtocolDetected = true;
 
 		std::unique_ptr<HTTPResponse> response(new HTTPResponse(code, message, headers));
 		return (std::make_shared<ChunkHTTP>(session->BaseData, session->Server->Payload, session, nullptr, std::move(response)));

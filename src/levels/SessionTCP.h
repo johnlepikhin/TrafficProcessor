@@ -146,6 +146,11 @@ public:
 	 * Optional protocol processor for this session
 	 */
 	Processor<SessionTCP, void> *Follower;
+
+	/**
+	 * True if following protocol is detected
+	 */
+	bool ProtocolDetected = false;
 };
 
 #endif /* SRC_LEVELS_SESSIONTCP_H_ */

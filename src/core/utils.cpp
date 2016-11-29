@@ -90,6 +90,16 @@ namespace util {
 		return (r);
 	}
 
+	std::string toLower(const std::string &s)
+	{
+		std::string r;
+		r.resize(s.length());
+	    for (unsigned int i = 0; i < s.length(); i++)
+	    	r[i]=tolower(s[i]);
+
+	    return (r);
+	}
+
 	bool iequals(const std::string& a, const std::string& b)
 	{
 	    unsigned int sz = a.size();

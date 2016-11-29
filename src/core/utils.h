@@ -88,6 +88,13 @@ namespace util {
 	 * @return True if strings are equal
 	 */
 	bool iequals(const std::string& a, const std::string& b);
+
+	/**
+	 * Convert string to lowercase
+	 * @param s Source string
+	 * @return Lowercase version of s
+	 */
+	std::string toLower(const std::string &s);
 }
 
 #endif /* UTILS_H_ */

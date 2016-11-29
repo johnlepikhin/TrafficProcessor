@@ -15,14 +15,12 @@ std::string PrinterUDP::Description()
 std::shared_ptr<ChunkRaw> PrinterUDP::Process(std::shared_ptr<ChunkUDP> chunk)
 {
 	try {
-		std::string *payload = chunk->Payload->GetSubStringOrFail(0, 20);
+		std::string payload = chunk->Payload->GetSubStringOrFail(0, 20);
 		std::cout << "UDP srcp=" << chunk->SourcePort
 				<< " dstp=" << chunk->DestinationPort
 				<< " length=" << chunk->PayloadLength
 				<< " content=" << payload[0]
 				<< "\n";
-
-		delete payload;
 	} catch (...) {
 		std::cout << "TCP srcp=" << chunk->SourcePort
 				<< " dstp=" << chunk->DestinationPort

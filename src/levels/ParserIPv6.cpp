@@ -16,19 +16,17 @@ std::string ParserIPv6::Description()
 std::shared_ptr<ChunkIPv6> ParserIPv6::Process(std::shared_ptr<ChunkEtherNetDIX> parent)
 {
 	if (parent->EtherNetType == 0x86dd) {
-		std::string *tmp = parent->Payload->GetSubStringOrFail(0, 8);
-		unsigned char version = tmp->at(0) >> 4;
+		std::string tmp = parent->Payload->GetSubStringOrFail(0, 8);
+		unsigned char version = tmp[0] >> 4;
 		if (version == 6) {
 
-			unsigned char traffic_class = (tmp->at(0) >> 4) & 0xff;
-			unsigned long flow_label = (tmp->at(0) & 0xf) << 12;
-			flow_label &= (tmp->at(1) << 8) | tmp->at(2);
+			unsigned char traffic_class = (tmp[0] >> 4) & 0xff;
+			unsigned long flow_label = (tmp[0] & 0xf) << 12;
+			flow_label &= (tmp[1] << 8) | tmp[2];
 
-			unsigned long payloadLength = (((unsigned long)tmp->at(4)) << 8) | tmp->at(5);
-			unsigned char next_header = tmp->at(6);
-			unsigned char hop_limit = tmp->at(7);
-
-			delete tmp;
+			unsigned long payloadLength = (((unsigned long)tmp[4]) << 8) | tmp[5];
+			unsigned char next_header = tmp[6];
+			unsigned char hop_limit = tmp[7];
 
 			IPv6Addr srcAddr(*parent->Payload, 8);
 			IPv6Addr dstAddr(*parent->Payload, 0x18);
@@ -118,8 +116,6 @@ std::shared_ptr<ChunkIPv6> ParserIPv6::Process(std::shared_ptr<ChunkEtherNetDIX>
 					, hop_limit
 					, hdrFragment
 					, payloadLength));
-		} else {
-			delete tmp;
 		}
 	}
 

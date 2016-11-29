@@ -50,6 +50,7 @@ std::shared_ptr<SessionTCP> ParserSessionTCP::Process(std::shared_ptr<ChunkTCP> 
 			|| (it->second->Client->Payload != nullptr && it->second->Client->Payload->CoveredSize)) {
 			if (it->second->Follower != nullptr) {
 				it->second->Follower->Recursive(it->second);
+				AfterProcess(it->second);
 				return (std::shared_ptr<SessionTCP>(nullptr));
 			}
 			return (it->second);
@@ -59,6 +60,7 @@ std::shared_ptr<SessionTCP> ParserSessionTCP::Process(std::shared_ptr<ChunkTCP> 
 	} else {
 		std::shared_ptr<SessionTCP> sessionTCP = std::make_shared<SessionTCP>(parent->BaseData, parent, IDGenerator.Next(), IsFuzzy);
 		SessionsCollector.insert(std::make_pair(key, sessionTCP));
+		AfterProcess(sessionTCP);
 		return (std::shared_ptr<SessionTCP>(nullptr));
 	}
 }
@@ -90,7 +92,7 @@ void ParserSessionTCP::GarbageCollector()
 	}
 }
 
-bool ParserSessionTCP::AfterRecursionHook(std::shared_ptr<SessionTCP> session, const std::exception *exn, bool found)
+void ParserSessionTCP::AfterProcess(std::shared_ptr<SessionTCP> &session)
 {
 	if (session != nullptr) {
 		// prevent access of followers to already processed data
@@ -105,6 +107,12 @@ bool ParserSessionTCP::AfterRecursionHook(std::shared_ptr<SessionTCP> session, c
 			GarbageCollector();
 		}
 	}
+}
+
+bool ParserSessionTCP::AfterRecursionHook(std::shared_ptr<SessionTCP> session, const std::exception *exn, bool found)
+{
+	if (session != nullptr)
+		AfterProcess(session);
 
 	return (found);
 }

@@ -105,6 +105,8 @@ public:
 
 	void GarbageCollector();
 
+	bool IsFuzzy = false;
+
 	unsigned long long DeleteClosedAfter = 1000;
 	unsigned long long DeleteClosingAfter = 1000;
 	unsigned long long DeleteInactiveAfter = 20000;

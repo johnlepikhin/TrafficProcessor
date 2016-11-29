@@ -24,7 +24,8 @@ inline bool isSameSource(chunkptr &chunk, EndPoint endpoint) {
 
 SessionTCP::SessionTCP(BaseQuilt baseData
 		, std::shared_ptr<ChunkTCP> parent
-		, unsigned long long lastInternalID)
+		, unsigned long long lastInternalID
+		, bool isFuzzy)
 	: Chunk(baseData, nullptr, parent)
 	, State(TCP_INITIAL)
 	, LastInternalID(lastInternalID)
@@ -33,7 +34,7 @@ SessionTCP::SessionTCP(BaseQuilt baseData
 	S_EP = std::make_shared<EndPoint>();
 	Server = S_EP;
 	Client = C_EP;
-	AddChunk(parent, lastInternalID);
+	AddChunk(parent, lastInternalID, isFuzzy);
 	Follower = nullptr;
 }
 
@@ -51,14 +52,14 @@ void EndPoint::ResetPayload()
 	PreviewCreated = false;
 }
 
-std::shared_ptr<std::string> EndPoint::GetPayloadPreview()
+std::string EndPoint::GetPayloadPreview()
 {
 	if (Payload == nullptr) {
-		return (std::shared_ptr<std::string>(nullptr));
+		return ("");
 	} else {
 		if (!PreviewCreated) {
 			PreviewCreated = true;
-			PayloadPreview = std::shared_ptr<std::string>(Payload->GetMaxSubString(0, 20));
+			PayloadPreview = Payload->GetMaxSubString(0, 20);
 		}
 		return (PayloadPreview);
 	}
@@ -90,6 +91,31 @@ void SessionTCP::AssignEndPoints(chunkptr &chunk, std::shared_ptr<EndPoint> corr
 		SwapFlows();
 	} else if (other->LastChunk != nullptr && isSameSource(other->LastChunk, chunk)) {
 		SwapFlows();
+	}
+}
+
+std::shared_ptr<EndPoint> SessionTCP::DetectEndPoint(chunkptr &chunk)
+{
+	if (C_EP->LastChunk == nullptr && S_EP->LastChunk == nullptr) {
+		return (C_EP);
+	} else if (C_EP->LastChunk == nullptr) {
+		if (isSameSource(S_EP->LastChunk, chunk)) {
+			return (S_EP);
+		} else {
+			return (C_EP);
+		}
+	} else if (S_EP->LastChunk == nullptr) {
+		if (isSameSource(C_EP->LastChunk, chunk)) {
+			return (C_EP);
+		} else {
+			return (S_EP);
+		}
+	} else {
+		if (isSameSource(C_EP->LastChunk, chunk)) {
+			return (C_EP);
+		} else {
+			return (S_EP);
+		}
 	}
 }
 
@@ -137,10 +163,19 @@ void SessionTCP::AppendPayload(chunkptr &chunk, std::shared_ptr<EndPoint> endpoi
 	endpoint->Payload->SewWithHole(chunk->Payload, endpoint->Payload->Length, chunk->PayloadLength);
 }
 
-void SessionTCP::AddChunk(std::shared_ptr<ChunkTCP> chunk, unsigned long long newLastInternalID)
+void SessionTCP::AddChunk(std::shared_ptr<ChunkTCP> chunk
+		, unsigned long long newLastInternalID
+		, bool isFuzzy)
 {
 	LastInternalID = newLastInternalID;
 	FillEndPoint(chunk);
+
+	if (isFuzzy) {
+		std::shared_ptr<EndPoint> ep = DetectEndPoint(chunk);
+		AppendPayload(chunk, ep);
+		return;
+	}
+
 	Inbox.insert(std::make_pair(chunk->SeqNumber, chunk));
 
 	while (1) {

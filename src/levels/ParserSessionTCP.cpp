@@ -45,7 +45,7 @@ std::shared_ptr<SessionTCP> ParserSessionTCP::Process(std::shared_ptr<ChunkTCP> 
 	SessionID key(parent);
 	auto it = SessionsCollector.find(key);
 	if (it != SessionsCollector.end()) {
-		it->second->AddChunk(parent, IDGenerator.Next());
+		it->second->AddChunk(parent, IDGenerator.Next(), IsFuzzy);
 		if ((it->second->Server->Payload != nullptr && it->second->Server->Payload->CoveredSize)
 			|| (it->second->Client->Payload != nullptr && it->second->Client->Payload->CoveredSize)) {
 			if (it->second->Follower != nullptr) {
@@ -57,7 +57,7 @@ std::shared_ptr<SessionTCP> ParserSessionTCP::Process(std::shared_ptr<ChunkTCP> 
 			return (std::shared_ptr<SessionTCP>(nullptr));
 		}
 	} else {
-		std::shared_ptr<SessionTCP> sessionTCP = std::make_shared<SessionTCP>(parent->BaseData, parent, IDGenerator.Next());
+		std::shared_ptr<SessionTCP> sessionTCP = std::make_shared<SessionTCP>(parent->BaseData, parent, IDGenerator.Next(), IsFuzzy);
 		SessionsCollector.insert(std::make_pair(key, sessionTCP));
 		return (std::shared_ptr<SessionTCP>(nullptr));
 	}
@@ -96,6 +96,10 @@ bool ParserSessionTCP::AfterRecursionHook(std::shared_ptr<SessionTCP> session, c
 		// prevent access of followers to already processed data
 		session->Client->ResetPayload();
 		session->Server->ResetPayload();
+
+		if (session->Inbox.size() > 4) {
+			IsFuzzy = true;
+		}
 
 		if (IDGenerator.Get() % 1000 == 0) {
 			GarbageCollector();

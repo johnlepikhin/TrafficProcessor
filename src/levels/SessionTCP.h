@@ -26,7 +26,7 @@ typedef std::shared_ptr<ChunkTCP> chunkptr;
 class EndPoint
 {
 private:
-	std::shared_ptr<std::string> PayloadPreview;
+	std::string PayloadPreview;
 	bool PreviewCreated = false;
 public:
 	EndPoint();
@@ -41,7 +41,7 @@ public:
 	 * Get first 20 bytes of payload. This fragment is cached, so method is very fast.
 	 * @return First 20 bytes of payload
 	 */
-	std::shared_ptr<std::string> GetPayloadPreview();
+	std::string GetPayloadPreview();
 
 	/**
 	 * Pointer to optional next data in the flow
@@ -77,13 +77,13 @@ private:
 	typedef unsigned long SeqT;
 	typedef std::map<SeqT, std::shared_ptr<ChunkTCP> > InboxT;
 
-	InboxT Inbox;
 
 	chunkptr PopChunk(
 			const std::function <bool (chunkptr &candidate)> &filter, bool erase = true);
 
 	void AssignEndPoints(chunkptr &chunk, std::shared_ptr<EndPoint> correct, std::shared_ptr<EndPoint> other);
 	void FillEndPoint(chunkptr &chunk);
+	std::shared_ptr<EndPoint> DetectEndPoint(chunkptr &chunk);
 	void AppendPayload(chunkptr &chunk, std::shared_ptr<EndPoint> endpoint);
 
 	std::shared_ptr<EndPoint> C_EP, S_EP;
@@ -96,14 +96,17 @@ public:
 	 */
 	SessionTCP(BaseQuilt baseData
 			, chunkptr parent
-			, unsigned long long lastInternalID);
+			, unsigned long long lastInternalID
+			, bool isFuzzy);
 
 	/**
 	 * Add TCP fragment to this session
 	 * @param chunk TCP fragment
 	 * @param newLastInternalID Unique ID of this event
 	 */
-	void AddChunk(chunkptr chunk, unsigned long long newLastInternalID);
+	void AddChunk(chunkptr chunk
+			, unsigned long long newLastInternalID
+			, bool isFuzzy);
 
 	// public because followers can also detect direction and swap flows
 	/**
@@ -112,8 +115,7 @@ public:
 	void SwapFlows();
 
 
-//	void CutFlowToNextChunk(Flow flow);
-//	void CheckFlowTimeOut(EndPoint &flow, EndPoint &otherFlow);
+	InboxT Inbox;
 
 	/**
 	 * Current state of the session

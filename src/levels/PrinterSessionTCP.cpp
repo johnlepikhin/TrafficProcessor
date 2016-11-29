@@ -16,10 +16,8 @@ std::string PrinterSessionTCP::Description()
 void PrintFlow(std::shared_ptr<EndPoint> flow, const std::string &who) {
 	try {
 		if (flow->Payload != nullptr && flow->Payload->CoveredSize) {
-			std::string *payload = flow->Payload->GetMaxSubString(0, 20000);
+			std::string payload = flow->Payload->GetMaxSubString(0, 20000);
 			std::cout << "TCP " << who << " says:\n" << payload[0] << "\n\n";
-
-			delete payload;
 		}
 	} catch (...) {
 

@@ -6,8 +6,8 @@
 bool ParserHTTP::CheckClientFlow(std::shared_ptr<EndPoint> flow) {
 	try {
 		if (flow->Payload.get() != nullptr && flow->Payload->CoveredSize) {
-			std::string *preview = flow->GetPayloadPreview().get();
-			return (ReqCheckRe.PartialMatch(*preview));
+			std::string preview = flow->GetPayloadPreview();
+			return (ReqCheckRe.PartialMatch(preview));
 		}
 	} catch (...) {
 	}
@@ -17,8 +17,8 @@ bool ParserHTTP::CheckClientFlow(std::shared_ptr<EndPoint> flow) {
 bool ParserHTTP::CheckServerFlow(std::shared_ptr<EndPoint> flow) {
 	try {
 		if (flow->Payload.get() != nullptr && flow->Payload->CoveredSize) {
-			std::string *preview = flow->GetPayloadPreview().get();
-			return (RespCheckRe.PartialMatch(*preview));
+			std::string preview = flow->GetPayloadPreview();
+			return (RespCheckRe.PartialMatch(preview));
 		}
 	} catch (...) {
 	}
@@ -26,9 +26,9 @@ bool ParserHTTP::CheckServerFlow(std::shared_ptr<EndPoint> flow) {
 }
 
 std::shared_ptr<ChunkHTTP> ParserHTTP::ParseClient(std::shared_ptr<SessionTCP> session) {
-	std::string *payload = session->Client->Payload->GetMaxSubString(0, 20000);
 	try {
-		pcrecpp::StringPiece input(*payload);
+		std::string payload = session->Client->Payload->GetMaxSubString(0, 20000);
+		pcrecpp::StringPiece input(payload);
 		std::string method, uri;
 		ReqFirstLineRe.FindAndConsume(&input, &method, &uri);
 		std::string key, value;
@@ -49,16 +49,15 @@ std::shared_ptr<ChunkHTTP> ParserHTTP::ParseClient(std::shared_ptr<SessionTCP> s
 
 		return (std::make_shared<ChunkHTTP>(session->BaseData, session->Client->Payload, session, std::move(request), nullptr));
 	} catch (...) {
-		delete payload;
 		return (std::shared_ptr<ChunkHTTP>(nullptr));
 	}
 }
 
 std::shared_ptr<ChunkHTTP> ParserHTTP::ParseServer(
 		std::shared_ptr<SessionTCP> session) {
-	std::string *payload = session->Server->Payload->GetMaxSubString(0, 20000);
 	try {
-		pcrecpp::StringPiece input(*payload);
+		std::string payload = session->Server->Payload->GetMaxSubString(0, 20000);
+		pcrecpp::StringPiece input(payload);
 		int code;
 		std::string message;
 		RespFirstLineRe.FindAndConsume(&input, &code, &message);
@@ -73,7 +72,6 @@ std::shared_ptr<ChunkHTTP> ParserHTTP::ParseServer(
 		std::unique_ptr<HTTPResponse> response(new HTTPResponse(code, message, headers));
 		return (std::make_shared<ChunkHTTP>(session->BaseData, session->Server->Payload, session, nullptr, std::move(response)));
 	} catch (...) {
-		delete payload;
 		return (std::shared_ptr<ChunkHTTP>(nullptr));
 	}
 }

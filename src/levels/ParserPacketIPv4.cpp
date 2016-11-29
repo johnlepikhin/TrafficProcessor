@@ -91,7 +91,8 @@ bool ParserPacketIPv4::AfterRecursionHook(std::shared_ptr<PacketIPVariant> packe
 
 std::shared_ptr<PacketIPVariant> ParserPacketIPv4::Process(std::shared_ptr<ChunkIPv4> parent)
 {
-	return (IPCollector.AddChunk(parent, IDGenerator.Next()));
+	std::shared_ptr<PacketIPVariant> r = IPCollector.AddChunk(parent, IDGenerator.Next());
+	return (r);
 }
 
 std::string ParserPacketIPv4::ID()

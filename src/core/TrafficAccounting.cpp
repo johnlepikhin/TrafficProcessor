@@ -39,12 +39,14 @@
 
 #include "../levels/LeafProcessor.h"
 #include "../levels/ParserHTTP.h"
+#include "../levels/ParserPacketMySQL.h"
 
 using namespace std;
 
 static ParserEtherNet generateParseTree()
 {
-	ParserHTTP *parserHTTP = new ParserHTTP();
+//	ParserHTTP *parserHTTP = new ParserHTTP();
+	ParserPacketMySQL *parserMySQL = new ParserPacketMySQL();
 
 
 //	ParserUDP *parserUDP = new ParserUDP();
@@ -54,7 +56,8 @@ static ParserEtherNet generateParseTree()
 //	PrinterSessionTCP *printerSessionTCP = new PrinterSessionTCP();
 
 	ParserSessionTCP *parserSessionTCP = new ParserSessionTCP();
-	parserSessionTCP->AddFollower(parserHTTP->AsFollower());
+//	parserSessionTCP->AddFollower(parserHTTP->AsFollower());
+	parserSessionTCP->AddFollower(parserMySQL->AsFollower());
 //	parserSessionTCP->AddFollower(printerSessionTCP->AsFollower());
 
 //	PrinterTCP *printerTCP = new PrinterTCP();

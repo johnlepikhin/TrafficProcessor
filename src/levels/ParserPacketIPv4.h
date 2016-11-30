@@ -18,7 +18,7 @@ public:
 	/**
 	 * Unique ID of the event when last fragment was received for this IP packet
 	 */
-	uint64_t LastInternalID;
+	uint64_t LastInternalID; //-V122
 };
 
 /**
@@ -75,7 +75,7 @@ public:
 
 private:
 	IPPairMap IPCollector;
-	uint64_t DeleteInactiveAfter = 10000;
+	uint64_t DeleteInactiveAfter = 10000; //-V122
 	Counter IDGenerator;
 };
 

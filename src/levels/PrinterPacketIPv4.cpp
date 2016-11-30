@@ -13,13 +13,14 @@ std::string PrinterPacketIPv4::Description()
 	return (std::string("IPv4 packet printer"));
 }
 
-std::shared_ptr<ChunkRaw> PrinterPacketIPv4::Process(std::shared_ptr<PacketIPv4> packet)
+std::shared_ptr<ChunkRaw> PrinterPacketIPv4::Process(const std::shared_ptr<PacketIPv4> &packet)
 {
 	if (packet->IsComplete) {
-		std::cout << "IPv4_Packet " << IPv4Addr::asString(packet->Parent->SrcIP)
-				<< " " << IPv4Addr::asString(packet->Parent->DstIP)
-				<< " ID=" << packet->Parent->ID
-				<< " Protocol=" << (int)packet->Parent->Protocol
+		ChunkIPv4 *parent = packet->Parent.get();
+		std::cout << "IPv4_Packet " << IPv4Addr::asString(parent->SrcIP)
+				<< " " << IPv4Addr::asString(parent->DstIP)
+				<< " ID=" << parent->ID
+				<< " Protocol=" << static_cast<uint32_t>(parent->Protocol)
 				<< " packetLength=" << packet->ExpectedSize
 				<< " dataLength=" << packet->ReceivedSize
 				<< " ifaceLength=" << packet->RawIfaceLength

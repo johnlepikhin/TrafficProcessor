@@ -13,7 +13,7 @@ std::string PrinterEtherNetRAW::Description()
 	return (std::string("EtherNetRAW frame printer"));
 }
 
-std::shared_ptr<ChunkRaw> PrinterEtherNetRAW::Process(std::shared_ptr<ChunkEtherNetRAW> raw)
+std::shared_ptr<ChunkRaw> PrinterEtherNetRAW::Process(const std::shared_ptr<ChunkEtherNetRAW> &raw)
 {
 	std::cout << "EtherNetRAW " << MAC::asString(raw->Parent->SourceMAC)
 		<< " -> " << MAC::asString(raw->Parent->DestinationMAC)

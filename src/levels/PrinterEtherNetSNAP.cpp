@@ -13,7 +13,7 @@ std::string PrinterEtherNetSNAP::Description()
 	return (std::string("EtherNetSNAP frame printer"));
 }
 
-std::shared_ptr<ChunkRaw> PrinterEtherNetSNAP::Process(std::shared_ptr<ChunkEtherNetSNAP> snap)
+std::shared_ptr<ChunkRaw> PrinterEtherNetSNAP::Process(const std::shared_ptr<ChunkEtherNetSNAP> &snap)
 {
 	std::cout << "EtherNetSNAP " << MAC::asString(snap->Parent->SourceMAC)
 		<< " -> " << MAC::asString(snap->Parent->DestinationMAC)

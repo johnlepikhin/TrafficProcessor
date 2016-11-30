@@ -12,6 +12,7 @@ bool ParserHTTP::CheckClientFlow(const std::shared_ptr<EndPoint> &flow) {
 			return (ReqCheckRe.PartialMatch(preview));
 		}
 	} catch (...) {
+		return (false);
 	}
 	return (false);
 }
@@ -23,6 +24,7 @@ bool ParserHTTP::CheckServerFlow(const std::shared_ptr<EndPoint> &flow) {
 			return (RespCheckRe.PartialMatch(preview));
 		}
 	} catch (...) {
+		return (false);
 	}
 	return (false);
 }

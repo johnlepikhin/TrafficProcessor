@@ -16,7 +16,7 @@ class PrinterSessionTCP: public Processor<SessionTCP, ChunkRaw> {
 	 * @param parent Optional reference to TCP session. Payload in endpoints can be nullptr!
 	 * @return NULL
 	 */
-	std::shared_ptr<ChunkRaw> Process(std::shared_ptr<SessionTCP> session);
+	std::shared_ptr<ChunkRaw> Process(const std::shared_ptr<SessionTCP> &session);
 
 	/**
 	 * Returns unique ID for this Printer

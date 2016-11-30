@@ -32,12 +32,12 @@ SessionID::SessionID(const std::shared_ptr<ChunkTCP> &chunk)
 		}
 	}
 
-	std::size_t b1 = (std::size_t)IP1.back() << (8*2*3);
-	std::size_t b2 = (std::size_t)IP1.back() << (8*2*2+1);
-	std::size_t b3 = (std::size_t)IP2.back() << (8*2*2);
-	std::size_t b4 = (std::size_t)IP2.back() << (8*2*1+1);
-	std::size_t s3 = (std::size_t)Port1 << (8*2*1);
-	std::size_t s4 = Port2;
+	uint64_t b1 = static_cast<uint64_t>(IP1.back()) << (8*2*3);
+	uint64_t b2 = static_cast<uint64_t>(IP1.back()) << (8*2*2+1);
+	uint64_t b3 = static_cast<uint64_t>(IP2.back()) << (8*2*2);
+	uint64_t b4 = static_cast<uint64_t>(IP2.back()) << (8*2*1+1);
+	uint64_t s3 = static_cast<uint64_t>(Port1) << (8*2*1);
+	uint64_t s4 = Port2;
 
 	Hash = b1 | b2 | b3 | b4 | s3 | s4;
 }
@@ -47,11 +47,12 @@ std::shared_ptr<SessionTCP> ParserSessionTCP::Process(const std::shared_ptr<Chun
 	SessionID key(parent);
 	auto it = SessionsCollector.find(key);
 	if (it != SessionsCollector.end()) {
-		it->second->AddChunk(parent, IDGenerator.Next(), IsFuzzy);
-		if ((it->second->Server->Payload != nullptr && it->second->Server->Payload->CoveredSize)
-			|| (it->second->Client->Payload != nullptr && it->second->Client->Payload->CoveredSize)) {
-			if (it->second->Follower != nullptr) {
-				it->second->Follower->Recursive(it->second);
+		SessionTCP *session = it->second.get();
+		session->AddChunk(parent, IDGenerator.Next(), IsFuzzy);
+		if ((session->Server->Payload != nullptr && session->Server->Payload->CoveredSize)
+			|| (session->Client->Payload != nullptr && session->Client->Payload->CoveredSize)) {
+			if (session->Follower != nullptr) {
+				session->Follower->Recursive(it->second);
 				AfterProcess(it->second);
 				return (std::shared_ptr<SessionTCP>(nullptr));
 			}
@@ -76,19 +77,19 @@ void ParserSessionTCP::GarbageCollector()
 			if (diff > DeleteClosedAfter) {
 				it = SessionsCollector.erase(it);
 			} else {
-				it++;
+				++it;
 			}
 		} else if (it->second->State == TCP_BYE1 || it->second->State == TCP_BYE2) {
 			if (diff > DeleteClosingAfter) {
 				it = SessionsCollector.erase(it);
 			} else {
-				it++;
+				++it;
 			}
 		} else {
 			if (diff > DeleteInactiveAfter) {
 				it = SessionsCollector.erase(it);
 			} else {
-				it++;
+				++it;
 			}
 		}
 	}

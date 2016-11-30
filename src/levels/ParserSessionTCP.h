@@ -37,7 +37,7 @@ public:
 	/**
 	 * Hash value of IPs+ports
 	 */
-	std::size_t Hash;
+	uint64_t Hash; //-V122
 
 	/**
 	 * Compare this session ID with another

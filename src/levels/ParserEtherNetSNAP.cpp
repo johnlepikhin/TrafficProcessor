@@ -22,7 +22,7 @@ std::shared_ptr<ChunkEtherNetSNAP> ParserEtherNetSNAP::Process(const std::shared
 		unsigned int b3 = ethernet->Payload->GetShortLEOrFail(3);
 		if (0xaaaa03 == b3) {
 			unsigned int oui = 0;
-			ethernet->Payload->CopyBytesOrFail((char *)&oui+1, 2, 3);
+			ethernet->Payload->CopyBytesOrFail(reinterpret_cast<char *>(&oui+1), 2, 3); //-V206
 			unsigned short pid = ethernet->Payload->GetShortLEOrFail(5);
 
 			PayloadQuilt payload = std::make_shared<CPayloadQuilt>(ethernet->Payload, 8);

@@ -17,16 +17,17 @@ std::shared_ptr<ChunkRaw> PrinterIPv6::Process(std::shared_ptr<ChunkIPv6> ipv6)
 {
 	std::string srcIP = ipv6->SrcIP.AsString();
 	std::string dstIP = ipv6->DstIP.AsString();
+	IPv6HeaderFragment *hdrFragment = ipv6->HdrFragment.get();
 	std::cout << "IPv6 " << srcIP
 		<< " " << dstIP
-		<< " flowLabel=" << (unsigned long)ipv6->FlowLabel
-		<< " hopLimit=" << (unsigned long)ipv6->HopLimit
-		<< " payloadLength=" << (unsigned long)ipv6->PayloadLength
-		<< " protocol=" << (unsigned long)ipv6->Protocol
-		<< " trafficClass=" << (unsigned long)ipv6->TrafficClass
-		<< " fragment_offset=" << (unsigned long)ipv6->HdrFragment->FragmentOffset
-		<< " fragment_has_next=" << (unsigned long)ipv6->HdrFragment->HasNextFragments
-		<< " fragment_packet_id=" << (unsigned long)ipv6->HdrFragment->PacketID
+		<< " flowLabel=" << static_cast<uint32_t>(ipv6->FlowLabel)
+		<< " hopLimit=" << static_cast<uint32_t>(ipv6->HopLimit)
+		<< " payloadLength=" << static_cast<uint32_t>(ipv6->PayloadLength)
+		<< " protocol=" << static_cast<uint32_t>(ipv6->Protocol)
+		<< " trafficClass=" << static_cast<uint32_t>(ipv6->TrafficClass)
+		<< " fragment_offset=" << static_cast<uint32_t>(hdrFragment->FragmentOffset)
+		<< " fragment_has_next=" << static_cast<uint32_t>(hdrFragment->HasNextFragments)
+		<< " fragment_packet_id=" << static_cast<uint32_t>(hdrFragment->PacketID)
 		<< "\n";
 
 	return (std::shared_ptr<ChunkRaw>(nullptr));

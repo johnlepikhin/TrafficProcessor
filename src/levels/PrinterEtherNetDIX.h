@@ -18,7 +18,7 @@ public:
 	 * @param dix Reference to DIX chunk
 	 * @return NULL
 	 */
-	std::shared_ptr<ChunkRaw> Process(std::shared_ptr<ChunkEtherNetDIX> dix);
+	std::shared_ptr<ChunkRaw> Process(const std::shared_ptr<ChunkEtherNetDIX> &dix);
 
 	/**
 	 * Returns unique ID for this Printer

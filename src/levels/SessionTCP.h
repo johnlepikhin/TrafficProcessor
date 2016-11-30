@@ -61,12 +61,12 @@ public:
 	/**
 	 * Amount of all received bytes in this TCP flow, including ethernet and IP headers
 	 */
-	unsigned long long RawIfaceBytes;
+	uint64_t RawIfaceBytes; //-V122
 
 	/**
 	 * Next expected sequence number
 	 */
-	unsigned long NextExpectedSEQ;
+	uint32_t NextExpectedSEQ;
 };
 
 /**
@@ -74,7 +74,7 @@ public:
  */
 class SessionTCP: public Chunk<ChunkTCP> {
 private:
-	typedef unsigned long SeqT;
+	typedef uint32_t SeqT;
 	typedef std::map<SeqT, std::shared_ptr<ChunkTCP> > InboxT;
 
 
@@ -145,7 +145,7 @@ public:
 	/**
 	 * Optional protocol processor for this session
 	 */
-	Processor<SessionTCP, void> *Follower;
+	Processor<SessionTCP, void> *Follower; //-V122
 
 	/**
 	 * True if following protocol is detected

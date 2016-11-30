@@ -22,12 +22,11 @@ void PrintFlow(std::shared_ptr<EndPoint> flow, const std::string &who) {
 			std::cout << "TCP " << who << " says:\n" << payload[0] << "\n\n";
 		}
 	} catch (...) {
-
+		return;
 	}
-
 }
 
-std::shared_ptr<ChunkRaw> PrinterSessionTCP::Process(std::shared_ptr<SessionTCP> session)
+std::shared_ptr<ChunkRaw> PrinterSessionTCP::Process(const std::shared_ptr<SessionTCP> &session)
 {
 	PrintFlow(session->Client, "client");
 	PrintFlow(session->Server, "server");

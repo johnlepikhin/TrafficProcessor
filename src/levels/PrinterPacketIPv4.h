@@ -15,7 +15,7 @@ class PrinterPacketIPv4: public Processor<PacketIPv4, ChunkRaw> {
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL
 	 */
-	std::shared_ptr<ChunkRaw> Process(std::shared_ptr<PacketIPv4> parent);
+	std::shared_ptr<ChunkRaw> Process(const std::shared_ptr<PacketIPv4> &parent);
 
 	/**
 	 * Returns unique ID for this Printer

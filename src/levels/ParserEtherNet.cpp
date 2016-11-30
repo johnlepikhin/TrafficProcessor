@@ -22,7 +22,7 @@ std::shared_ptr<ChunkEtherNet> ParserEtherNet::Process(const BaseQuilt &data)
 	unsigned long long SA = MAC::Make(buf, 6);
 
 	unsigned short eType;
-	buf.copy((char *)&eType, 2, 12);
+	buf.copy(reinterpret_cast<char *>(&eType), 2, 12);
 	eType = (eType << 8) | (eType >> 8);
 
 	PayloadQuilt payload = std::make_shared<CPayloadQuilt>(data, 14);

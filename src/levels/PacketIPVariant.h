@@ -16,7 +16,8 @@ public:
 	 * @param ipv4 Optional pointer to IPv4 fragment
 	 * @param ipv6 Optional pointer to IPv6 fragment
 	 */
-	PacketIPVariant(std::shared_ptr<PacketIPv4> ipv4, std::shared_ptr<ChunkIPv6> ipv6);
+	PacketIPVariant(const std::shared_ptr<PacketIPv4> &ipv4
+			, const std::shared_ptr<ChunkIPv6> &ipv6);
 
 	/**
 	 * Optional pointer to IPv4 fragment

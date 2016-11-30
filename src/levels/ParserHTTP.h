@@ -19,10 +19,10 @@ private:
 	pcrecpp::RE RespCheckRe;
 	pcrecpp::RE RespFirstLineRe;
 	pcrecpp::RE HeaderLineRe;
-	bool CheckClientFlow(std::shared_ptr<EndPoint> flow);
-	std::shared_ptr<ChunkHTTP> ParseClient(std::shared_ptr<SessionTCP> session);
-	bool CheckServerFlow(std::shared_ptr<EndPoint> flow);
-	std::shared_ptr<ChunkHTTP> ParseServer(std::shared_ptr<SessionTCP> session);
+	bool CheckClientFlow(const std::shared_ptr<EndPoint> &flow);
+	std::shared_ptr<ChunkHTTP> ParseClient(const std::shared_ptr<SessionTCP> &session);
+	bool CheckServerFlow(const std::shared_ptr<EndPoint> &flow);
+	std::shared_ptr<ChunkHTTP> ParseServer(const std::shared_ptr<SessionTCP> &session);
 public:
 	ParserHTTP();
 
@@ -31,7 +31,7 @@ public:
 	 * @param session Reference to TCP session
 	 * @return NULL or parsed chunk
 	 */
-	std::shared_ptr<ChunkHTTP> Process(std::shared_ptr<SessionTCP> session);
+	std::shared_ptr<ChunkHTTP> Process(const std::shared_ptr<SessionTCP> &session);
 
 	/**
 	 * Returns unique ID for this Parser

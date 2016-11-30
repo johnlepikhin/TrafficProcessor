@@ -7,3 +7,4 @@ proj_files.lnt
 .cproject
 .settings
 dumps
+/Debug executable/

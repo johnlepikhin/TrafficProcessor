@@ -25,9 +25,9 @@ public:
 	 * @param sourcePort Source TCP port
 	 * @param destinationPort Destination TCP port
 	 */
-	ChunkTCP(BaseQuilt baseData
-			, PayloadQuilt payload
-			, std::shared_ptr<PacketIPVariant> parent
+	ChunkTCP(const BaseQuilt &baseData
+			, const PayloadQuilt &payload
+			, const std::shared_ptr<PacketIPVariant> &parent
 			, const uint16_t pktLength
 			, const uint16_t headerLength
 			, const uint16_t payloadLength

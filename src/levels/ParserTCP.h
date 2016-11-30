@@ -16,7 +16,7 @@ class ParserTCP: public Processor<PacketIPVariant, ChunkTCP> {
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	std::shared_ptr<ChunkTCP> Process(std::shared_ptr<PacketIPVariant> parent);
+	std::shared_ptr<ChunkTCP> Process(const std::shared_ptr<PacketIPVariant> &parent);
 
 	/**
 	 * Returns unique ID for this Parser

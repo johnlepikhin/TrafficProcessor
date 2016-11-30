@@ -26,9 +26,9 @@ public:
 	 * @param parent Reference to TCP session
 	 * @param request HTTP request
 	 */
-	PacketMySQL(BaseQuilt baseData
-		, PayloadQuilt payload
-		, std::shared_ptr<SessionTCP> parent
+	PacketMySQL(const BaseQuilt &baseData
+		, const PayloadQuilt &payload
+		, const std::shared_ptr<SessionTCP> &parent
 		, std::unique_ptr<MySQLRequest> request
 		, std::unique_ptr<MySQLResponse> response
 		, uint32_t packetLength);

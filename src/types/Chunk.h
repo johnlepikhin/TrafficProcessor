@@ -18,7 +18,7 @@ public:
 	 * @param baseData Reference to original data chunk
 	 * @param payload Reference to payload
 	 */
-	ChunkTraits(BaseQuilt baseData, PayloadQuilt payload)
+	ChunkTraits(const BaseQuilt &baseData, const PayloadQuilt &payload)
 		: BaseData(baseData)
 		, Payload(payload) {};
 
@@ -46,7 +46,7 @@ public:
 	 * @param payload Reference to contained data piece
 	 * @param parent Reference to parent Chunk
 	 */
-	Chunk(BaseQuilt baseData, PayloadQuilt payload, std::shared_ptr<PARENT> parent)
+	Chunk(const BaseQuilt &baseData, const PayloadQuilt &payload, const std::shared_ptr<PARENT> &parent)
 		: ChunkTraits(baseData, payload)
 		, Parent(parent) {}
 
@@ -55,7 +55,7 @@ public:
 	 * @param baseData Reference to original data piece
 	 * @param payload Reference to contained data piece
 	 */
-	Chunk(BaseQuilt baseData, PayloadQuilt payload)
+	Chunk(const BaseQuilt &baseData, const PayloadQuilt &payload)
 		: ChunkTraits(baseData, payload)
 		, Parent(std::shared_ptr<PARENT>(nullptr)) {}
 

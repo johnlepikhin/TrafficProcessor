@@ -1,12 +1,14 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "PacketIPv4.h"
 #include <sparsed-ropes/Quilt.h>
 
 #include "../types/Chunk.h"
 
-PacketIPv4::PacketIPv4(BaseQuilt baseData
-		, PayloadQuilt payload
-		, std::shared_ptr<ChunkIPv4> parent)
+PacketIPv4::PacketIPv4(const BaseQuilt &baseData
+		, const PayloadQuilt &payload
+		, const std::shared_ptr<ChunkIPv4> &parent)
 	: Chunk(baseData, payload, parent)
 	, IsComplete(false)
 	, ReceivedSize(0)
@@ -16,7 +18,7 @@ PacketIPv4::PacketIPv4(BaseQuilt baseData
 	AddChunk(parent);
 }
 
-bool PacketIPv4::AddChunk(std::shared_ptr<ChunkIPv4> chunk)
+bool PacketIPv4::AddChunk(const std::shared_ptr<ChunkIPv4> &chunk)
 {
 	Payload->SewWithHole(chunk->Payload, chunk->FragmentOffset, chunk->PayloadLength);
 	RawIfaceLength += chunk->BaseData->Length;

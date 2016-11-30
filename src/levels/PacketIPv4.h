@@ -15,16 +15,16 @@ public:
 	 * @param payload Reference to payload of this frame
 	 * @param parent Optional reference to parent Chunk
 	 */
-	PacketIPv4(BaseQuilt baseData
-			, PayloadQuilt payload
-			, std::shared_ptr<ChunkIPv4> parent);
+	PacketIPv4(const BaseQuilt &baseData
+			, const PayloadQuilt &payload
+			, const std::shared_ptr<ChunkIPv4> &parent);
 
 	/**
 	 * Add IPv4 fragment to the packet
 	 * @param chunk IPv4 fragment
 	 * @return True if all expected fragments are registered within this packet
 	 */
-	bool AddChunk(std::shared_ptr<ChunkIPv4> chunk);
+	bool AddChunk(const std::shared_ptr<ChunkIPv4> &chunk);
 
 	/**
 	 * True if all fragments are found and packet is ready to use

@@ -1,3 +1,5 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include <typeinfo>
 
@@ -14,7 +16,7 @@ std::string ParserEtherNet802LLC::Description()
 	return (std::string("Ethernet 802.3 LLC frame"));
 }
 
-std::shared_ptr<ChunkEtherNet802LLC> ParserEtherNet802LLC::Process(std::shared_ptr<ChunkEtherNet> ethernet)
+std::shared_ptr<ChunkEtherNet802LLC> ParserEtherNet802LLC::Process(const std::shared_ptr<ChunkEtherNet> &ethernet)
 {
 	if (ethernet->EtherNetType <= 1500) {
 		unsigned short b2 = ethernet->Payload->GetShortLEOrFail(0);

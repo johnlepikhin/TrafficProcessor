@@ -16,7 +16,7 @@ class ParserUDP: public Processor<PacketIPVariant, ChunkUDP> {
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	std::shared_ptr<ChunkUDP> Process(std::shared_ptr<PacketIPVariant> parent);
+	std::shared_ptr<ChunkUDP> Process(const std::shared_ptr<PacketIPVariant> &parent);
 
 	/**
 	 * Returns unique ID for this Parser

@@ -1,9 +1,11 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "ParserHTTP.h"
 
 #include "../core/utils.h"
 
-bool ParserHTTP::CheckClientFlow(std::shared_ptr<EndPoint> flow) {
+bool ParserHTTP::CheckClientFlow(const std::shared_ptr<EndPoint> &flow) {
 	try {
 		if (flow->Payload.get() != nullptr && flow->Payload->CoveredSize) {
 			std::string preview = flow->GetPayloadPreview();
@@ -14,7 +16,7 @@ bool ParserHTTP::CheckClientFlow(std::shared_ptr<EndPoint> flow) {
 	return (false);
 }
 
-bool ParserHTTP::CheckServerFlow(std::shared_ptr<EndPoint> flow) {
+bool ParserHTTP::CheckServerFlow(const std::shared_ptr<EndPoint> &flow) {
 	try {
 		if (flow->Payload.get() != nullptr && flow->Payload->CoveredSize) {
 			std::string preview = flow->GetPayloadPreview();
@@ -25,7 +27,7 @@ bool ParserHTTP::CheckServerFlow(std::shared_ptr<EndPoint> flow) {
 	return (false);
 }
 
-std::shared_ptr<ChunkHTTP> ParserHTTP::ParseClient(std::shared_ptr<SessionTCP> session) {
+std::shared_ptr<ChunkHTTP> ParserHTTP::ParseClient(const std::shared_ptr<SessionTCP> &session) {
 	try {
 		std::string payload = session->Client->Payload->GetMaxSubString(0, 20000);
 		pcrecpp::StringPiece input(payload);
@@ -55,11 +57,11 @@ std::shared_ptr<ChunkHTTP> ParserHTTP::ParseClient(std::shared_ptr<SessionTCP> s
 }
 
 std::shared_ptr<ChunkHTTP> ParserHTTP::ParseServer(
-		std::shared_ptr<SessionTCP> session) {
+		const std::shared_ptr<SessionTCP> &session) {
 	try {
 		std::string payload = session->Server->Payload->GetMaxSubString(0, 20000);
 		pcrecpp::StringPiece input(payload);
-		int code;
+		int code = 0;
 		std::string message;
 		RespFirstLineRe.FindAndConsume(&input, &code, &message);
 		std::string key, value;
@@ -78,7 +80,7 @@ std::shared_ptr<ChunkHTTP> ParserHTTP::ParseServer(
 	}
 }
 
-std::shared_ptr<ChunkHTTP> ParserHTTP::Process(std::shared_ptr<SessionTCP> session)
+std::shared_ptr<ChunkHTTP> ParserHTTP::Process(const std::shared_ptr<SessionTCP> &session)
 {
 	if (CheckClientFlow(session->Client)) {
 		return(ParseClient(session));

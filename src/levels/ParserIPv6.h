@@ -18,7 +18,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	std::shared_ptr<ChunkIPv6> Process(std::shared_ptr<ChunkEtherNetDIX> parent);
+	std::shared_ptr<ChunkIPv6> Process(const std::shared_ptr<ChunkEtherNetDIX> &parent);
 
 	/**
 	 * Returns unique ID for this Parser

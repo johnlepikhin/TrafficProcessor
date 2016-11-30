@@ -64,7 +64,7 @@ namespace util {
 	 * @param count Number of bytes to read
 	 * @return Amount of read bytes
 	 */
-	ssize_t readToBuffer(int fd, char *buf, size_t count);
+	ssize_t readToBuffer(int fd, char *buf, uint32_t count);
 
 	/**
 	 * Skip bytes in fd
@@ -72,7 +72,7 @@ namespace util {
 	 * @param count Amount of bytes to skip
 	 * @return Amount of skipped bytes
 	 */
-	ssize_t skipBytesInFD(int fd, size_t count);
+	ssize_t skipBytesInFD(int fd, uint32_t count);
 
 	/**
 	 * Make PCAP quilt string for file descriptor

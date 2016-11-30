@@ -18,9 +18,9 @@ public:
 	 * @param hasNextFragments False if this is last fragment
 	 * @param packetID Packet identifier
 	 */
-	IPv6HeaderFragment(unsigned short fragmentOffset
+	IPv6HeaderFragment(uint16_t fragmentOffset
 			, bool hasNextFragments
-			, unsigned long packetID)
+			, uint32_t packetID)
 		: FragmentOffset(fragmentOffset)
 		, HasNextFragments(hasNextFragments)
 		, PacketID(packetID)
@@ -39,7 +39,7 @@ public:
 	/**
 	 * Packet identifier
 	 */
-	unsigned long PacketID;
+	uint32_t PacketID;
 };
 
 /**
@@ -61,17 +61,17 @@ public:
 	 * @param hdrFragment Pointer to optional Fragment extra header
 	 * @param payloadLength Length of payload
 	 */
-	ChunkIPv6(BaseQuilt baseData
-			, PayloadQuilt payload
-			, std::shared_ptr<ChunkEtherNetDIX> parent
-			, IPv6Addr srcIP
-			, IPv6Addr dstIP
+	ChunkIPv6(const BaseQuilt &baseData
+			, const PayloadQuilt &payload
+			, const std::shared_ptr<ChunkEtherNetDIX> &parent
+			, const IPv6Addr &srcIP
+			, const IPv6Addr &dstIP
 			, unsigned char protocol
 			, unsigned char trafficClass
-			, unsigned long flowLabel
+			, uint32_t flowLabel
 			, unsigned char hopLimit
-			, std::shared_ptr<IPv6HeaderFragment> hdrFragment
-			, unsigned long payloadLength
+			, const std::shared_ptr<IPv6HeaderFragment> &hdrFragment
+			, uint32_t payloadLength
 			);
 
 	/**
@@ -92,7 +92,7 @@ public:
 	/**
 	 * Flow label
 	 */
-	unsigned long FlowLabel;
+	uint32_t FlowLabel;
 
 	/**
 	 * Hop limit
@@ -102,7 +102,7 @@ public:
 	/**
 	 * Length of payload
 	 */
-	unsigned long PayloadLength;
+	uint32_t PayloadLength;
 
 	/**
 	 * Pointer to optional extra header Fragment

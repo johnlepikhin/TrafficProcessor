@@ -1,3 +1,5 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,9 +29,9 @@ namespace util {
 	}
 
 	void *mallocRead (std::istream &stream, std::streamsize size) {
-		void *r = (void *)mallocOrFatal((size_t)size);
+		void *r = reinterpret_cast<void *>(mallocOrFatal(size));
 
-		stream.read((char *)r, size);
+		stream.read(reinterpret_cast<char *>(r), size);
 		if (stream.fail ()) {
 			free (r);
 
@@ -40,7 +42,7 @@ namespace util {
 	}
 
 	void anyRead (std::istream &stream, void *ptr, std::streamsize size) {
-		stream.read((char *)ptr, size);
+		stream.read(reinterpret_cast<char *>(ptr), size);
 
 		if (stream.fail ()) {
 			throw std::underflow_error("Stream is empty in anyRead");
@@ -51,11 +53,11 @@ namespace util {
 		return (((v & 0xff) << 8) + (v >> 8));
 	}
 
-	ssize_t readToBuffer(int fd, char *buf, size_t count) {
-		ssize_t dataToRead = count;
+	uint32_t readToBuffer(int fd, char *buf, uint32_t count) {
+		int64_t dataToRead = count;
 
 		while(dataToRead) {
-			ssize_t rd = read(fd, buf, dataToRead);
+			int64_t rd = read(fd, buf, dataToRead);
 			if (rd < 0)
 				return (rd);
 			if (0 == rd)
@@ -67,19 +69,19 @@ namespace util {
 		return (count);
 	}
 
-	ssize_t skipBytesInFD(int fd, size_t count) {
+	uint32_t skipBytesInFD(int fd, uint32_t count) {
 		char buffer[4096];
 		return (readToBuffer(fd, buffer, count));
 	}
 
 	BaseQuilt quiltOfPcap(int fd)
 	{
-		unsigned int size, captured, secs, usecs;
+		uint32_t size, captured, secs, usecs;
 
-		readToBuffer (fd, (char *)&secs, sizeof (secs));
-		readToBuffer (fd, (char *)&usecs, sizeof (usecs));
-		readToBuffer (fd, (char *)&captured, sizeof (captured));
-		readToBuffer (fd, (char *)&size, sizeof (size));
+		readToBuffer (fd, reinterpret_cast<char *>(&secs), sizeof (secs)); //-V206
+		readToBuffer (fd, reinterpret_cast<char *>(&usecs), sizeof (usecs)); //-V206
+		readToBuffer (fd, reinterpret_cast<char *>(&captured), sizeof (captured)); //-V206
+		readToBuffer (fd, reinterpret_cast<char *>(&size), sizeof (size)); //-V206
 
 		std::shared_ptr<std::string> IS = std::make_shared<std::string>();
 		IS->resize(captured);
@@ -94,7 +96,7 @@ namespace util {
 	{
 		std::string r;
 		r.resize(s.length());
-	    for (unsigned int i = 0; i < s.length(); i++)
+	    for (size_t i = 0; i < s.length(); i++)
 	    	r[i]=tolower(s[i]);
 
 	    return (r);
@@ -102,10 +104,10 @@ namespace util {
 
 	bool iequals(const std::string& a, const std::string& b)
 	{
-	    unsigned int sz = a.size();
+	    size_t sz = a.size();
 	    if (b.size() != sz)
 	        return (false);
-	    for (unsigned int i = 0; i < sz; ++i)
+	    for (size_t i = 0; i < sz; ++i)
 	        if (tolower(a[i]) != tolower(b[i]))
 	            return (false);
 	    return (true);

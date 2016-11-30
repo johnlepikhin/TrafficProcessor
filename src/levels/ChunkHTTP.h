@@ -15,10 +15,10 @@ public:
 	 * @param uri HTTP URI
 	 * @param headers HTTP headers list
 	 */
-	HTTPRequest(std::string host
-			, std::string method
-			, std::string uri
-			, std::vector<std::pair<std::string, std::string> > headers);
+	HTTPRequest(const std::string &host
+			, const std::string &method
+			, const std::string &uri
+			, const std::vector<std::pair<std::string, std::string> > &headers);
 
 	/**
 	 * Host
@@ -51,8 +51,8 @@ public:
 	 * @param headers HTTP headers list
 	 */
 	HTTPResponse(int code
-			, std::string message
-			, std::vector<std::pair<std::string, std::string> > headers);
+			, const std::string &message
+			, const std::vector<std::pair<std::string, std::string> > &headers);
 
 	/**
 	 * Code
@@ -79,9 +79,9 @@ public:
 	 * @param parent Reference to TCP session
 	 * @param request HTTP request
 	 */
-	ChunkHTTP(BaseQuilt baseData
-		, PayloadQuilt payload
-		, std::shared_ptr<SessionTCP> parent
+	ChunkHTTP(const BaseQuilt &baseData
+		, const PayloadQuilt &payload
+		, const std::shared_ptr<SessionTCP> &parent
 		, std::unique_ptr<HTTPRequest> request
 		, std::unique_ptr<HTTPResponse> response);
 

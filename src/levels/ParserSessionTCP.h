@@ -55,7 +55,7 @@ public:
 	 * Create session ID from TCP fragment
 	 * @param chunk TCP fragment
 	 */
-	SessionID(std::shared_ptr<ChunkTCP> chunk);
+	SessionID(const std::shared_ptr<ChunkTCP> &chunk);
 };
 
 /**
@@ -87,10 +87,10 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	std::shared_ptr<SessionTCP> Process(std::shared_ptr<ChunkTCP> parent);
+	std::shared_ptr<SessionTCP> Process(const std::shared_ptr<ChunkTCP> &parent);
 
-	virtual void AfterProcess(std::shared_ptr<SessionTCP> &session);
-	virtual bool AfterRecursionHook(std::shared_ptr<SessionTCP> session, const std::exception *exn, bool found);
+	virtual void AfterProcess(const std::shared_ptr<SessionTCP> &session);
+	virtual bool AfterRecursionHook(const std::shared_ptr<SessionTCP> &session, const std::exception *exn, bool found);
 
 	/**
 	 * Returns unique ID for this Parser

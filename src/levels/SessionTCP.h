@@ -81,10 +81,10 @@ private:
 	chunkptr PopChunk(
 			const std::function <bool (chunkptr &candidate)> &filter, bool erase = true);
 
-	void AssignEndPoints(chunkptr &chunk, std::shared_ptr<EndPoint> correct, std::shared_ptr<EndPoint> other);
-	void FillEndPoint(chunkptr &chunk);
-	std::shared_ptr<EndPoint> DetectEndPoint(chunkptr &chunk);
-	void AppendPayload(chunkptr &chunk, std::shared_ptr<EndPoint> endpoint);
+	void AssignEndPoints(const chunkptr &chunk, const std::shared_ptr<EndPoint> &correct, const std::shared_ptr<EndPoint> &other);
+	void FillEndPoint(const chunkptr &chunk);
+	std::shared_ptr<EndPoint> DetectEndPoint(const chunkptr &chunk);
+	void AppendPayload(const chunkptr &chunk, const std::shared_ptr<EndPoint> &endpoint);
 
 	std::shared_ptr<EndPoint> C_EP, S_EP;
 public:
@@ -94,8 +94,8 @@ public:
 	 * @param parent Pointer to TCP fragment
 	 * @param lastInternalID Unique ID of the last event related to this session (used for garbage collection)
 	 */
-	SessionTCP(BaseQuilt baseData
-			, chunkptr parent
+	SessionTCP(const BaseQuilt &baseData
+			, const chunkptr &parent
 			, unsigned long long lastInternalID
 			, bool isFuzzy);
 
@@ -104,7 +104,7 @@ public:
 	 * @param chunk TCP fragment
 	 * @param newLastInternalID Unique ID of this event
 	 */
-	void AddChunk(chunkptr chunk
+	void AddChunk(const chunkptr &chunk
 			, unsigned long long newLastInternalID
 			, bool isFuzzy);
 

@@ -1,3 +1,5 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include <typeinfo>
 
@@ -14,7 +16,7 @@ std::string ParserEtherNetSNAP::Description()
 	return (std::string("Ethernet SNAP frame"));
 }
 
-std::shared_ptr<ChunkEtherNetSNAP> ParserEtherNetSNAP::Process(std::shared_ptr<ChunkEtherNet> ethernet)
+std::shared_ptr<ChunkEtherNetSNAP> ParserEtherNetSNAP::Process(const std::shared_ptr<ChunkEtherNet> &ethernet)
 {
 	if (ethernet->EtherNetType <= 1500) {
 		unsigned int b3 = ethernet->Payload->GetShortLEOrFail(3);

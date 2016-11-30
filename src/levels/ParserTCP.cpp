@@ -1,3 +1,5 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "ParserTCP.h"
 #include "ChunkTCP.h"
@@ -13,17 +15,18 @@ std::string ParserTCP::Description()
 	return (std::string("TCP fragment"));
 }
 
-std::shared_ptr<ChunkTCP> ParserTCP::Process(std::shared_ptr<PacketIPVariant> packet)
+std::shared_ptr<ChunkTCP> ParserTCP::Process(const std::shared_ptr<PacketIPVariant> &packet)
 {
 	int Protocol = -1;
 	unsigned short pktLength;
 	PayloadQuilt Payload;
 	BaseQuilt BaseData;
 	if (packet->IPv4 != nullptr) {
-		Protocol = packet->IPv4->Parent->Protocol;
-		pktLength = packet->IPv4->ExpectedSize;
-		Payload = packet->IPv4->Payload;
-		BaseData = packet->IPv4->BaseData;
+		PacketIPv4 *ipv4 = packet->IPv4.get();
+		Protocol = ipv4->Parent->Protocol;
+		pktLength = ipv4->ExpectedSize;
+		Payload = ipv4->Payload;
+		BaseData = ipv4->BaseData;
 	} else if (packet->IPv6 != nullptr) {
 		// TODO
 //		Protocol = packet->IPv6->Parent->Protocol;
@@ -37,17 +40,19 @@ std::shared_ptr<ChunkTCP> ParserTCP::Process(std::shared_ptr<PacketIPVariant> pa
 
 		unsigned short destinationPort = Payload->GetShortBEOrFail(2);
 
-		unsigned long seqNumber(0);
-		Payload->CopyBytesOrFail((char *)&seqNumber, 4, 4);
+		uint32_t seqNumber(0);
+		Payload->CopyBytesOrFail(reinterpret_cast<char *>(&seqNumber) //-V206
+				, 4, 4); //-V112
 
-		unsigned long confirmNumber(0);
-		Payload->CopyBytesOrFail((char *)&confirmNumber, 8, 4);
+		uint32_t confirmNumber(0);
+		Payload->CopyBytesOrFail(reinterpret_cast<char *>(&confirmNumber) //-V206
+				, 8, 4); //-V112
 
-		unsigned short headerLength = (Payload->GetCharOrFail(12) >> 4) << 2;
+		uint16_t headerLength = (Payload->GetCharOrFail(12) >> 4) << 2;
 
 		unsigned char flags = Payload->GetCharOrFail(13) & 0b111111;
 
-		unsigned short windowSize = Payload->GetShortBEOrFail(15);
+		uint16_t windowSize = Payload->GetShortBEOrFail(15);
 
 		PayloadQuilt payload = std::make_shared<CPayloadQuilt>(Payload, headerLength);
 

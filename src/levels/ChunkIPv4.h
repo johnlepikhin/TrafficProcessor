@@ -28,12 +28,12 @@ public:
 	 * @param fragmentOffset offset of this fragment in bytes
 	 * @param ttl TTL
 	 */
-	ChunkIPv4(BaseQuilt baseData
-			, PayloadQuilt payload
-			, std::shared_ptr<ChunkEtherNetDIX> parent
+	ChunkIPv4(const BaseQuilt &baseData
+			, const PayloadQuilt &payload
+			, const std::shared_ptr<ChunkEtherNetDIX> &parent
 			, unsigned char iHL32bit
-			, const unsigned long srcIP
-			, const unsigned long dstIP
+			, const uint32_t srcIP
+			, const uint32_t dstIP
 			, unsigned short pktLength
 			, unsigned short payloadLength
 			, unsigned char protocol
@@ -51,12 +51,12 @@ public:
 	/**
 	 * Source IP address
 	 */
-	const unsigned long SrcIP;
+	const uint32_t SrcIP;
 
 	/**
 	 * Destination IP address
 	 */
-	const unsigned long DstIP;
+	const uint32_t DstIP;
 
 	/**
 	 * Full packet length
@@ -122,7 +122,7 @@ public:
 	 */
 	inline std::string BinaryOfDstIP() { return (BinaryOfIP(DstIP)); };
 private:
-	std::string BinaryOfIP(unsigned long ip);
+	std::string BinaryOfIP(uint32_t ip);
 };
 
 #endif /* SRC_LEVELS_CHUNKIPV4_H_ */

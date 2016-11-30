@@ -1,3 +1,5 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include <typeinfo>
 
@@ -13,7 +15,7 @@ std::string ParserIPv6::Description()
 	return (std::string("IPv6 fragment parser"));
 }
 
-std::shared_ptr<ChunkIPv6> ParserIPv6::Process(std::shared_ptr<ChunkEtherNetDIX> parent)
+std::shared_ptr<ChunkIPv6> ParserIPv6::Process(const std::shared_ptr<ChunkEtherNetDIX> &parent)
 {
 	if (parent->EtherNetType == 0x86dd) {
 		std::string tmp = parent->Payload->GetSubStringOrFail(0, 8);
@@ -21,10 +23,10 @@ std::shared_ptr<ChunkIPv6> ParserIPv6::Process(std::shared_ptr<ChunkEtherNetDIX>
 		if (version == 6) {
 
 			unsigned char traffic_class = (tmp[0] >> 4) & 0xff;
-			unsigned long flow_label = (tmp[0] & 0xf) << 12;
+			uint32_t flow_label = (tmp[0] & 0xf) << 12;
 			flow_label &= (tmp[1] << 8) | tmp[2];
 
-			unsigned long payloadLength = (((unsigned long)tmp[4]) << 8) | tmp[5];
+			uint32_t payloadLength = ((static_cast<uint32_t>(tmp[4])) << 8) | tmp[5];
 			unsigned char next_header = tmp[6];
 			unsigned char hop_limit = tmp[7];
 
@@ -33,7 +35,7 @@ std::shared_ptr<ChunkIPv6> ParserIPv6::Process(std::shared_ptr<ChunkEtherNetDIX>
 
 			std::shared_ptr<IPv6HeaderFragment> hdrFragment = std::make_shared<IPv6HeaderFragment>(0, false, 0);
 
-			unsigned long int hdrOffset = 0x28;
+			uint32_t hdrOffset = 0x28;
 
 			while (next_header == 0
 					|| next_header == 60
@@ -49,8 +51,8 @@ std::shared_ptr<ChunkIPv6> ParserIPv6::Process(std::shared_ptr<ChunkEtherNetDIX>
 				{
 					std::cout << "hop-by-hop detected\n";
 
-					unsigned long int hdrExtLen = (tmp_short & 0xff) << 3;
-					unsigned long int optOffset = 2;
+					uint32_t hdrExtLen = (tmp_short & 0xff) << 3;
+					uint32_t optOffset = 2;
 					while (optOffset < hdrExtLen) {
 						tmp_short = parent->Payload->GetShortLEOrFail(optOffset);
 						unsigned char opt_type = tmp_short >> 8;
@@ -59,7 +61,9 @@ std::shared_ptr<ChunkIPv6> ParserIPv6::Process(std::shared_ptr<ChunkEtherNetDIX>
 						switch (opt_type) {
 
 						case 0xc2: // Jumbogram
-							parent->Payload->CopyBytesOrFail((char *)&payloadLength, optOffset+2, 4);
+							parent->Payload->CopyBytesOrFail(
+									reinterpret_cast<char *>(&payloadLength) //-V206
+									, optOffset+2, 4); //-V112
 							break;
 
 						default:
@@ -69,21 +73,23 @@ std::shared_ptr<ChunkIPv6> ParserIPv6::Process(std::shared_ptr<ChunkEtherNetDIX>
 						optOffset+=2+opt_len;
 					}
 
-					hdrOffset += 4 + ((tmp_short & 0xff) << 3);
+					hdrOffset += 4 + ((tmp_short & 0xff) << 3); //-V112
 					break;
 				}
 				case 43: // Routing
 				case 60: // Destination
-					hdrOffset += 4 + ((tmp_short & 0xff) << 3);
+					hdrOffset += 4 + ((tmp_short & 0xff) << 3); //-V112
 					break;
 
 				case 44: // Fragment
 				{
 					tmp_short = parent->Payload->GetShortLEOrFail(hdrOffset+2);
-					unsigned long fragment_offset = (tmp_short >> 3) << 3;
+					uint32_t fragment_offset = (tmp_short >> 3) << 3;
 					bool has_next_fragments = tmp_short & 1;
-					unsigned long packetID = 0;
-					parent->Payload->CopyBytesOrFail((char *)&packetID, hdrOffset+4, 4);
+					uint32_t packetID = 0;
+					parent->Payload->CopyBytesOrFail(
+							reinterpret_cast<char *>(&packetID) //-V206
+							, hdrOffset+4, 4); //-V112
 
 					std::shared_ptr<IPv6HeaderFragment> newHdrFragment
 						= std::make_shared<IPv6HeaderFragment>(fragment_offset, has_next_fragments, packetID);

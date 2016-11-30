@@ -1,8 +1,10 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "ParserPacketMySQL.h"
 #include "../core/utils.h"
 
-std::string readStringNULL(std::string payload, size_t offset)
+std::string readStringNULL(const std::string &payload, size_t offset)
 {
 	size_t nulpos = payload.find('\000', offset);
 	if (nulpos == std::string::npos) {
@@ -13,9 +15,9 @@ std::string readStringNULL(std::string payload, size_t offset)
 	}
 }
 
-unsigned long long readLenEnc(std::string payload, size_t offset)
+uint64_t readLenEnc(const std::string &payload, size_t offset)
 {
-	unsigned long long r = 0;
+	uint64_t r = 0;
 	if (payload[offset] < 0xfb) {
 		r = payload[offset];
 	} else if (payload[offset] == 0xfc) {
@@ -26,13 +28,13 @@ unsigned long long readLenEnc(std::string payload, size_t offset)
 		r += payload[offset+2] << 8;
 		r += payload[offset+3];
 	} else if (payload[offset] == 0xfe) {
-		r += (unsigned long long)payload[offset+1] << 56;
-		r += (unsigned long long)payload[offset+2] << 48;
-		r += (unsigned long long)payload[offset+3] << 40;
-		r += (unsigned long long)payload[offset+4] << 32;
-		r += (unsigned long long)payload[offset+5] << 24;
-		r += (unsigned long long)payload[offset+6] << 16;
-		r += (unsigned long long)payload[offset+7] << 8;
+		r += static_cast<uint64_t>(payload[offset+1]) << 56;
+		r += static_cast<uint64_t>(payload[offset+2]) << 48;
+		r += static_cast<uint64_t>(payload[offset+3]) << 40;
+		r += static_cast<uint64_t>(payload[offset+4]) << 32; //-V112
+		r += static_cast<uint64_t>(payload[offset+5]) << 24;
+		r += static_cast<uint64_t>(payload[offset+6]) << 16;
+		r += static_cast<uint64_t>(payload[offset+7]) << 8;
 		r += payload[offset+8];
 	}
 	return (r);
@@ -44,24 +46,27 @@ size_t lengthLenEnc(unsigned long long v) {
 	} else if (v < 0x10000) {
 		return (3);
 	} else if (v < 0x1000000) {
-		return (4);
+		return (4); //-V112
 	}
 	return (9);
 }
 
-uint32_t ParserPacketMySQL::GetPayloadLength(std::shared_ptr<EndPoint> flow)
+uint32_t ParserPacketMySQL::GetPayloadLength(const std::shared_ptr<EndPoint> &flow)
 {
 	std::string preview = flow->GetPayloadPreview();
-	uint32_t length = ((unsigned char)preview[2] << 16) | ((unsigned char)preview[1] << 8) | (unsigned char)preview[0];
+	uint32_t length =
+			(static_cast<unsigned char>(preview[2]) << 16)
+			| (static_cast<unsigned char>(preview[1]) << 8)
+			| static_cast<unsigned char>(preview[0]);
 
 	return (length);
 }
 
-std::string ParserPacketMySQL::ReadPacketPreview(uint32_t length, std::shared_ptr<EndPoint> flow)
+std::string ParserPacketMySQL::ReadPacketPreview(uint32_t length, const std::shared_ptr<EndPoint> &flow)
 {
 	try {
-		uint32_t readBytes = std::min(length, (uint32_t)200);
-		std::string r = flow->Payload->GetSubStringOrFail(4, readBytes);
+		uint32_t readBytes = std::min(length, static_cast<uint32_t>(200));
+		std::string r = flow->Payload->GetSubStringOrFail(4, readBytes); //-V112
 //		std::cout << "length " << length
 //				<< ", s_port=" << flow->LastChunk->SourcePort
 //				<< ", d_port=" << flow->LastChunk->DestinationPort
@@ -75,7 +80,7 @@ std::string ParserPacketMySQL::ReadPacketPreview(uint32_t length, std::shared_pt
 
 bool isPrintable(std::string &str) {
 	for(size_t i=0; i<str.size(); i++) {
-		if (str[i] < 32 || str[i] > 127)
+		if (str[i] < 32 || str[i] > 127) //-V112
 			return (false);
 	}
 
@@ -83,7 +88,7 @@ bool isPrintable(std::string &str) {
 }
 
 std::shared_ptr<PacketMySQL> ParserPacketMySQL::DefaultCase(
-		std::shared_ptr<SessionTCP> session
+		const std::shared_ptr<SessionTCP> &session
 		, uint32_t packetLength)
 {
 	if (session->ProtocolDetected) {
@@ -99,26 +104,26 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::DefaultCase(
 }
 
 std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseHandshakeResponse(
-		std::shared_ptr<SessionTCP> session
-		, std::string payload
+		const std::shared_ptr<SessionTCP> &session
+		, const std::string &payload
 		, uint32_t packetLength)
 {
 	size_t offset = 0;
 
 	uint32_t capFlags =
-			((uint32_t)payload[offset] << 24)
-			+ ((uint32_t)payload[offset+1] << 16)
-			+ ((uint32_t)payload[offset+2] << 8)
+			(static_cast<uint32_t>(payload[offset]) << 24)
+			+ (static_cast<uint32_t>(payload[offset+1]) << 16)
+			+ (static_cast<uint32_t>(payload[offset+2]) << 8)
 			+ payload[offset+3];
-	offset+=4;
+	offset+=4; //-V112
 
 	if (capFlags & 0x00000200) {
 		uint32_t maxPktLen =
-				((uint32_t)payload[offset] << 24)
-				+ ((uint32_t)payload[offset+1] << 16)
-				+ ((uint32_t)payload[offset+2] << 8)
+				(static_cast<uint32_t>(payload[offset]) << 24)
+				+ (static_cast<uint32_t>(payload[offset+1]) << 16)
+				+ (static_cast<uint32_t>(payload[offset+2]) << 8)
 				+ payload[offset+3];
-		offset+=4;
+		offset+=4; //-V112
 
 		int charset = payload[0];
 		offset++;
@@ -186,8 +191,8 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseHandshakeResponse(
 }
 
 std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseCommand(
-		std::shared_ptr<SessionTCP> session
-		, std::string payload
+		const std::shared_ptr<SessionTCP> &session
+		, const std::string &payload
 		, uint32_t packetLength)
 {
 	char cmd = payload[0];
@@ -234,13 +239,13 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseCommand(
 }
 
 std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseClient(
-		std::shared_ptr<SessionTCP> session
-		, std::shared_ptr<EndPoint> flow)
+		const std::shared_ptr<SessionTCP> &session
+		, const std::shared_ptr<EndPoint> &flow)
 {
 	if (flow->Payload.get() != nullptr && flow->Payload->CoveredSize) {
-		try {
+//		try {
 			uint32_t pktLen = GetPayloadLength(flow);
-			try {
+//			try {
 				std::string payload = ReadPacketPreview(pktLen, flow);
 				if (!payload.empty()) {
 					std::shared_ptr<PacketMySQL> r;
@@ -249,25 +254,25 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseClient(
 					if (r != nullptr)
 						return (r);
 
-					r = ParseCommand(session, payload, pktLen);
+					return (ParseCommand(session, payload, pktLen));
 				}
-			} catch (...) {
-			}
+//			} catch (...) {
+//			}
 			return (DefaultCase(session, pktLen));
-		} catch (...) {
-		}
+//		} catch (...) {
+//		}
 	}
 	return (DefaultCase(session, 0));
 }
 
 std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseServer(
-		std::shared_ptr<SessionTCP> session
-		, std::shared_ptr<EndPoint> flow)
+		const std::shared_ptr<SessionTCP> &session
+		, const std::shared_ptr<EndPoint> &flow)
 {
 	if (flow->Payload.get() != nullptr && flow->Payload->CoveredSize) {
-		try {
+//		try {
 			uint32_t pktLen = GetPayloadLength(flow);
-			try {
+//			try {
 				std::string payload = ReadPacketPreview(pktLen, flow);
 				if (!payload.empty()) {
 					if (payload[0] == 10) {
@@ -279,22 +284,22 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseServer(
 							return (std::shared_ptr<PacketMySQL>(nullptr));
 
 						size_t offset = 1 + serverVersion.size() + 1;
-						unsigned long connectionId =
-								((int)payload[offset] << 24)
-								+ ((int)payload[offset+1] << 16)
-								+ ((int)payload[offset+2] << 8)
+						uint32_t connectionId =
+								(static_cast<int>(payload[offset]) << 24)
+								+ (static_cast<int>(payload[offset+1]) << 16)
+								+ (static_cast<int>(payload[offset+2]) << 8)
 								+ payload[offset+3];
-						offset+=4;
+						offset+=4; //-V112
 
-						std::string auth_plugin_data_part_1 = payload.substr(offset, 8);
+//						std::string auth_plugin_data_part_1 = payload.substr(offset, 8);
 						offset+=8;
 
 						if (payload[offset] != 0)
 							return (std::shared_ptr<PacketMySQL>(nullptr));
 						offset++;
 
-						int capFlags =
-								((int)payload[offset] << 8)
+						uint16_t capFlags =
+								(static_cast<uint16_t>(payload[offset]) << 8)
 								+ payload[offset+1];
 						offset+=2;
 
@@ -322,16 +327,16 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseServer(
 						return (std::shared_ptr<PacketMySQL>(r));
 					}
 				}
-			} catch (...) {
-			}
+//			} catch (...) {
+//			}
 			return (DefaultCase(session, pktLen));
-		} catch (...) {
-		}
+//		} catch (...) {
+//		}
 	}
 	return (DefaultCase(session, 0));
 }
 
-std::shared_ptr<PacketMySQL> ParserPacketMySQL::Process(std::shared_ptr<SessionTCP> session)
+std::shared_ptr<PacketMySQL> ParserPacketMySQL::Process(const std::shared_ptr<SessionTCP> &session)
 {
 	std::shared_ptr<PacketMySQL> r = ParseClient(session, session->Client);
 	if (r != nullptr)

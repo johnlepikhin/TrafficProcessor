@@ -1,3 +1,5 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include <typeinfo>
 
@@ -15,7 +17,7 @@ std::string ParserEtherNetDIX::Description()
 	return (std::string("Ethernet DIX frame"));
 }
 
-std::shared_ptr<ChunkEtherNetDIX> ParserEtherNetDIX::Process(std::shared_ptr<ChunkEtherNet> parent)
+std::shared_ptr<ChunkEtherNetDIX> ParserEtherNetDIX::Process(const std::shared_ptr<ChunkEtherNet> &parent)
 {
 	if (parent->EtherNetType > 1500) {
 		std::shared_ptr<ChunkEtherNetDIX> r = std::make_shared<ChunkEtherNetDIX>(parent->BaseData, parent->Payload, parent, parent->EtherNetType);

@@ -1,3 +1,5 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "ParserEtherNet.h"
 
@@ -11,7 +13,7 @@ std::string ParserEtherNet::Description()
 	return (std::string("Ethernet frame"));
 }
 
-std::shared_ptr<ChunkEtherNet> ParserEtherNet::Process(BaseQuilt data)
+std::shared_ptr<ChunkEtherNet> ParserEtherNet::Process(const BaseQuilt &data)
 {
 	std::string buf;
 	buf.resize(14);

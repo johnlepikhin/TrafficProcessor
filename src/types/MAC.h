@@ -13,7 +13,7 @@ namespace MAC {
 	 * @param data Pointer to Data, buffer must point to position from where MAC to read
 	 * @param offset Offset in data from where MAC must be read
 	 */
-	unsigned long long Make(std::shared_ptr<Quilt> data, const size_t offset);
+	unsigned long long Make(const std::shared_ptr<Quilt> &data, const size_t offset);
 
 	/**
 	 * Create MAC from substring

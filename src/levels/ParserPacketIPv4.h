@@ -18,13 +18,13 @@ public:
 	/**
 	 * Unique ID of the event when last fragment was received for this IP packet
 	 */
-	unsigned long long LastInternalID;
+	uint64_t LastInternalID;
 };
 
 /**
  * Hash table where key is srcIP+dstIP and the value is IPPacketMap
  */
-class IPPairMap : public std::unordered_map<unsigned long long, std::shared_ptr<IPPacketMap> > {
+class IPPairMap : public std::unordered_map<uint64_t, IPPacketMap> {
 public:
 	/**
 	 * Register new IPv4 fragment
@@ -32,8 +32,8 @@ public:
 	 * @param newInternalId Unique ID of this event
 	 * @return Pointer to PacketIPVariant with which this fragment is associated
 	 */
-	std::shared_ptr<PacketIPVariant> AddChunk(std::shared_ptr<ChunkIPv4> chunk
-			, unsigned long long newInternalId);
+	std::shared_ptr<PacketIPVariant> AddChunk(const std::shared_ptr<ChunkIPv4> &chunk
+			, uint64_t newInternalId);
 };
 
 /**
@@ -46,7 +46,7 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @return NULL or parsed chunk
 	 */
-	std::shared_ptr<PacketIPVariant> Process(std::shared_ptr<ChunkIPv4> parent);
+	std::shared_ptr<PacketIPVariant> Process(const std::shared_ptr<ChunkIPv4> &parent);
 
 	/**
 	 * Some post-processing after all following processors are done
@@ -54,7 +54,7 @@ public:
 	 * @param exn Optional generated exception
 	 * @param found
 	 */
-	virtual bool AfterRecursionHook(std::shared_ptr<PacketIPVariant> chunk, const std::exception *exn, bool found);
+	virtual bool AfterRecursionHook(const std::shared_ptr<PacketIPVariant> &chunk, const std::exception *exn, bool found);
 
 	/**
 	 * Returns unique ID for this Parser
@@ -75,7 +75,7 @@ public:
 
 private:
 	IPPairMap IPCollector;
-	unsigned long long DeleteInactiveAfter = 10000;
+	uint64_t DeleteInactiveAfter = 10000;
 	Counter IDGenerator;
 };
 

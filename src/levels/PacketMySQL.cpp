@@ -1,3 +1,5 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "PacketMySQL.h"
 
@@ -7,9 +9,9 @@ MySQLRequest::MySQLRequest(char commandType)
 
 }
 
-PacketMySQL::PacketMySQL(BaseQuilt baseData
-		, PayloadQuilt payload
-		, std::shared_ptr<SessionTCP> parent
+PacketMySQL::PacketMySQL(const BaseQuilt &baseData
+		, const PayloadQuilt &payload
+		, const std::shared_ptr<SessionTCP> &parent
 		, std::unique_ptr<MySQLRequest> request
 		, std::unique_ptr<MySQLResponse> response
 		, uint32_t packetLength)

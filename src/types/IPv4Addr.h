@@ -14,20 +14,20 @@ namespace IPv4Addr {
 	 * @param data Pointer to Quilt
 	 * @param offset Offset from where address must be read
 	 */
-	unsigned long Make(Quilt &data, const patch_position offset);
+	uint32_t Make(const Quilt &data, const patch_position offset);
 
 	/**
 	 * Create IPv4 from std::string
 	 * @param data Reference to std::string
 	 * @param offset Offset from where address must be read
 	 */
-	unsigned long Make(const std::string &data, const std::streamoff offset);
+	uint32_t Make(const std::string &data, const std::streamoff offset);
 
 	/**
 	 * Human readable representation
 	 * @return Human readable representation
 	 */
-	std::string asString(unsigned long addr);
+	std::string asString(uint32_t addr);
 };
 
 #endif /* IPV4ADDR_H_ */

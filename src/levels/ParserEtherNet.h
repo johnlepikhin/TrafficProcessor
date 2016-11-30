@@ -15,7 +15,7 @@ public:
 	 * @param payload Reference to base PCAP frame
 	 * @return ChunkEtherNet on success or nullptr
 	 */
-	std::shared_ptr<ChunkEtherNet> Process(BaseQuilt payload);
+	std::shared_ptr<ChunkEtherNet> Process(const BaseQuilt &payload);
 
 	/**
 	 * Returns unique ID for this Parser

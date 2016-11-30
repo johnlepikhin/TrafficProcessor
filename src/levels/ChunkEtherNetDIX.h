@@ -16,9 +16,9 @@ public:
 	 * @param parent Optional reference to parent Chunk
 	 * @param etherType EtherNet type (OSI level 3 type)
 	 */
-	ChunkEtherNetDIX(BaseQuilt baseData
-			, PayloadQuilt payload
-			, std::shared_ptr<ChunkEtherNet> parent
+	ChunkEtherNetDIX(const BaseQuilt &baseData
+			, const PayloadQuilt &payload
+			, const std::shared_ptr<ChunkEtherNet> &parent
 			, const unsigned short etherType);
 
 	/**

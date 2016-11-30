@@ -20,9 +20,9 @@ public:
 	 * @param sourcePort Source UDP port
 	 * @param destinationPort Destination UDP port
 	 */
-	ChunkUDP(BaseQuilt baseData
-			, PayloadQuilt payload
-			, std::shared_ptr<PacketIPVariant> parent
+	ChunkUDP(const BaseQuilt &baseData
+			, const PayloadQuilt &payload
+			, const std::shared_ptr<PacketIPVariant> &parent
 			, const unsigned int pktLength
 			, const unsigned int payloadLength
 			, const unsigned int sourcePort

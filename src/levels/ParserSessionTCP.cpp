@@ -1,7 +1,9 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "ParserSessionTCP.h"
 
-SessionID::SessionID(std::shared_ptr<ChunkTCP> chunk)
+SessionID::SessionID(const std::shared_ptr<ChunkTCP> &chunk)
 {
 	std::string ip1 = chunk->Parent->BinaryOfSrcIP();
 	std::string ip2 = chunk->Parent->BinaryOfDstIP();
@@ -40,7 +42,7 @@ SessionID::SessionID(std::shared_ptr<ChunkTCP> chunk)
 	Hash = b1 | b2 | b3 | b4 | s3 | s4;
 }
 
-std::shared_ptr<SessionTCP> ParserSessionTCP::Process(std::shared_ptr<ChunkTCP> parent)
+std::shared_ptr<SessionTCP> ParserSessionTCP::Process(const std::shared_ptr<ChunkTCP> &parent)
 {
 	SessionID key(parent);
 	auto it = SessionsCollector.find(key);
@@ -92,14 +94,14 @@ void ParserSessionTCP::GarbageCollector()
 	}
 }
 
-void ParserSessionTCP::AfterProcess(std::shared_ptr<SessionTCP> &session)
+void ParserSessionTCP::AfterProcess(const std::shared_ptr<SessionTCP> &session)
 {
 	if (session != nullptr) {
 		// prevent access of followers to already processed data
 		session->Client->ResetPayload();
 		session->Server->ResetPayload();
 
-		if (session->Inbox.size() > 4) {
+		if (session->Inbox.size() > 4) { //-V112
 			IsFuzzy = true;
 		}
 
@@ -109,7 +111,7 @@ void ParserSessionTCP::AfterProcess(std::shared_ptr<SessionTCP> &session)
 	}
 }
 
-bool ParserSessionTCP::AfterRecursionHook(std::shared_ptr<SessionTCP> session, const std::exception *exn, bool found)
+bool ParserSessionTCP::AfterRecursionHook(const std::shared_ptr<SessionTCP> &session, const std::exception *exn, bool found)
 {
 	if (session != nullptr)
 		AfterProcess(session);

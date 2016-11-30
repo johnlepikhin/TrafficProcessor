@@ -1,8 +1,10 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "SessionTCP.h"
 #include <string.h>
 
-inline bool isSameSource(chunkptr &chunk1, chunkptr &chunk2) {
+inline bool isSameSource(const chunkptr &chunk1, const chunkptr &chunk2) {
 	if (chunk1->SourcePort == chunk2->SourcePort) {
 		if (chunk1->Parent->BinaryOfSrcIP() == chunk2->Parent->BinaryOfSrcIP()) {
 			return (true);
@@ -14,7 +16,7 @@ inline bool isSameSource(chunkptr &chunk1, chunkptr &chunk2) {
 	}
 }
 
-inline bool isSameSource(chunkptr &chunk, EndPoint endpoint) {
+inline bool isSameSource(const chunkptr &chunk, const EndPoint &endpoint) {
 	if (endpoint.LastChunk != nullptr) {
 		return (isSameSource(chunk, endpoint.LastChunk));
 	} else {
@@ -22,8 +24,8 @@ inline bool isSameSource(chunkptr &chunk, EndPoint endpoint) {
 	}
 }
 
-SessionTCP::SessionTCP(BaseQuilt baseData
-		, std::shared_ptr<ChunkTCP> parent
+SessionTCP::SessionTCP(const BaseQuilt &baseData
+		, const std::shared_ptr<ChunkTCP> &parent
 		, unsigned long long lastInternalID
 		, bool isFuzzy)
 	: Chunk(baseData, nullptr, parent)
@@ -85,7 +87,7 @@ void SessionTCP::SwapFlows()
 	DirectionDetected = true;
 }
 
-void SessionTCP::AssignEndPoints(chunkptr &chunk, std::shared_ptr<EndPoint> correct, std::shared_ptr<EndPoint> other)
+void SessionTCP::AssignEndPoints(const chunkptr &chunk, const std::shared_ptr<EndPoint> &correct, const std::shared_ptr<EndPoint> &other)
 {
 	if (correct->LastChunk != nullptr && !isSameSource(correct->LastChunk, chunk)) {
 		SwapFlows();
@@ -94,7 +96,7 @@ void SessionTCP::AssignEndPoints(chunkptr &chunk, std::shared_ptr<EndPoint> corr
 	}
 }
 
-std::shared_ptr<EndPoint> SessionTCP::DetectEndPoint(chunkptr &chunk)
+std::shared_ptr<EndPoint> SessionTCP::DetectEndPoint(const chunkptr &chunk)
 {
 	if (C_EP->LastChunk == nullptr && S_EP->LastChunk == nullptr) {
 		return (C_EP);
@@ -119,7 +121,7 @@ std::shared_ptr<EndPoint> SessionTCP::DetectEndPoint(chunkptr &chunk)
 	}
 }
 
-void SessionTCP::FillEndPoint(chunkptr &chunk)
+void SessionTCP::FillEndPoint(const chunkptr &chunk)
 {
 	if (C_EP->LastChunk == nullptr && S_EP->LastChunk == nullptr) {
 		C_EP->LastChunk = chunk;
@@ -154,7 +156,7 @@ void SessionTCP::FillEndPoint(chunkptr &chunk)
 	}
 }
 
-void SessionTCP::AppendPayload(chunkptr &chunk, std::shared_ptr<EndPoint> endpoint)
+void SessionTCP::AppendPayload(const chunkptr &chunk, const std::shared_ptr<EndPoint> &endpoint)
 {
 	if (endpoint->Payload == nullptr) {
 		PayloadQuilt p(new CPayloadQuilt());
@@ -163,7 +165,7 @@ void SessionTCP::AppendPayload(chunkptr &chunk, std::shared_ptr<EndPoint> endpoi
 	endpoint->Payload->SewWithHole(chunk->Payload, endpoint->Payload->Length, chunk->PayloadLength);
 }
 
-void SessionTCP::AddChunk(std::shared_ptr<ChunkTCP> chunk
+void SessionTCP::AddChunk(const std::shared_ptr<ChunkTCP> &chunk
 		, unsigned long long newLastInternalID
 		, bool isFuzzy)
 {

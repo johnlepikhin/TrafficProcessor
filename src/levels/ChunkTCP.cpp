@@ -1,9 +1,11 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "ChunkTCP.h"
 
-ChunkTCP::ChunkTCP(BaseQuilt baseData
-		, PayloadQuilt payload
-		, std::shared_ptr<PacketIPVariant> parent
+ChunkTCP::ChunkTCP(const BaseQuilt &baseData
+		, const PayloadQuilt &payload
+		, const std::shared_ptr<PacketIPVariant> &parent
 		, const uint16_t pktLength
 		, const uint16_t headerLength
 		, const uint16_t payloadLength

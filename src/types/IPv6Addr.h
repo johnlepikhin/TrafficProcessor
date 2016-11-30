@@ -34,7 +34,7 @@ public:
 	 * @param other Reference to other address
 	 * @return True if addresses are equal
 	 */
-	inline bool operator=(IPv6Addr &other) const { return (Data == other.AsBinary()); }
+	inline bool operator=(const IPv6Addr &other) const { return (Data == other.AsBinary()); }
 private:
 	std::string Data;
 };

@@ -67,11 +67,6 @@ std::string ParserPacketMySQL::ReadPacketPreview(uint32_t length, const std::sha
 	try {
 		uint32_t readBytes = std::min(length, static_cast<uint32_t>(200));
 		std::string r = flow->Payload->GetSubStringOrFail(4, readBytes); //-V112
-//		std::cout << "length " << length
-//				<< ", s_port=" << flow->LastChunk->SourcePort
-//				<< ", d_port=" << flow->LastChunk->DestinationPort
-//				<< ", protocol=" << int(r[0])
-//				<< "\n";
 		return (r);
 	} catch (...) {
 		return ("");
@@ -183,8 +178,6 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseHandshakeResponse(
 		session->ProtocolDetected = true;
 		session->Follower = this->AsFollower();
 
-		std::cout << "user=" << username << "\n";
-
 		return (std::shared_ptr<PacketMySQL>(r));
 	}
 	return (std::shared_ptr<PacketMySQL>(nullptr));
@@ -220,7 +213,6 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseCommand(
 			std::unique_ptr<MySQLRequest> req(new MySQLRequest(cmd));
 			req->Query = query;
 			req->QueryType = util::toLower(queryType);
-			std::cout << "queryType " << req->QueryType << "\n";
 
 			PacketMySQL *r = new PacketMySQL(session->BaseData
 					, session->Payload

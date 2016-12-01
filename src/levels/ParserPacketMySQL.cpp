@@ -86,7 +86,7 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::DefaultCase(
 		const std::shared_ptr<SessionTCP> &session
 		, uint32_t packetLength)
 {
-	if (session->ProtocolDetected) {
+	if (session->Follower != nullptr) {
 		return (std::make_shared<PacketMySQL>(session->BaseData
 				, session->Payload
 				, session
@@ -175,7 +175,6 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseHandshakeResponse(
 		r->Charset = charset;
 		r->MaxPktLen = maxPktLen;
 
-		session->ProtocolDetected = true;
 		session->Follower = this->AsFollower();
 
 		return (std::shared_ptr<PacketMySQL>(r));
@@ -221,7 +220,6 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseCommand(
 					, nullptr
 					, packetLength);
 
-			session->ProtocolDetected = true;
 			session->Follower = this->AsFollower();
 
 			return (std::shared_ptr<PacketMySQL>(r));
@@ -313,7 +311,6 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseServer(
 						r->ServerVersion = serverVersion;
 						r->ConnectionID = connectionId;
 
-						session->ProtocolDetected = true;
 						session->Follower = this->AsFollower();
 
 						return (std::shared_ptr<PacketMySQL>(r));

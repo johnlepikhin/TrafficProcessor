@@ -8,8 +8,8 @@
 bool ParserHTTP::CheckClientFlow(const std::shared_ptr<EndPoint> &flow) {
 	try {
 		if (flow->Payload.get() != nullptr && flow->Payload->CoveredSize) {
-			std::string preview = flow->GetPayloadPreview();
-			return (ReqCheckRe.PartialMatch(preview));
+			std::string *preview = flow->GetPayloadPreview();
+			return (ReqCheckRe.PartialMatch(*preview));
 		}
 	} catch (...) {
 		return (false);
@@ -20,8 +20,8 @@ bool ParserHTTP::CheckClientFlow(const std::shared_ptr<EndPoint> &flow) {
 bool ParserHTTP::CheckServerFlow(const std::shared_ptr<EndPoint> &flow) {
 	try {
 		if (flow->Payload.get() != nullptr && flow->Payload->CoveredSize) {
-			std::string preview = flow->GetPayloadPreview();
-			return (RespCheckRe.PartialMatch(preview));
+			std::string *preview = flow->GetPayloadPreview();
+			return (RespCheckRe.PartialMatch(*preview));
 		}
 	} catch (...) {
 		return (false);

@@ -53,11 +53,11 @@ size_t lengthLenEnc(unsigned long long v) {
 
 uint32_t ParserPacketMySQL::GetPayloadLength(const std::shared_ptr<EndPoint> &flow)
 {
-	std::string preview = flow->GetPayloadPreview();
+	std::string *preview = flow->GetPayloadPreview();
 	uint32_t length =
-			(static_cast<unsigned char>(preview[2]) << 16)
-			| (static_cast<unsigned char>(preview[1]) << 8)
-			| static_cast<unsigned char>(preview[0]);
+			(static_cast<unsigned char>(preview->at(2)) << 16)
+			| (static_cast<unsigned char>(preview->at(1)) << 8)
+			| static_cast<unsigned char>(preview->at(0));
 
 	return (length);
 }
@@ -65,8 +65,9 @@ uint32_t ParserPacketMySQL::GetPayloadLength(const std::shared_ptr<EndPoint> &fl
 std::string ParserPacketMySQL::ReadPacketPreview(uint32_t length, const std::shared_ptr<EndPoint> &flow)
 {
 	try {
-		uint32_t readBytes = std::min(length, static_cast<uint32_t>(200));
-		std::string r = flow->Payload->GetSubStringOrFail(4, readBytes); //-V112
+		std::string *buf = flow->GetPayloadPreview();
+		uint32_t readBytes = std::min(length, static_cast<uint32_t>(buf->length()-4)); //-V112
+		std::string r(buf->substr(4, readBytes)); //-V112
 		return (r);
 	} catch (...) {
 		return ("");

@@ -26,8 +26,7 @@ typedef std::shared_ptr<ChunkTCP> chunkptr;
 class EndPoint
 {
 private:
-	std::string PayloadPreview;
-	bool PreviewCreated = false;
+	std::unique_ptr<std::string> PayloadPreview;
 public:
 	EndPoint();
 
@@ -38,10 +37,10 @@ public:
 	void ResetPayload();
 
 	/**
-	 * Get first 20 bytes of payload. This fragment is cached, so method is very fast.
-	 * @return First 20 bytes of payload
+	 * Get at least first 20 bytes of payload. This fragment is cached, so method is very fast.
+	 * @return First 20+ bytes of payload
 	 */
-	std::string GetPayloadPreview();
+	std::string *GetPayloadPreview();
 
 	/**
 	 * Pointer to optional next data in the flow

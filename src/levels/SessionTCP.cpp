@@ -51,19 +51,17 @@ EndPoint::EndPoint()
 void EndPoint::ResetPayload()
 {
 	Payload = nullptr;
-	PreviewCreated = false;
+	PayloadPreview = nullptr;
 }
 
-std::string EndPoint::GetPayloadPreview()
+std::string *EndPoint::GetPayloadPreview()
 {
 	if (Payload == nullptr) {
-		return ("");
+		return (nullptr);
 	} else {
-		if (!PreviewCreated) {
-			PreviewCreated = true;
-			PayloadPreview = Payload->GetMaxSubString(0, 20);
-		}
-		return (PayloadPreview);
+		if (PayloadPreview == nullptr)
+			PayloadPreview = std::unique_ptr<std::string>(new std::string(Payload->GetMaxSubString(0, 20)));
+		return (PayloadPreview.get());
 	}
 }
 

@@ -90,7 +90,8 @@ public:
 	std::shared_ptr<SessionTCP> Process(const std::shared_ptr<ChunkTCP> &parent);
 
 	virtual void AfterProcess(const std::shared_ptr<SessionTCP> &session);
-	virtual bool AfterRecursionHook(const std::shared_ptr<SessionTCP> &session, const std::exception *exn, bool found);
+	virtual int32_t BeforeRecursionHook(const std::shared_ptr<SessionTCP> &session);
+	virtual int32_t AfterRecursionHook(const std::shared_ptr<SessionTCP> &session, const std::exception *exn, int32_t followersProcessed);
 
 	/**
 	 * Returns unique ID for this Parser

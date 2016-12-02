@@ -10,6 +10,7 @@
  * Parser for UDP datagrams
  */
 class ParserUDP: public Processor<PacketIPVariant, ChunkUDP> {
+public:
 	/**
 	 * Try to get UDP from data.
 	 * @param data Reference to Data from where chunk was read

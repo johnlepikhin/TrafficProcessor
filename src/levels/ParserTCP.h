@@ -10,6 +10,7 @@
  * Parser for TCP fragments
  */
 class ParserTCP: public Processor<PacketIPVariant, ChunkTCP> {
+public:
 	/**
 	 * Try to get TCP from data.
 	 * @param data Reference to Data from where chunk was read

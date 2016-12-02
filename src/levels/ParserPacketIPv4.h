@@ -54,7 +54,7 @@ public:
 	 * @param exn Optional generated exception
 	 * @param found
 	 */
-	virtual bool AfterRecursionHook(const std::shared_ptr<PacketIPVariant> &chunk, const std::exception *exn, bool found);
+	virtual int32_t AfterRecursionHook(const std::shared_ptr<PacketIPVariant> &chunk, const std::exception *exn, int32_t followersProcessed);
 
 	/**
 	 * Returns unique ID for this Parser

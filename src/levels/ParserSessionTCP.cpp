@@ -42,6 +42,15 @@ SessionID::SessionID(const std::shared_ptr<ChunkTCP> &chunk)
 	Hash = b1 | b2 | b3 | b4 | s3 | s4;
 }
 
+int32_t ParserSessionTCP::BeforeRecursionHook(const std::shared_ptr<SessionTCP> &session)
+{
+	if (session->Follower != nullptr) {
+		session->Follower->Recursive(session);
+		return (1);
+	}
+	return (0);
+}
+
 std::shared_ptr<SessionTCP> ParserSessionTCP::Process(const std::shared_ptr<ChunkTCP> &parent)
 {
 	SessionID key(parent);
@@ -51,11 +60,6 @@ std::shared_ptr<SessionTCP> ParserSessionTCP::Process(const std::shared_ptr<Chun
 		session->AddChunk(parent, IDGenerator.Next(), IsFuzzy);
 		if ((session->Server->Payload != nullptr && session->Server->Payload->CoveredSize)
 			|| (session->Client->Payload != nullptr && session->Client->Payload->CoveredSize)) {
-			if (session->Follower != nullptr) {
-				session->Follower->Recursive(it->second);
-				AfterProcess(it->second);
-				return (std::shared_ptr<SessionTCP>(nullptr));
-			}
 			return (it->second);
 		} else {
 			return (std::shared_ptr<SessionTCP>(nullptr));
@@ -112,12 +116,12 @@ void ParserSessionTCP::AfterProcess(const std::shared_ptr<SessionTCP> &session)
 	}
 }
 
-bool ParserSessionTCP::AfterRecursionHook(const std::shared_ptr<SessionTCP> &session, const std::exception *exn, bool found)
+int32_t ParserSessionTCP::AfterRecursionHook(const std::shared_ptr<SessionTCP> &session, const std::exception *exn, int32_t followersProcessed)
 {
 	if (session != nullptr)
 		AfterProcess(session);
 
-	return (found);
+	return (followersProcessed);
 }
 
 std::string ParserSessionTCP::ID()

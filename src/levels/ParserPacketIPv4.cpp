@@ -60,7 +60,7 @@ void ParserPacketIPv4::GarbageCollector()
 	}
 }
 
-bool ParserPacketIPv4::AfterRecursionHook(const std::shared_ptr<PacketIPVariant> &packet, const std::exception *exn, bool found)
+int32_t ParserPacketIPv4::AfterRecursionHook(const std::shared_ptr<PacketIPVariant> &packet, const std::exception *exn, int32_t followersProcessed)
 {
 	if (IDGenerator.Get() % 10000 == 0) {
 		GarbageCollector();
@@ -68,7 +68,7 @@ bool ParserPacketIPv4::AfterRecursionHook(const std::shared_ptr<PacketIPVariant>
 
 	PacketIPv4 *ipv4 = packet->IPv4.get();
 	if (!ipv4->IsComplete)
-		return (found);
+		return (followersProcessed);
 
 	unsigned long long pair = pair_of_IPv4(ipv4->Parent);
 
@@ -89,7 +89,7 @@ bool ParserPacketIPv4::AfterRecursionHook(const std::shared_ptr<PacketIPVariant>
 //		}
 	}
 
-	return (found);
+	return (followersProcessed);
 }
 
 std::shared_ptr<PacketIPVariant> ParserPacketIPv4::Process(const std::shared_ptr<ChunkIPv4> &parent)

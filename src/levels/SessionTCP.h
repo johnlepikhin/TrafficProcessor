@@ -96,6 +96,7 @@ public:
 	SessionTCP(const BaseQuilt &baseData
 			, const chunkptr &parent
 			, unsigned long long lastInternalID
+			, uint64_t sessionID
 			, bool isFuzzy);
 
 	/**
@@ -141,6 +142,10 @@ public:
 	 */
 	unsigned long long LastInternalID;
 
+	/**
+	 * Unique ID of this session
+	 */
+	unsigned long long SessionID;
 	/**
 	 * Optional protocol processor for this session
 	 */

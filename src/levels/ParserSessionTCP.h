@@ -115,6 +115,7 @@ public:
 private:
 	SessionsMap SessionsCollector;
 	Counter IDGenerator;
+	Counter SessionIDGenerator;
 };
 
 #endif /* SRC_LEVELS_PARSERSESSIONTCP_H_ */

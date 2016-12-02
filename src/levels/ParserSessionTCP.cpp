@@ -65,7 +65,11 @@ std::shared_ptr<SessionTCP> ParserSessionTCP::Process(const std::shared_ptr<Chun
 			return (std::shared_ptr<SessionTCP>(nullptr));
 		}
 	} else {
-		std::shared_ptr<SessionTCP> sessionTCP = std::make_shared<SessionTCP>(parent->BaseData, parent, IDGenerator.Next(), IsFuzzy);
+		std::shared_ptr<SessionTCP> sessionTCP = std::make_shared<SessionTCP>(parent->BaseData
+				, parent,
+				IDGenerator.Next(),
+				SessionIDGenerator.Next(),
+				IsFuzzy);
 		SessionsCollector.insert(std::make_pair(key, sessionTCP));
 		AfterProcess(sessionTCP);
 		return (std::shared_ptr<SessionTCP>(nullptr));

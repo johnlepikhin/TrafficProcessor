@@ -27,9 +27,11 @@ inline bool isSameSource(const chunkptr &chunk, const EndPoint &endpoint) {
 SessionTCP::SessionTCP(const BaseQuilt &baseData
 		, const std::shared_ptr<ChunkTCP> &parent
 		, unsigned long long lastInternalID
+		, uint64_t sessionID
 		, bool isFuzzy)
 	: Chunk(baseData, nullptr, parent)
 	, State(TCP_INITIAL)
+	, SessionID(sessionID)
 	, LastInternalID(lastInternalID)
 {
 	C_EP = std::make_shared<EndPoint>();

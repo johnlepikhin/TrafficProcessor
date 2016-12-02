@@ -30,6 +30,7 @@ bool ParserHTTP::CheckServerFlow(const std::shared_ptr<EndPoint> &flow) {
 }
 
 std::shared_ptr<ChunkHTTP> ParserHTTP::ParseClient(const std::shared_ptr<SessionTCP> &session) {
+	std::vector<std::pair<std::string, std::string> > headers;
 	try {
 		std::string payload = session->Client->Payload->GetMaxSubString(0, 20000);
 		pcrecpp::StringPiece input(payload);
@@ -37,7 +38,6 @@ std::shared_ptr<ChunkHTTP> ParserHTTP::ParseClient(const std::shared_ptr<Session
 		ReqFirstLineRe.FindAndConsume(&input, &method, &uri);
 		std::string key, value;
 		std::string host("");
-		std::vector<std::pair<std::string, std::string> > headers;
 		while (HeaderLineRe.FindAndConsume(&input, &key, &value)) {
 			if (util::iequals(key, "host"))
 				host = value;
@@ -53,12 +53,20 @@ std::shared_ptr<ChunkHTTP> ParserHTTP::ParseClient(const std::shared_ptr<Session
 
 		return (std::make_shared<ChunkHTTP>(session->BaseData, session->Client->Payload, session, std::move(request), nullptr));
 	} catch (...) {
-		return (std::shared_ptr<ChunkHTTP>(nullptr));
+		if (session->Follower != nullptr) {
+			// Session protocol already detected, probably this is data chunk
+			std::unique_ptr<HTTPRequest> request(new HTTPRequest("", "", "", headers));
+			return (std::make_shared<ChunkHTTP>(session->BaseData, session->Client->Payload, session, std::move(request), nullptr));
+
+		} else {
+			return (std::shared_ptr<ChunkHTTP>(nullptr));
+		}
 	}
 }
 
 std::shared_ptr<ChunkHTTP> ParserHTTP::ParseServer(
 		const std::shared_ptr<SessionTCP> &session) {
+	std::vector<std::pair<std::string, std::string> > headers;
 	try {
 		std::string payload = session->Server->Payload->GetMaxSubString(0, 20000);
 		pcrecpp::StringPiece input(payload);
@@ -66,7 +74,6 @@ std::shared_ptr<ChunkHTTP> ParserHTTP::ParseServer(
 		std::string message;
 		RespFirstLineRe.FindAndConsume(&input, &code, &message);
 		std::string key, value;
-		std::vector<std::pair<std::string, std::string> > headers;
 		while (HeaderLineRe.FindAndConsume(&input, &key, &value)) {
 			headers.push_back(std::make_pair(key, value));
 		}
@@ -76,7 +83,13 @@ std::shared_ptr<ChunkHTTP> ParserHTTP::ParseServer(
 		std::unique_ptr<HTTPResponse> response(new HTTPResponse(code, message, headers));
 		return (std::make_shared<ChunkHTTP>(session->BaseData, session->Server->Payload, session, nullptr, std::move(response)));
 	} catch (...) {
-		return (std::shared_ptr<ChunkHTTP>(nullptr));
+		if (session->Follower != nullptr) {
+			// Session protocol already detected, probably this is data chunk
+			std::unique_ptr<HTTPResponse> response(new HTTPResponse(0, "", headers));
+			return (std::make_shared<ChunkHTTP>(session->BaseData, session->Server->Payload, session, nullptr, std::move(response)));
+		} else {
+			return (std::shared_ptr<ChunkHTTP>(nullptr));
+		}
 	}
 }
 
@@ -95,6 +108,11 @@ std::shared_ptr<ChunkHTTP> ParserHTTP::Process(const std::shared_ptr<SessionTCP>
 
 	} else if (CheckServerFlow(session->Server)) {
 		return (ParseServer(session));
+	}
+
+	if (session->Follower != nullptr) {
+		// Session protocol already detected, probably this is data chunk
+		return (std::make_shared<ChunkHTTP>(session->BaseData, session->Server->Payload, session, nullptr, nullptr));
 	}
 	return (std::shared_ptr<ChunkHTTP>(nullptr));
 }

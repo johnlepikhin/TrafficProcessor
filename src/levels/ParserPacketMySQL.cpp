@@ -74,7 +74,7 @@ std::string ParserPacketMySQL::ReadPacketPreview(uint32_t length, const std::sha
 	}
 }
 
-bool isPrintable(std::string &str) {
+bool isPrintable(const std::string &str) {
 	for(size_t i=0; i<str.size(); i++) {
 		if (str[i] < 32 || str[i] > 127) //-V112
 			return (false);

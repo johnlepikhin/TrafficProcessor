@@ -69,9 +69,16 @@ namespace util {
 		return (count);
 	}
 
+	char skipBuffer[4096];
+
 	uint32_t skipBytesInFD(int fd, uint32_t count) {
-		char buffer[4096];
-		return (readToBuffer(fd, buffer, count));
+		int32_t dataToRead = count;
+		while (dataToRead) {
+			int32_t bsize = std::min(4096, dataToRead);
+			int32_t rd = readToBuffer(fd, skipBuffer, bsize);
+			dataToRead-=rd;
+		}
+		return (count);
 	}
 
 	BaseQuilt quiltOfPcap(int fd)

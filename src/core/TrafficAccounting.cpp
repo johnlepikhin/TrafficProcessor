@@ -42,6 +42,7 @@
 #include "../levels/LeafProcessor.h"
 #include "../levels/ParserHTTP.h"
 #include "../levels/ParserPacketMySQL.h"
+#include "../levels/ParserChunkSSL.h"
 
 using namespace std;
 
@@ -49,6 +50,7 @@ static ParserEtherNet generateParseTree()
 {
 //	ParserHTTP *parserHTTP = new ParserHTTP();
 	ParserPacketMySQL *parserMySQL = new ParserPacketMySQL();
+	ParserChunkSSL *parserChunkSSL = new ParserChunkSSL();
 
 
 //	ParserUDP *parserUDP = new ParserUDP();
@@ -60,6 +62,7 @@ static ParserEtherNet generateParseTree()
 	ParserSessionTCP *parserSessionTCP = new ParserSessionTCP();
 //	parserSessionTCP->AddFollower(parserHTTP->AsFollower());
 	parserSessionTCP->AddFollower(parserMySQL->AsFollower());
+	parserSessionTCP->AddFollower(parserChunkSSL->AsFollower());
 //	parserSessionTCP->AddFollower(printerSessionTCP->AsFollower());
 
 //	PrinterTCP *printerTCP = new PrinterTCP();

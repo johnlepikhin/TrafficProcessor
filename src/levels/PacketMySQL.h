@@ -13,8 +13,16 @@ public:
 	std::string QueryType;
 };
 
+enum responsetype_t { OK, ERROR, AUTH };
+
 class MySQLResponse {
 public:
+	MySQLResponse(responsetype_t responseType);
+	uint64_t AffectedRows = 0; //-V122
+	uint64_t LastInsertID = 0; //-V122
+	responsetype_t ResponseType;
+	uint16_t ErrorCode = 0;
+	uint16_t StatusFlags = 0;
 };
 
 class PacketMySQL: public Chunk<SessionTCP> {

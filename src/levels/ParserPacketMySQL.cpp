@@ -301,7 +301,7 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseServer(
 						|| (!(capFlags & 0x00080000) && payload[offset] != 0))
 					return (std::shared_ptr<PacketMySQL>(nullptr));
 
-				std::unique_ptr<MySQLResponse> req(new MySQLResponse);
+				std::unique_ptr<MySQLResponse> req(new MySQLResponse(AUTH));
 
 				PacketMySQL *r = new PacketMySQL(session->BaseData
 						, session->Payload
@@ -315,18 +315,41 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseServer(
 				session->Follower = this->AsFollower();
 
 				return (std::shared_ptr<PacketMySQL>(r));
-			} else if (payload[0] == 0x00 || payload[0] == 0xfe || payload[0] == 0xff) {
-				if (session->Follower != nullptr) {
-					std::unique_ptr<MySQLResponse> req(new MySQLResponse);
+			} else if (session->Follower != nullptr) {
+				if (payload[0] == 0x00 || payload[0] == 0xfe) {
+					std::unique_ptr<MySQLResponse> resp(new MySQLResponse(OK));
+
+					uint32_t offset = 1;
+
+					resp->AffectedRows = readLenEnc(payload, offset);
+					offset += lengthLenEnc(resp->AffectedRows);
+
+					resp->LastInsertID = readLenEnc(payload, offset);
+					offset += lengthLenEnc(resp->LastInsertID);
+
+					resp->StatusFlags = (payload[offset] << 8) + (payload[offset+1]);
 
 					return (std::make_shared<PacketMySQL>(session->BaseData
 							, session->Payload
 							, session
 							, nullptr
-							, std::move(req)
+							, std::move(resp)
 							, pktLen));
+				} else if (payload[0] == 0xff) {
+					std::unique_ptr<MySQLResponse> resp(new MySQLResponse(ERROR));
+
+					uint32_t offset = 1;
+					resp->ErrorCode = (payload[offset] << 8) + (payload[offset+1]);
+
+					return (std::make_shared<PacketMySQL>(session->BaseData
+							, session->Payload
+							, session
+							, nullptr
+							, std::move(resp)
+					, pktLen));
 				}
 			}
+
 		}
 		//			} catch (...) {
 		//			}

@@ -9,6 +9,12 @@ MySQLRequest::MySQLRequest(char commandType)
 
 }
 
+MySQLResponse::MySQLResponse(responsetype_t responseType)
+	: ResponseType(responseType)
+{
+
+}
+
 PacketMySQL::PacketMySQL(const BaseQuilt &baseData
 		, const PayloadQuilt &payload
 		, const std::shared_ptr<SessionTCP> &parent

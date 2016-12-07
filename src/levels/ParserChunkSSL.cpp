@@ -277,6 +277,7 @@ std::shared_ptr<ChunkSSL> ParserChunkSSL::FlowParser(const std::shared_ptr<Sessi
 						}
 
 						case APPLICATION_DATA: {
+							session->Follower = this->AsFollower();
 							return (std::make_shared<ChunkSSL>(session, APPLICATION_DATA, version, length, nullptr, nullptr));
 						}
 					}

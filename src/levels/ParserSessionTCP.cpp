@@ -32,12 +32,12 @@ SessionID::SessionID(const std::shared_ptr<ChunkTCP> &chunk)
 		}
 	}
 
-	uint64_t b1 = static_cast<uint64_t>(IP1.back()) << (8*2*3);
-	uint64_t b2 = static_cast<uint64_t>(IP1.back()) << (8*2*2+1);
-	uint64_t b3 = static_cast<uint64_t>(IP2.back()) << (8*2*2);
-	uint64_t b4 = static_cast<uint64_t>(IP2.back()) << (8*2*1+1);
-	uint64_t s3 = static_cast<uint64_t>(Port1) << (8*2*1);
-	uint64_t s4 = Port2;
+	uint64_t b1 = static_cast<uint64_t>(IP1[IP1.length()-2]) << (8*2*3);
+	uint64_t b2 = static_cast<uint64_t>(IP1.back()) << (8*(2*2+1));
+	uint64_t b3 = static_cast<uint64_t>(IP2[IP2.length()-2]) << (8*2*2);
+	uint64_t b4 = static_cast<uint64_t>(IP2.back()) << (8*(2*1+1));
+	uint64_t s3 = static_cast<uint64_t>(Port1 & 0xff) << (8*2*1);
+	uint64_t s4 = Port2 & 0xff;
 
 	Hash = b1 | b2 | b3 | b4 | s3 | s4;
 }
@@ -71,8 +71,17 @@ std::shared_ptr<SessionTCP> ParserSessionTCP::Process(const std::shared_ptr<Chun
 				SessionIDGenerator.Next(),
 				IsFuzzy);
 		SessionsCollector.insert(std::make_pair(key, sessionTCP));
-		AfterProcess(sessionTCP);
-		return (std::shared_ptr<SessionTCP>(nullptr));
+		// TODO
+//		AfterProcess(sessionTCP);
+//		return (std::shared_ptr<SessionTCP>(nullptr));
+
+		if ((sessionTCP->Server->Payload != nullptr && sessionTCP->Server->Payload->CoveredSize)
+			|| (sessionTCP->Client->Payload != nullptr && sessionTCP->Client->Payload->CoveredSize)) {
+			return (sessionTCP);
+		} else {
+			return (std::shared_ptr<SessionTCP>(nullptr));
+		}
+
 	}
 }
 

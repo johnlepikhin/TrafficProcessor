@@ -140,12 +140,12 @@ public:
 	/**
 	 * Unique ID of the last event related to this session (used for garbage collection)
 	 */
-	unsigned long long LastInternalID;
+	uint64_t LastInternalID; //-V122
 
 	/**
 	 * Unique ID of this session
 	 */
-	unsigned long long SessionID;
+	uint64_t SessionID; //-V122
 	/**
 	 * Optional protocol processor for this session
 	 */

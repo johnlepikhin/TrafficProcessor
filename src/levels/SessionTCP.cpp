@@ -31,8 +31,8 @@ SessionTCP::SessionTCP(const BaseQuilt &baseData
 		, bool isFuzzy)
 	: Chunk(baseData, nullptr, parent)
 	, State(TCP_INITIAL)
-	, SessionID(sessionID)
 	, LastInternalID(lastInternalID)
+	, SessionID(sessionID)
 {
 	C_EP = std::make_shared<EndPoint>();
 	S_EP = std::make_shared<EndPoint>();

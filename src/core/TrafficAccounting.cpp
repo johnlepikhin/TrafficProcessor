@@ -89,9 +89,13 @@ static ParserEtherNet generateParseTree()
 
 //	LeafProcessor<ChunkEtherNetDIX> *leafEtherNetDIX = new LeafProcessor<ChunkEtherNetDIX>();
 	ParserEtherNetDIX *etherNetDIX = new ParserEtherNetDIX();
+	ParserEtherNet802LLC *etherNet802LLC = new ParserEtherNet802LLC();
+	ParserEtherNetRAW *etherNetRAW = new ParserEtherNetRAW();
+	ParserEtherNetSNAP *etherNetSNAP = new ParserEtherNetSNAP();
 //	etherNetDIX->AddFollower(leafEtherNetDIX->AsFollower());
 //	etherNetDIX->AddFollower((new PrinterEtherNetDIX())->AsFollower());
 	etherNetDIX->AddFollower(parserIPv4->AsFollower());
+//	etherNet802LLC->AddFollower(parserIPv4->AsFollower());
 //	etherNetDIX->AddFollower(parserIPv6->AsFollower());
 
 	ParserEtherNet etherNet;
@@ -99,6 +103,10 @@ static ParserEtherNet generateParseTree()
 //	LeafProcessor<ChunkEtherNet> *leafEtherNet = new LeafProcessor<ChunkEtherNet>();
 //	etherNet.AddFollower(leafEtherNet->AsFollower());
 	etherNet.AddFollower(etherNetDIX->AsFollower());
+	etherNet.AddFollower(etherNet802LLC->AsFollower());
+	etherNet.AddFollower(etherNetRAW->AsFollower());
+	etherNet.AddFollower(etherNetSNAP->AsFollower());
+
 //	etherNet.AddFollower(new ParserEtherNet802LLC());
 //	etherNet.AddFollower(new ParserEtherNetRAW());
 //	etherNet.AddFollower(new ParserEtherNetSNAP());

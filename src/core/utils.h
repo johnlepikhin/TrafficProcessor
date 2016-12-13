@@ -3,6 +3,7 @@
 #define UTILS_H_
 
 #include <memory>
+#include <pcap.h>
 
 #include "../types/PhantomQuilt.h"
 
@@ -73,6 +74,13 @@ namespace util {
 	 * @return Amount of skipped bytes
 	 */
 	ssize_t skipBytesInFD(int fd, uint32_t count);
+
+	/**
+	 * Read PCAP quilt string from pcap handler
+	 * @param pcap_handler PCap handler
+	 * @return Quilt representation of PCAP
+	 */
+	BaseQuilt quiltOfPcapHandler(pcap_t *pcap_handler);
 
 	/**
 	 * Make PCAP quilt string for file descriptor

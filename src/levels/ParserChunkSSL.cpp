@@ -254,7 +254,6 @@ std::shared_ptr<ChunkSSL> ParserChunkSSL::FlowParser(const std::shared_ptr<Sessi
 						case CHANGE_CIPHER_SPEC: {
 							if (length != 1 || preview->at(5) != 1)
 								return (std::shared_ptr<ChunkSSL>(nullptr));
-							std::cout << "CHANGE_CIPHER_SPEC\n";
 							return (std::make_shared<ChunkSSL>(session, CHANGE_CIPHER_SPEC, version, length, nullptr, nullptr));
 						}
 

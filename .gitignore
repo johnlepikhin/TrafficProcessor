@@ -1,6 +1,4 @@
 /UnitTests/
-/Debug/
-/Release/
 Documentation/
 proj_files.lnt
 .project
@@ -8,3 +6,14 @@ proj_files.lnt
 .settings
 dumps
 /Debug executable/
+**/*.o
+**.d
+**.gcda
+**.gcno
+**.log
+**.a
+**/strace_out
+Debug/report.tasks
+**/perf.data
+**/*.swp
+Debug/PVS-Studio.cfg

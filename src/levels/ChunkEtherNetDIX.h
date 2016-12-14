@@ -2,12 +2,12 @@
 #ifndef SRC_LEVELS_CHUNKETHERNETDIX_H_
 #define SRC_LEVELS_CHUNKETHERNETDIX_H_
 
-#include "ChunkEtherNet.h"
+#include "ChunkEtherNetTraits.h"
 
 /**
  * Container for DIX EtherNet frame
  */
-class ChunkEtherNetDIX: public Chunk<ChunkEtherNet> {
+class ChunkEtherNetDIX: public ChunkEtherNetTraits {
 public:
 	/**
 	 * Constructor for DIX

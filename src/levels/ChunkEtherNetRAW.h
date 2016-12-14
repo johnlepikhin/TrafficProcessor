@@ -3,12 +3,12 @@
 #define SRC_LEVELS_CHUNKETHERNETRAW_H_
 
 #include "../types/Chunk.h"
-#include "ChunkEtherNet.h"
+#include "ChunkEtherNetTraits.h"
 
 /**
  * Container for RAW EtherNet frame
  */
-class ChunkEtherNetRAW: public Chunk<ChunkEtherNet> {
+class ChunkEtherNetRAW: public ChunkEtherNetTraits {
 public:
 	/**
 	 * Constructor for RAW

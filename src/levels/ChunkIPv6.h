@@ -5,7 +5,7 @@
 #include "../types/IPv6Addr.h"
 #include "../types/Chunk.h"
 #include "../types/PhantomQuilt.h"
-#include "ChunkEtherNetDIX.h"
+#include "ChunkEtherNetTraits.h"
 
 /**
  * Representation of Fragment extra header
@@ -45,7 +45,7 @@ public:
 /**
  * Container for IPv6 chunk
  */
-class ChunkIPv6: public Chunk<ChunkEtherNetDIX> {
+class ChunkIPv6: public Chunk<ChunkEtherNetTraits> {
 public:
 	/**
 	 * Constructor
@@ -63,7 +63,7 @@ public:
 	 */
 	ChunkIPv6(const BaseQuilt &baseData
 			, const PayloadQuilt &payload
-			, const std::shared_ptr<ChunkEtherNetDIX> &parent
+			, const std::shared_ptr<ChunkEtherNetTraits> &parent
 			, const IPv6Addr &srcIP
 			, const IPv6Addr &dstIP
 			, unsigned char protocol

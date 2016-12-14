@@ -15,7 +15,7 @@ std::string ParserIPv4::Description()
 	return (std::string("IPv4 packet fragment"));
 }
 
-std::shared_ptr<ChunkIPv4> ParserIPv4::Process(const std::shared_ptr<ChunkEtherNetDIX> &dix)
+std::shared_ptr<ChunkIPv4> ParserIPv4::Process(const std::shared_ptr<ChunkEtherNetTraits> &dix)
 {
 	if (dix->Parent->EtherNetType == 0x800) {
 		unsigned char IHL32bit = dix->Payload->GetCharOrFail(0) & 0xf;

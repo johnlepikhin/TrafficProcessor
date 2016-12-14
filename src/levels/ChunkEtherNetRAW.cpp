@@ -7,7 +7,7 @@ ChunkEtherNetRAW::ChunkEtherNetRAW(const BaseQuilt &baseData
 		, const PayloadQuilt &payload
 		, const std::shared_ptr<ChunkEtherNet> &parent
 		, const unsigned short length)
-	: Chunk<ChunkEtherNet>(baseData, payload, parent)
+	: ChunkEtherNetTraits(baseData, payload, parent)
 	, PayloadLength(length)
 
 {

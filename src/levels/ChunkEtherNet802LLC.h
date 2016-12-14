@@ -3,12 +3,12 @@
 #define SRC_LEVELS_CHUNKETHERNET802LLC_H_
 
 #include "../types/Chunk.h"
-#include "ChunkEtherNet.h"
+#include "ChunkEtherNetTraits.h"
 
 /**
  * Container for 802.3 LLC EtherNet frame
  */
-class ChunkEtherNet802LLC : public Chunk<ChunkEtherNet> {
+class ChunkEtherNet802LLC : public ChunkEtherNetTraits {
 public:
 	/**
 	 * Constructor for 802.3 LLC

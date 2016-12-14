@@ -6,7 +6,7 @@
 
 ChunkIPv4::ChunkIPv4(const BaseQuilt &baseData
 		, const PayloadQuilt &payload
-		, const std::shared_ptr<ChunkEtherNetDIX> &parent
+		, const std::shared_ptr<ChunkEtherNetTraits> &parent
 		, unsigned char iHL32bit
 		, const uint32_t srcIP
 		, const uint32_t dstIP

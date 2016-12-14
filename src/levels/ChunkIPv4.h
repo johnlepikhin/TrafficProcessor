@@ -4,12 +4,12 @@
 
 #include "../types/IPv4Addr.h"
 #include "../types/Chunk.h"
-#include "ChunkEtherNetDIX.h"
+#include "ChunkEtherNetTraits.h"
 
 /**
  * Container for IPv4 chunk
  */
-class ChunkIPv4: public Chunk<ChunkEtherNetDIX> {
+class ChunkIPv4: public Chunk<ChunkEtherNetTraits> {
 public:
 	/**
 	 * Constructor
@@ -30,7 +30,7 @@ public:
 	 */
 	ChunkIPv4(const BaseQuilt &baseData
 			, const PayloadQuilt &payload
-			, const std::shared_ptr<ChunkEtherNetDIX> &parent
+			, const std::shared_ptr<ChunkEtherNetTraits> &parent
 			, unsigned char iHL32bit
 			, const uint32_t srcIP
 			, const uint32_t dstIP

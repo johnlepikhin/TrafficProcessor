@@ -3,12 +3,12 @@
 #define SRC_LEVELS_CHUNKETHERNETSNAP_H_
 
 #include "../types/Chunk.h"
-#include "ChunkEtherNet.h"
+#include "ChunkEtherNetTraits.h"
 
 /**
  * Container for SNAP EtherNet frame
  */
-class ChunkEtherNetSNAP: public Chunk<ChunkEtherNet> {
+class ChunkEtherNetSNAP: public ChunkEtherNetTraits {
 public:
 	/**
 	 * Constructor for SNAP

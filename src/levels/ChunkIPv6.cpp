@@ -5,7 +5,7 @@
 
 ChunkIPv6::ChunkIPv6(const BaseQuilt &baseData
 		, const PayloadQuilt &payload
-		, const std::shared_ptr<ChunkEtherNetDIX> &parent
+		, const std::shared_ptr<ChunkEtherNetTraits> &parent
 		, const IPv6Addr &srcIP
 		, const IPv6Addr &dstIP
 		, unsigned char protocol
@@ -14,7 +14,7 @@ ChunkIPv6::ChunkIPv6(const BaseQuilt &baseData
 		, unsigned char hopLimit
 		, const std::shared_ptr<IPv6HeaderFragment> &hdrFragment
 		, uint32_t payloadLength)
-	: Chunk<ChunkEtherNetDIX>(baseData, payload, parent)
+	: Chunk<ChunkEtherNetTraits>(baseData, payload, parent)
 	, SrcIP(srcIP)
 	, DstIP(dstIP)
 	, TrafficClass(trafficClass)

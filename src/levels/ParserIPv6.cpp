@@ -15,9 +15,9 @@ std::string ParserIPv6::Description()
 	return (std::string("IPv6 fragment parser"));
 }
 
-std::shared_ptr<ChunkIPv6> ParserIPv6::Process(const std::shared_ptr<ChunkEtherNetDIX> &parent)
+std::shared_ptr<ChunkIPv6> ParserIPv6::Process(const std::shared_ptr<ChunkEtherNetTraits> &parent)
 {
-	if (parent->EtherNetType == 0x86dd) {
+	if (parent->Parent->EtherNetType == 0x86dd) {
 		std::string tmp = parent->Payload->GetSubStringOrFail(0, 8);
 		unsigned char version = tmp[0] >> 4;
 		if (version == 6) {

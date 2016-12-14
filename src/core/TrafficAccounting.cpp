@@ -94,8 +94,12 @@ static ParserEtherNet generateParseTree()
 	ParserEtherNetSNAP *etherNetSNAP = new ParserEtherNetSNAP();
 //	etherNetDIX->AddFollower(leafEtherNetDIX->AsFollower());
 //	etherNetDIX->AddFollower((new PrinterEtherNetDIX())->AsFollower());
-	etherNetDIX->AddFollower(parserIPv4->AsFollower());
-//	etherNet802LLC->AddFollower(parserIPv4->AsFollower());
+
+	etherNetDIX->AddFollower(reinterpret_cast<Processor<ChunkEtherNetDIX, void> *>(parserIPv4));
+	etherNet802LLC->AddFollower(reinterpret_cast<Processor<ChunkEtherNet802LLC, void> *>(parserIPv4));
+	etherNetRAW->AddFollower(reinterpret_cast<Processor<ChunkEtherNetRAW, void> *>(parserIPv4));
+	etherNetSNAP->AddFollower(reinterpret_cast<Processor<ChunkEtherNetSNAP, void> *>(parserIPv4));
+
 //	etherNetDIX->AddFollower(parserIPv6->AsFollower());
 
 	ParserEtherNet etherNet;

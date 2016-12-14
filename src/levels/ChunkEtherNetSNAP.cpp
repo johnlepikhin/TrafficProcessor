@@ -9,7 +9,7 @@ ChunkEtherNetSNAP::ChunkEtherNetSNAP(const BaseQuilt &baseData
 		, const unsigned short length
 		, const unsigned int oui
 		, const unsigned short pid)
-	: Chunk(baseData, payload, parent)
+	: ChunkEtherNetTraits(baseData, payload, parent)
 	, PayloadLength(length)
 	, OUI(oui)
 	, PID(pid)

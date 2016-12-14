@@ -2,7 +2,7 @@
 #ifndef SRC_TYPES_PHANTOM_H_
 #define SRC_TYPES_PHANTOM_H_
 
-#include <sparsed-ropes/Quilt.h>
+#include "Quilt.h"
 
 template <typename DATA, typename SPECIFIER>
 class Phantom : public DATA {

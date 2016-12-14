@@ -2,7 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "PacketIPv4.h"
-#include <sparsed-ropes/Quilt.h>
+#include "Quilt.h"
 
 #include "../types/Chunk.h"
 

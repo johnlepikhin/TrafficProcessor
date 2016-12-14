@@ -3,7 +3,7 @@
 #define SRC_TYPES_PHANTOMQUILT_H_
 
 #include <memory>
-#include <sparsed-ropes/Quilt.h>
+#include "Quilt.h"
 #include "Phantom.h"
 
 template <typename SPECIFIER>

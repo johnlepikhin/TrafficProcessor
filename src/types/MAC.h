@@ -2,7 +2,7 @@
 #ifndef MAC_H_
 #define MAC_H_
 
-#include <sparsed-ropes/Quilt.h>
+#include "Quilt.h"
 
 /**
  * MAC address container and reader

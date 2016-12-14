@@ -5,17 +5,14 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/core/ProcessorsCollection.cpp \
-../src/core/TrafficAccounting.cpp \
 ../src/core/utils.cpp 
 
 OBJS += \
 ./src/core/ProcessorsCollection.o \
-./src/core/TrafficAccounting.o \
 ./src/core/utils.o 
 
 CPP_DEPS += \
 ./src/core/ProcessorsCollection.d \
-./src/core/TrafficAccounting.d \
 ./src/core/utils.d 
 
 

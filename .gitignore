@@ -17,3 +17,5 @@ Debug/report.tasks
 **/perf.data
 **/*.swp
 Debug/PVS-Studio.cfg
+/Debug/
+/Release/

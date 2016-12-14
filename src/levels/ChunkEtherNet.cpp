@@ -5,9 +5,9 @@
 
 ChunkEtherNet::ChunkEtherNet(const BaseQuilt &baseData
 		, const PayloadQuilt &payload
-		, const unsigned long long destinationMAC
-		, const unsigned long long sourceMAC
-		, const unsigned short ethernetType)
+		, const uint64_t destinationMAC
+		, const uint64_t sourceMAC
+		, const uint16_t ethernetType)
 	: Chunk<CBaseQuilt>(baseData, payload)
 	, DestinationMAC(destinationMAC)
 	, SourceMAC(sourceMAC)

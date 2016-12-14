@@ -6,11 +6,13 @@
 ChunkEtherNetSNAP::ChunkEtherNetSNAP(const BaseQuilt &baseData
 		, const PayloadQuilt &payload
 		, const std::shared_ptr<ChunkEtherNet> &parent
-		, const unsigned short length
-		, const unsigned int oui
-		, const unsigned short pid)
-	: ChunkEtherNetTraits(baseData, payload, parent)
-	, PayloadLength(length)
+		, const uint16_t length
+		, const uint8_t dsap
+		, const uint8_t ssap
+		, const uint8_t control
+		, const uint32_t oui
+		, const uint16_t pid)
+	: ChunkEtherNet802LLC(baseData, payload, parent, length, dsap, ssap, control)
 	, OUI(oui)
 	, PID(pid)
 {

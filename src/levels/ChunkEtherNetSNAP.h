@@ -3,12 +3,12 @@
 #define SRC_LEVELS_CHUNKETHERNETSNAP_H_
 
 #include "../types/Chunk.h"
-#include "ChunkEtherNetTraits.h"
+#include "ChunkEtherNet802LLC.h"
 
 /**
  * Container for SNAP EtherNet frame
  */
-class ChunkEtherNetSNAP: public ChunkEtherNetTraits {
+class ChunkEtherNetSNAP: public ChunkEtherNet802LLC {
 public:
 	/**
 	 * Constructor for SNAP
@@ -22,24 +22,22 @@ public:
 	ChunkEtherNetSNAP(const BaseQuilt &baseData
 			, const PayloadQuilt &payload
 			, const std::shared_ptr<ChunkEtherNet> &parent
-			, const unsigned short length
-			, const unsigned int oui
-			, const unsigned short pid);
-
-	/**
-	 * 2-byte length of payload
-	 */
-	const unsigned short PayloadLength;
+			, const uint16_t length
+			, const uint8_t dsap
+			, const uint8_t ssap
+			, const uint8_t control
+			, const uint32_t oui
+			, const uint16_t pid);
 
 	/**
 	 * OUI
 	 */
-	const unsigned int OUI;
+	const uint32_t OUI;
 
 	/**
 	 * PID
 	 */
-	const unsigned short PID;
+	const uint16_t PID;
 };
 
 #endif /* SRC_LEVELS_CHUNKETHERNETSNAP_H_ */

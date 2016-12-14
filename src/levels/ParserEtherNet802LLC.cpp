@@ -20,7 +20,7 @@ std::shared_ptr<ChunkEtherNet802LLC> ParserEtherNet802LLC::Process(const std::sh
 {
 	if (ethernet->EtherNetType <= 1500) {
 		unsigned short b2 = ethernet->Payload->GetShortLEOrFail(0);
-		if (0xaaaa != b2) {
+		if (0xaaaa != b2 && 0xffff != b2) {
 			unsigned char dsap = b2 >> 8;
 			unsigned char ssap = b2 & 0xff;
 			unsigned char control = ethernet->Payload->GetCharOrFail(1);

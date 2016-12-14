@@ -23,24 +23,24 @@ public:
 	 */
 	ChunkEtherNet(const BaseQuilt &baseData,
 			const PayloadQuilt &payload,
-			const unsigned long long destinationMAC,
-			const unsigned long long sourceMAC,
-			const unsigned short ethernetType);
+			const uint64_t destinationMAC,
+			const uint64_t sourceMAC,
+			const uint16_t ethernetType);
 
 	/**
 	 * Reference to destination MAC address
 	 */
-	const unsigned long long DestinationMAC;
+	const uint64_t DestinationMAC; //-V122
 
 	/**
 	 * Reference to source MAC address
 	 */
-	const unsigned long long SourceMAC;
+	const uint64_t SourceMAC; //-V122
 
 	/**
 	 * 2-byte value at offset 13, ethernet type or payload length
 	 */
-	const unsigned short EtherNetType;
+	const uint16_t EtherNetType;
 };
 
 #endif /* SRC_LEVELS_CHUNKETHERNET_H_ */

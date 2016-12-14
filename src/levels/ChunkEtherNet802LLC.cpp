@@ -10,7 +10,8 @@ ChunkEtherNet802LLC::ChunkEtherNet802LLC(const BaseQuilt &baseData
 		, const unsigned char dsap
 		, const unsigned char ssap
 		, const unsigned char control)
-	: ChunkEtherNetTraits(baseData, payload, parent)
+	: ChunkEtherNetTraits(baseData, payload, parent
+			, Frame802LLC, (static_cast<uint16_t>(ssap) << 8) + static_cast<uint16_t>(dsap))
 	, PayloadLength(length)
 	, DSAP(dsap)
 	, SSAP(ssap)

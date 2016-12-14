@@ -19,12 +19,8 @@ public:
 	ChunkEtherNetDIX(const BaseQuilt &baseData
 			, const PayloadQuilt &payload
 			, const std::shared_ptr<ChunkEtherNet> &parent
-			, const unsigned short etherType);
+			, const uint16_t etherType);
 
-	/**
-	 * 2-byte value at offset 13, ethernet type (/etc/ethertypes in Debian)
-	 */
-	const unsigned short EtherNetType;
 };
 
 #endif /* SRC_LEVELS_CHUNKETHERNETDIX_H_ */

@@ -18,7 +18,7 @@ std::shared_ptr<ChunkRaw> PrinterEtherNetDIX::Process(const std::shared_ptr<Chun
 	const std::shared_ptr<ChunkEtherNet> ethernet = dix->Parent;
 	std::cout << "EtherNetDIX " << MAC::asString(ethernet->SourceMAC)
 		<< " -> " << MAC::asString(ethernet->DestinationMAC)
-		<< " type=" << dix->EtherNetType
+		<< " type=" << dix->TraitsProtocol
 		<< "   Data: captured=" << dix->BaseData->CoveredSize << ", size=" << dix->BaseData->Length
 		<< "\n";
 

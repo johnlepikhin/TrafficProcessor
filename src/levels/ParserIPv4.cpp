@@ -4,6 +4,7 @@
 #include <typeinfo>
 
 #include "ParserIPv4.h"
+#include "ChunkEtherNet802LLC.h"
 
 std::string ParserIPv4::ID()
 {
@@ -15,51 +16,50 @@ std::string ParserIPv4::Description()
 	return (std::string("IPv4 packet fragment"));
 }
 
-std::shared_ptr<ChunkIPv4> ParserIPv4::Process(const std::shared_ptr<ChunkEtherNetTraits> &dix)
+std::shared_ptr<ChunkIPv4> ParserIPv4::Process(const std::shared_ptr<ChunkEtherNetTraits> &parent)
 {
-	if (dix->Parent->EtherNetType == 0x800) {
-		unsigned char IHL32bit = dix->Payload->GetCharOrFail(0) & 0xf;
+	if (parent->TraitsProtocol != 0x800)
+		return (std::shared_ptr<ChunkIPv4>(nullptr));
 
-		uint32_t SrcIP = IPv4Addr::Make(*dix->Payload, 12);
-		uint32_t DstIP = IPv4Addr::Make(*dix->Payload, 16);
+	uint8_t IHL32bit = parent->Payload->GetCharOrFail(0) & 0xf;
 
-		uint16_t PktLength = dix->Payload->GetShortLEOrFail(2);
-		PktLength = static_cast<uint16_t>((PktLength>>8) | (PktLength<<8));
+	uint32_t SrcIP = IPv4Addr::Make(*parent->Payload, 12);
+	uint32_t DstIP = IPv4Addr::Make(*parent->Payload, 16);
 
-		uint16_t PayloadLength = PktLength - IHL32bit*4; //-V112
+	uint16_t PktLength = parent->Payload->GetShortLEOrFail(2);
+	PktLength = static_cast<uint16_t>((PktLength>>8) | (PktLength<<8));
 
-		unsigned char flags = dix->Payload->GetCharOrFail(6);
-		bool FlagDontFragment = flags & 0x40;
-		bool FlagIsFragmented = flags & 0x20;
+	uint16_t PayloadLength = PktLength - IHL32bit*4; //-V112
 
-		unsigned short FragmentOffset = dix->Payload->GetShortLEOrFail(6);
-		FragmentOffset = ((FragmentOffset >> 8) + ((FragmentOffset & 0x1f) << 8)) << 3;
+	uint8_t flags = parent->Payload->GetCharOrFail(6);
+	bool FlagDontFragment = flags & 0x40;
+	bool FlagIsFragmented = flags & 0x20;
 
-		uint16_t ID = dix->Payload->GetShortLEOrFail(4); //-V112
+	uint16_t FragmentOffset = parent->Payload->GetShortLEOrFail(6);
+	FragmentOffset = ((FragmentOffset >> 8) + ((FragmentOffset & 0x1f) << 8)) << 3;
 
-		unsigned char TTL = dix->Payload->GetCharOrFail(8);
+	uint16_t ID = parent->Payload->GetShortLEOrFail(4); //-V112
 
-		unsigned char Protocol = dix->Payload->GetCharOrFail(9);
+	uint8_t TTL = parent->Payload->GetCharOrFail(8);
 
-		PayloadQuilt payload = std::make_shared<CPayloadQuilt>(dix->Payload, IHL32bit*4); //-V112
+	uint8_t Protocol = parent->Payload->GetCharOrFail(9);
 
-		std::shared_ptr<ChunkIPv4> r = std::make_shared<ChunkIPv4>(
-				dix->BaseData,
-				payload,
-				dix,
-				IHL32bit,
-				SrcIP,
-				DstIP,
-				PktLength,
-				PayloadLength,
-				Protocol,
-				FlagDontFragment,
-				FlagIsFragmented,
-				ID,
-				FragmentOffset,
-				TTL);
-		return (r);
-	}
+	PayloadQuilt payload = std::make_shared<CPayloadQuilt>(parent->Payload, IHL32bit*4); //-V112
 
-	return (std::shared_ptr<ChunkIPv4>(nullptr));
+	std::shared_ptr<ChunkIPv4> r = std::make_shared<ChunkIPv4>(
+			parent->BaseData,
+			payload,
+			parent,
+			IHL32bit,
+			SrcIP,
+			DstIP,
+			PktLength,
+			PayloadLength,
+			Protocol,
+			FlagDontFragment,
+			FlagIsFragmented,
+			ID,
+			FragmentOffset,
+			TTL);
+	return (r);
 }

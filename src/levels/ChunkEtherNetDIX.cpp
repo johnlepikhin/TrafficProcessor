@@ -6,9 +6,8 @@
 ChunkEtherNetDIX::ChunkEtherNetDIX(const BaseQuilt &baseData
 		, const PayloadQuilt &payload
 		, const std::shared_ptr<ChunkEtherNet> &parent
-		, const unsigned short etherType)
-	: ChunkEtherNetTraits(baseData, payload, parent)
-	, EtherNetType(etherType)
+		, const uint16_t etherType)
+	: ChunkEtherNetTraits(baseData, payload, parent, FrameDIX, etherType)
 
 {
 }

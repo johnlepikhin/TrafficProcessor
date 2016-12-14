@@ -23,8 +23,8 @@ std::shared_ptr<ChunkEtherNet802LLC> ParserEtherNet802LLC::Process(const std::sh
 		if (0xaaaa != b2 && 0xffff != b2) {
 			unsigned char dsap = b2 >> 8;
 			unsigned char ssap = b2 & 0xff;
-			unsigned char control = ethernet->Payload->GetCharOrFail(1);
-			PayloadQuilt payload = std::make_shared<CPayloadQuilt>(ethernet->Payload, 3);
+			unsigned char control = ethernet->Payload->GetCharOrFail(2);
+			PayloadQuilt payload = std::make_shared<CPayloadQuilt>(ethernet->Payload, 2); // TODO offset should be 3, but there's no control byte in real data!
 			std::shared_ptr<ChunkEtherNet802LLC> r = std::make_shared<ChunkEtherNet802LLC>(
 					ethernet->BaseData,
 					payload,

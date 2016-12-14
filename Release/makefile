@@ -40,19 +40,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: libtrafficaccounting.a
+all: libtrafficprocessor.a
 
 # Tool invocations
-libtrafficaccounting.a: $(OBJS) $(USER_OBJS)
+libtrafficprocessor.a: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC Archiver'
-	ar -r  "libtrafficaccounting.a" $(OBJS) $(USER_OBJS) $(LIBS)
+	ar -r  "libtrafficprocessor.a" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(ARCHIVES)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(CPP_DEPS)$(C_DEPS) libtrafficaccounting.a
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(ARCHIVES)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(CPP_DEPS)$(C_DEPS) libtrafficprocessor.a
 	-@echo ' '
 
 .PHONY: all clean dependents

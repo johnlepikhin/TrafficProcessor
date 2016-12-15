@@ -3,7 +3,7 @@
 #define SRC_TYPES_PROCESSOR_H_
 
 #include <typeinfo>
-#include <RecursiveDelegator.h>
+#include "RecursiveDelegator.h"
 #include "Chunk.h"
 
 /**

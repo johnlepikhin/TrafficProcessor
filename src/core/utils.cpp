@@ -87,7 +87,7 @@ namespace util {
 		struct pcap_pkthdr header;
 
 		const u_char *data = pcap_next(pcap_handler, &header);
-		std::string packet((const char *)data, header.caplen);
+		std::string packet(reinterpret_cast<const char *>(data), header.caplen);
 		std::shared_ptr<std::string> IS = std::make_shared<std::string>(packet);
 		return (std::make_shared<CBaseQuilt>(IS, header.len, header.ts.tv_sec, header.ts.tv_usec));
 	}

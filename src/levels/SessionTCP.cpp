@@ -61,7 +61,7 @@ std::string *EndPoint::GetPayloadPreview()
 	if (Payload == nullptr) {
 		return (nullptr);
 	} else {
-		if (PayloadPreview == nullptr)
+		if (PayloadPreview.get() == nullptr)
 			PayloadPreview = std::unique_ptr<std::string>(new std::string(Payload->GetMaxSubString(0, 20)));
 		return (PayloadPreview.get());
 	}

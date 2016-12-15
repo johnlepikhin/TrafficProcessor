@@ -134,14 +134,14 @@ CPP_DEPS += \
 src/levels/%.o: ../src/levels/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -I../../cpp-quilt-strings/src -O3 -Wall -c -fmessage-length=0 -std=c++11 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -std=c++0x -I../../cpp-quilt-strings/src -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
 src/levels/ParserPacketIPv4.o: ../src/levels/ParserPacketIPv4.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -I../../cpp-quilt-strings/src -O3 -Wall -c -fmessage-length=0 -std=c++11 -MMD -MP -MF"$(@:%.o=%.d)" -MT"src/levels/ParserPacketIPv4.d" -o "$@" "$<"
+	g++ -std=c++0x -I../../cpp-quilt-strings/src -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"src/levels/ParserPacketIPv4.d" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

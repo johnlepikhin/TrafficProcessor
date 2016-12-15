@@ -29,7 +29,7 @@ CPP_DEPS += \
 src/types/%.o: ../src/types/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -std=c++0x -I../../cpp-sparse-ropes/src -O0 -g3 -ftest-coverage -fprofile-arcs -Wall -c -fmessage-length=0 -std=c++11 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -std=c++0x -I../../cpp-quilt-strings/src -O0 -g3 -ftest-coverage -fprofile-arcs -Wall -c -fmessage-length=0 -std=c++11 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

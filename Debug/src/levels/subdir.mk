@@ -15,7 +15,6 @@ CPP_SRCS += \
 ../src/levels/ChunkSSL.cpp \
 ../src/levels/ChunkTCP.cpp \
 ../src/levels/ChunkUDP.cpp \
-../src/levels/LeafProcessor.cpp \
 ../src/levels/PacketIPVariant.cpp \
 ../src/levels/PacketIPv4.cpp \
 ../src/levels/PacketMySQL.cpp \
@@ -33,16 +32,6 @@ CPP_SRCS += \
 ../src/levels/ParserSessionTCP.cpp \
 ../src/levels/ParserTCP.cpp \
 ../src/levels/ParserUDP.cpp \
-../src/levels/PrinterEtherNet802LLC.cpp \
-../src/levels/PrinterEtherNetDIX.cpp \
-../src/levels/PrinterEtherNetRAW.cpp \
-../src/levels/PrinterEtherNetSNAP.cpp \
-../src/levels/PrinterIPv4.cpp \
-../src/levels/PrinterIPv6.cpp \
-../src/levels/PrinterPacketIPv4.cpp \
-../src/levels/PrinterSessionTCP.cpp \
-../src/levels/PrinterTCP.cpp \
-../src/levels/PrinterUDP.cpp \
 ../src/levels/SessionTCP.cpp 
 
 OBJS += \
@@ -57,7 +46,6 @@ OBJS += \
 ./src/levels/ChunkSSL.o \
 ./src/levels/ChunkTCP.o \
 ./src/levels/ChunkUDP.o \
-./src/levels/LeafProcessor.o \
 ./src/levels/PacketIPVariant.o \
 ./src/levels/PacketIPv4.o \
 ./src/levels/PacketMySQL.o \
@@ -75,16 +63,6 @@ OBJS += \
 ./src/levels/ParserSessionTCP.o \
 ./src/levels/ParserTCP.o \
 ./src/levels/ParserUDP.o \
-./src/levels/PrinterEtherNet802LLC.o \
-./src/levels/PrinterEtherNetDIX.o \
-./src/levels/PrinterEtherNetRAW.o \
-./src/levels/PrinterEtherNetSNAP.o \
-./src/levels/PrinterIPv4.o \
-./src/levels/PrinterIPv6.o \
-./src/levels/PrinterPacketIPv4.o \
-./src/levels/PrinterSessionTCP.o \
-./src/levels/PrinterTCP.o \
-./src/levels/PrinterUDP.o \
 ./src/levels/SessionTCP.o 
 
 CPP_DEPS += \
@@ -99,7 +77,6 @@ CPP_DEPS += \
 ./src/levels/ChunkSSL.d \
 ./src/levels/ChunkTCP.d \
 ./src/levels/ChunkUDP.d \
-./src/levels/LeafProcessor.d \
 ./src/levels/PacketIPVariant.d \
 ./src/levels/PacketIPv4.d \
 ./src/levels/PacketMySQL.d \
@@ -117,16 +94,6 @@ CPP_DEPS += \
 ./src/levels/ParserSessionTCP.d \
 ./src/levels/ParserTCP.d \
 ./src/levels/ParserUDP.d \
-./src/levels/PrinterEtherNet802LLC.d \
-./src/levels/PrinterEtherNetDIX.d \
-./src/levels/PrinterEtherNetRAW.d \
-./src/levels/PrinterEtherNetSNAP.d \
-./src/levels/PrinterIPv4.d \
-./src/levels/PrinterIPv6.d \
-./src/levels/PrinterPacketIPv4.d \
-./src/levels/PrinterSessionTCP.d \
-./src/levels/PrinterTCP.d \
-./src/levels/PrinterUDP.d \
 ./src/levels/SessionTCP.d 
 
 

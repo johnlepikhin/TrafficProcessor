@@ -4,7 +4,6 @@
 #include <typeinfo>
 
 #include "ParserEtherNet802LLC.h"
-#include "PrinterEtherNet802LLC.h"
 
 std::string ParserEtherNet802LLC::ID()
 {

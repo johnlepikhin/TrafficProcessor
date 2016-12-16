@@ -4,7 +4,6 @@
 #include <typeinfo>
 
 #include "ParserEtherNetSNAP.h"
-#include "PrinterEtherNetSNAP.h"
 
 std::string ParserEtherNetSNAP::ID()
 {

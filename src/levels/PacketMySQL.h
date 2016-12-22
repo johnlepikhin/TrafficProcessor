@@ -13,7 +13,7 @@ public:
 	std::string QueryType;
 };
 
-enum responsetype_t { OK, ERROR, AUTH };
+enum responsetype_t { MySQL_OK, MySQL_ERROR, MySQL_AUTH };
 
 class MySQLResponse {
 public:

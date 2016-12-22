@@ -301,7 +301,7 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseServer(
 						|| (!(capFlags & 0x00080000) && payload[offset] != 0))
 					return (std::shared_ptr<PacketMySQL>(nullptr));
 
-				std::unique_ptr<MySQLResponse> req(new MySQLResponse(AUTH));
+				std::unique_ptr<MySQLResponse> req(new MySQLResponse(MySQL_AUTH));
 
 				PacketMySQL *r = new PacketMySQL(session->BaseData
 						, session->Payload
@@ -317,7 +317,7 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseServer(
 				return (std::shared_ptr<PacketMySQL>(r));
 			} else if (session->Follower != nullptr) {
 				if (payload[0] == 0x00 || payload[0] == 0xfe) {
-					std::unique_ptr<MySQLResponse> resp(new MySQLResponse(OK));
+					std::unique_ptr<MySQLResponse> resp(new MySQLResponse(MySQL_OK));
 
 					uint32_t offset = 1;
 
@@ -336,7 +336,7 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseServer(
 							, std::move(resp)
 							, pktLen));
 				} else if (payload[0] == 0xff) {
-					std::unique_ptr<MySQLResponse> resp(new MySQLResponse(ERROR));
+					std::unique_ptr<MySQLResponse> resp(new MySQLResponse(MySQL_ERROR));
 
 					uint32_t offset = 1;
 					resp->ErrorCode = (payload[offset] << 8) + (payload[offset+1]);

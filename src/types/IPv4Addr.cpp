@@ -28,11 +28,12 @@ std::string asString(uint32_t addr)
 {
 	std::string r;
 	r.resize(16, 0);
-	snprintf(&(r.at(0)), 16, "%i.%i.%i.%i",
+	uint16_t written = snprintf(&(r.at(0)), 16, "%i.%i.%i.%i",
 			static_cast<int>(addr & 0xff),
 			static_cast<int>((addr >> 8) & 0xff),
 			static_cast<int>((addr >> 16) & 0xff),
 			static_cast<int>(addr >> 24));
+	r.resize(written);
 	return (r);
 }
 

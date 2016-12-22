@@ -26,14 +26,16 @@ unsigned long long Make(const std::string &data, const size_t offset)
 
 std::string asString(const unsigned long long mac)
 {
-	char r[18];
-	snprintf(r, sizeof(r), "%02hhx:%02hhx:%02hhx:%02hhx:%02hhx:%02hhx"
+	std::string r;
+	r.resize(18, 0);
+	uint16_t written = snprintf(&(r.at(0)), 18, "%02hhx:%02hhx:%02hhx:%02hhx:%02hhx:%02hhx"
 			, static_cast<int>(mac & 0xff)
 			, static_cast<int>(mac >> 8) & 0xff
 			, static_cast<int>(mac >> 16) & 0xff
 			, static_cast<int>(mac >> 24) & 0xff
 			, static_cast<int>(mac >> 32) & 0xff //-V112
 			, static_cast<int>(mac >> 40) & 0xff);
+	r.resize(written);
 	return (r);
 
 }

@@ -12,8 +12,9 @@ IPv6Addr::IPv6Addr(const Quilt &data, const std::streamoff offset)
 }
 
 std::string IPv6Addr::AsString() const {
-	char r[50];
-	snprintf(r, sizeof(r), "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x",
+	std::string r;
+	r.resize(48, 0);
+	uint16_t written = snprintf(&(r.at(0)), 48, "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x",
 			static_cast<unsigned char>(Data[0]),
 			static_cast<unsigned char>(Data[1]),
 			static_cast<unsigned char>(Data[2]),
@@ -30,5 +31,6 @@ std::string IPv6Addr::AsString() const {
 			static_cast<unsigned char>(Data[13]),
 			static_cast<unsigned char>(Data[14]),
 			static_cast<unsigned char>(Data[15]));
+	r.resize(written);
 	return (r);
 }

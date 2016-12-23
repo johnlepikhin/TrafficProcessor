@@ -234,9 +234,9 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseClient(
 		, const std::shared_ptr<EndPoint> &flow)
 {
 	if (flow->Payload.get() != nullptr && flow->Payload->CoveredSize) {
-//		try {
+		try {
 			uint32_t pktLen = GetPayloadLength(flow);
-//			try {
+			try {
 				std::string payload = ReadPacketPreview(pktLen, flow);
 				if (!payload.empty()) {
 					std::shared_ptr<PacketMySQL> r;
@@ -247,11 +247,13 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseClient(
 
 					return (ParseCommand(session, payload, pktLen));
 				}
-//			} catch (...) {
-//			}
+			} catch (...) {
+				return (DefaultCase(session, pktLen));
+			}
 			return (DefaultCase(session, pktLen));
-//		} catch (...) {
-//		}
+		} catch (...) {
+			return (DefaultCase(session, 0));
+		}
 	}
 	return (DefaultCase(session, 0));
 }
@@ -261,101 +263,103 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseServer(
 		, const std::shared_ptr<EndPoint> &flow)
 {
 	if (flow->Payload.get() != nullptr && flow->Payload->CoveredSize) {
-		//		try {
-		uint32_t pktLen = GetPayloadLength(flow);
-		//			try {
-		std::string payload = ReadPacketPreview(pktLen, flow);
-		if (!payload.empty()) {
-			if (payload[0] == 10) {
-				std::string serverVersion = readStringNULL(payload, 1);
-				if (serverVersion.empty())
-					return (std::shared_ptr<PacketMySQL>(nullptr));
+		try {
+			uint32_t pktLen = GetPayloadLength(flow);
+			try {
+				std::string payload = ReadPacketPreview(pktLen, flow);
+				if (!payload.empty()) {
+					if (payload[0] == 10) {
+						std::string serverVersion = readStringNULL(payload, 1);
+						if (serverVersion.empty())
+							return (std::shared_ptr<PacketMySQL>(nullptr));
 
-				if (!isPrintable(serverVersion))
-					return (std::shared_ptr<PacketMySQL>(nullptr));
+						if (!isPrintable(serverVersion))
+							return (std::shared_ptr<PacketMySQL>(nullptr));
 
-				size_t offset = 1 + serverVersion.size() + 1;
-				uint32_t connectionId =
-						(static_cast<int>(payload[offset]) << 24)
-						+ (static_cast<int>(payload[offset+1]) << 16)
-						+ (static_cast<int>(payload[offset+2]) << 8)
-						+ payload[offset+3];
-				offset+=4; //-V112
+						size_t offset = 1 + serverVersion.size() + 1;
+						uint32_t connectionId =
+								(static_cast<int>(payload[offset]) << 24)
+								+ (static_cast<int>(payload[offset+1]) << 16)
+								+ (static_cast<int>(payload[offset+2]) << 8)
+								+ payload[offset+3];
+						offset+=4; //-V112
 
-				//						std::string auth_plugin_data_part_1 = payload.substr(offset, 8);
-				offset+=8;
+						//						std::string auth_plugin_data_part_1 = payload.substr(offset, 8);
+						offset+=8;
 
-				if (payload[offset] != 0)
-					return (std::shared_ptr<PacketMySQL>(nullptr));
-				offset++;
+						if (payload[offset] != 0)
+							return (std::shared_ptr<PacketMySQL>(nullptr));
+						offset++;
 
-				uint16_t capFlags =
-						(static_cast<uint16_t>(payload[offset]) << 8)
-						+ payload[offset+1];
-				offset+=2;
+						uint16_t capFlags =
+								(static_cast<uint16_t>(payload[offset]) << 8)
+								+ payload[offset+1];
+						offset+=2;
 
-				size_t auth_plugin_data_length = payload[offset];
-				offset++;
+						size_t auth_plugin_data_length = payload[offset];
+						offset++;
 
-				if (((capFlags & 0x00080000) && auth_plugin_data_length == 0)
-						|| (!(capFlags & 0x00080000) && payload[offset] != 0))
-					return (std::shared_ptr<PacketMySQL>(nullptr));
+						if (((capFlags & 0x00080000) && auth_plugin_data_length == 0)
+								|| (!(capFlags & 0x00080000) && payload[offset] != 0))
+							return (std::shared_ptr<PacketMySQL>(nullptr));
 
-				std::unique_ptr<MySQLResponse> req(new MySQLResponse(MySQL_AUTH));
+						std::unique_ptr<MySQLResponse> req(new MySQLResponse(MySQL_AUTH));
 
-				PacketMySQL *r = new PacketMySQL(session->BaseData
-						, session->Payload
-						, session
-						, nullptr
-						, std::move(req)
+						PacketMySQL *r = new PacketMySQL(session->BaseData
+								, session->Payload
+								, session
+								, nullptr
+								, std::move(req)
 						, pktLen);
-				r->ServerVersion = serverVersion;
-				r->ConnectionID = connectionId;
+						r->ServerVersion = serverVersion;
+						r->ConnectionID = connectionId;
 
-				session->Follower = this->AsFollower();
+						session->Follower = this->AsFollower();
 
-				return (std::shared_ptr<PacketMySQL>(r));
-			} else if (session->Follower != nullptr) {
-				if (payload[0] == 0x00 || payload[0] == 0xfe) {
-					std::unique_ptr<MySQLResponse> resp(new MySQLResponse(MySQL_OK));
+						return (std::shared_ptr<PacketMySQL>(r));
+					} else if (session->Follower != nullptr) {
+						if (payload[0] == 0x00 || payload[0] == 0xfe) {
+							std::unique_ptr<MySQLResponse> resp(new MySQLResponse(MySQL_OK));
 
-					uint32_t offset = 1;
+							uint32_t offset = 1;
 
-					resp->AffectedRows = readLenEnc(payload, offset);
-					offset += lengthLenEnc(resp->AffectedRows);
+							resp->AffectedRows = readLenEnc(payload, offset);
+							offset += lengthLenEnc(resp->AffectedRows);
 
-					resp->LastInsertID = readLenEnc(payload, offset);
-					offset += lengthLenEnc(resp->LastInsertID);
+							resp->LastInsertID = readLenEnc(payload, offset);
+							offset += lengthLenEnc(resp->LastInsertID);
 
-					resp->StatusFlags = (payload[offset] << 8) + (payload[offset+1]);
+							resp->StatusFlags = (payload[offset] << 8) + (payload[offset+1]);
 
-					return (std::make_shared<PacketMySQL>(session->BaseData
-							, session->Payload
-							, session
-							, nullptr
-							, std::move(resp)
+							return (std::make_shared<PacketMySQL>(session->BaseData
+									, session->Payload
+									, session
+									, nullptr
+									, std::move(resp)
 							, pktLen));
-				} else if (payload[0] == 0xff) {
-					std::unique_ptr<MySQLResponse> resp(new MySQLResponse(MySQL_ERROR));
+						} else if (payload[0] == 0xff) {
+							std::unique_ptr<MySQLResponse> resp(new MySQLResponse(MySQL_ERROR));
 
-					uint32_t offset = 1;
-					resp->ErrorCode = (payload[offset] << 8) + (payload[offset+1]);
+							uint32_t offset = 1;
+							resp->ErrorCode = (payload[offset] << 8) + (payload[offset+1]);
 
-					return (std::make_shared<PacketMySQL>(session->BaseData
-							, session->Payload
-							, session
-							, nullptr
-							, std::move(resp)
-					, pktLen));
+							return (std::make_shared<PacketMySQL>(session->BaseData
+									, session->Payload
+									, session
+									, nullptr
+									, std::move(resp)
+							, pktLen));
+						}
+					}
+
 				}
+			} catch (...) {
+				return (DefaultCase(session, pktLen));
 			}
-
+			return (DefaultCase(session, pktLen));
+		} catch (...) {
+			return (DefaultCase(session, 0));
 		}
-		//			} catch (...) {
-		//			}
-		return (DefaultCase(session, pktLen));
-		//		} catch (...) {
-		//		}
 	}
 	return (DefaultCase(session, 0));
 }

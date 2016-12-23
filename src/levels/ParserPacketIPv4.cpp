@@ -89,7 +89,7 @@ int32_t ParserPacketIPv4::AfterRecursionHook(const std::shared_ptr<PacketIPVaria
 //		}
 	}
 
-	return (followersProcessed);
+	return (Processor<ChunkIPv4, PacketIPVariant>::AfterRecursionHook(packet, exn, followersProcessed));
 }
 
 std::shared_ptr<PacketIPVariant> ParserPacketIPv4::Process(const std::shared_ptr<ChunkIPv4> &parent)

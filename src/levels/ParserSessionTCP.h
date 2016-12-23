@@ -91,6 +91,7 @@ public:
 
 	virtual void AfterProcess(const std::shared_ptr<SessionTCP> &session);
 	virtual int32_t BeforeRecursionHook(const std::shared_ptr<SessionTCP> &session);
+
 	virtual int32_t AfterRecursionHook(const std::shared_ptr<SessionTCP> &session, const std::exception *exn, int32_t followersProcessed);
 
 	/**
@@ -109,9 +110,9 @@ public:
 
 	bool IsFuzzy = false;
 
-	unsigned long long DeleteClosedAfter = 1000;
-	unsigned long long DeleteClosingAfter = 1000;
-	unsigned long long DeleteInactiveAfter = 20000;
+	unsigned long long DeleteClosedAfter = 300;
+	unsigned long long DeleteClosingAfter = 300;
+	unsigned long long DeleteInactiveAfter = 2000;
 private:
 	SessionsMap SessionsCollector;
 	Counter IDGenerator;

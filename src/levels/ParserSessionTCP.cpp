@@ -58,12 +58,7 @@ std::shared_ptr<SessionTCP> ParserSessionTCP::Process(const std::shared_ptr<Chun
 	if (it != SessionsCollector.end()) {
 		SessionTCP *session = it->second.get();
 		session->AddChunk(parent, IDGenerator.Next(), IsFuzzy);
-		if ((session->Server->Payload != nullptr && session->Server->Payload->CoveredSize)
-			|| (session->Client->Payload != nullptr && session->Client->Payload->CoveredSize)) {
-			return (it->second);
-		} else {
-			return (std::shared_ptr<SessionTCP>(nullptr));
-		}
+		return (it->second);
 	} else {
 		std::shared_ptr<SessionTCP> sessionTCP = std::make_shared<SessionTCP>(parent->BaseData
 				, parent,
@@ -75,13 +70,7 @@ std::shared_ptr<SessionTCP> ParserSessionTCP::Process(const std::shared_ptr<Chun
 //		AfterProcess(sessionTCP);
 //		return (std::shared_ptr<SessionTCP>(nullptr));
 
-		if ((sessionTCP->Server->Payload != nullptr && sessionTCP->Server->Payload->CoveredSize)
-			|| (sessionTCP->Client->Payload != nullptr && sessionTCP->Client->Payload->CoveredSize)) {
-			return (sessionTCP);
-		} else {
-			return (std::shared_ptr<SessionTCP>(nullptr));
-		}
-
+		return (sessionTCP);
 	}
 }
 
@@ -114,6 +103,10 @@ void ParserSessionTCP::GarbageCollector()
 
 void ParserSessionTCP::AfterProcess(const std::shared_ptr<SessionTCP> &session)
 {
+	if (IDGenerator.Get() % 1000 == 0) {
+		GarbageCollector();
+	}
+
 	if (session != nullptr) {
 		// prevent access of followers to already processed data
 		session->Client->ResetPayload();
@@ -123,18 +116,14 @@ void ParserSessionTCP::AfterProcess(const std::shared_ptr<SessionTCP> &session)
 			IsFuzzy = true;
 		}
 
-		if (IDGenerator.Get() % 1000 == 0) {
-			GarbageCollector();
-		}
 	}
 }
 
 int32_t ParserSessionTCP::AfterRecursionHook(const std::shared_ptr<SessionTCP> &session, const std::exception *exn, int32_t followersProcessed)
 {
-	if (session != nullptr)
-		AfterProcess(session);
+	AfterProcess(session);
 
-	return (followersProcessed);
+	return (Processor<ChunkTCP, SessionTCP>::AfterRecursionHook(session, exn, followersProcessed));
 }
 
 std::string ParserSessionTCP::ID()

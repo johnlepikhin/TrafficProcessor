@@ -23,9 +23,11 @@ public:
 	virtual ~Processor()
 	{
 		for (auto i : Followers) {
-			i->RecursiveParents--;
-			if (!i->RecursiveParents)
-				delete i;
+			if (i) {
+				i->RecursiveParents--;
+				if (!i->RecursiveParents)
+					delete i;
+			}
 		}
 	};
 

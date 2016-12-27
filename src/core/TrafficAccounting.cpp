@@ -36,9 +36,9 @@ using namespace std;
 
 static ParserEtherNet generateParseTree()
 {
-//	ParserHTTP *parserHTTP = new ParserHTTP();
-	ParserPacketMySQL *parserMySQL = new ParserPacketMySQL();
-	ParserChunkSSL *parserChunkSSL = new ParserChunkSSL();
+	ParserHTTP *parserHTTP = new ParserHTTP();
+//	ParserPacketMySQL *parserMySQL = new ParserPacketMySQL();
+//	ParserChunkSSL *parserChunkSSL = new ParserChunkSSL();
 
 
 //	ParserUDP *parserUDP = new ParserUDP();
@@ -48,9 +48,9 @@ static ParserEtherNet generateParseTree()
 //	PrinterSessionTCP *printerSessionTCP = new PrinterSessionTCP();
 
 	ParserSessionTCP *parserSessionTCP = new ParserSessionTCP();
-//	parserSessionTCP->AddFollower(parserHTTP->AsFollower());
-	parserSessionTCP->AddFollower(parserMySQL->AsFollower());
-	parserSessionTCP->AddFollower(parserChunkSSL->AsFollower());
+	parserSessionTCP->AddFollower(parserHTTP->AsFollower());
+//	parserSessionTCP->AddFollower(parserMySQL->AsFollower());
+//	parserSessionTCP->AddFollower(parserChunkSSL->AsFollower());
 //	parserSessionTCP->AddFollower(printerSessionTCP->AsFollower());
 
 //	PrinterTCP *printerTCP = new PrinterTCP();

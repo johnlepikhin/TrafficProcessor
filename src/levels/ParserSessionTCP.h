@@ -110,9 +110,9 @@ public:
 
 	bool IsFuzzy = false;
 
-	unsigned long long DeleteClosedAfter = 300;
-	unsigned long long DeleteClosingAfter = 300;
-	unsigned long long DeleteInactiveAfter = 2000;
+	unsigned long long DeleteClosedAfter = 1000;
+	unsigned long long DeleteClosingAfter = 1000;
+	unsigned long long DeleteInactiveAfter = 10000;
 private:
 	SessionsMap SessionsCollector;
 	Counter IDGenerator;

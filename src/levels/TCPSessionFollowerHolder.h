@@ -21,8 +21,11 @@ public:
 			if (r != nullptr) {
 				session->Follower = this->AsFollower();
 				SessionsMap.emplace(session->SessionID, r);
+				SessionsMap.erase(session->SessionID);
 				session->OnDestroyHooks.push_back([this](SessionTCP *session) {
-					SessionsMap.erase(session->SessionID);
+					auto it = SessionsMap.find(session->SessionID);
+					if (it != SessionsMap.end())
+						SessionsMap.erase(session->SessionID);
 				});
 			}
 			return (r);

@@ -178,6 +178,9 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseCommand(
 		, const std::string &payload
 		, uint32_t packetLength)
 {
+	if (session->Follower == nullptr)
+		return (std::shared_ptr<PacketMySQL>(nullptr));
+
 	char cmd = payload[0];
 	if (cmd == 0x02) {
 		// COM_INIT_DB
@@ -218,8 +221,10 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseClient(
 				std::string payload = ReadPacketPreview(pktLen, flow);
 				if (!payload.empty()) {
 					std::shared_ptr<PacketMySQL> r = ParseHandshakeResponse(session, chunk, payload, pktLen);
-					if (r != nullptr)
+
+					if (r != nullptr) {
 						return (r);
+					}
 
 					return (ParseCommand(session, chunk, payload, pktLen));
 				}
@@ -353,6 +358,7 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::FollowerProcess(const std::share
 
 	r = ParseServer(session, chunk, session->Server);
 	return (r);
+
 }
 
 ParserPacketMySQL::ParserPacketMySQL()

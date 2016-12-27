@@ -2,7 +2,7 @@
 #ifndef SRC_LEVELS_PARSERPACKETMYSQL_H_
 #define SRC_LEVELS_PARSERPACKETMYSQL_H_
 
-#include "../types/Processor.h"
+#include "TCPSessionFollowerHolder.h"
 #include "../types/Chunk.h"
 #include "SessionTCP.h"
 #include <pcrecpp.h>
@@ -12,7 +12,7 @@
 /**
  * Parser of MySQL packets
  */
-class ParserPacketMySQL: public Processor<SessionTCP, PacketMySQL> {
+class ParserPacketMySQL: public TCPSessionFollowerHolder<PacketMySQL> {
 private:
 	pcrecpp::RE QueryCheckRe;
 	uint32_t GetPayloadLength(const std::shared_ptr<EndPoint> &flow);
@@ -21,24 +21,29 @@ private:
 
 	std::shared_ptr<PacketMySQL> ParseClient(
 			const std::shared_ptr<SessionTCP> &session
+			, const std::shared_ptr<PacketMySQL> &follower
 			, const std::shared_ptr<EndPoint> &flow);
 
 	std::shared_ptr<PacketMySQL> ParseServer(
 			const std::shared_ptr<SessionTCP> &session
+			, std::shared_ptr<PacketMySQL> follower
 			, const std::shared_ptr<EndPoint> &flow);
 
 	std::shared_ptr<PacketMySQL> ParseHandshakeResponse(
 			const std::shared_ptr<SessionTCP> &session
+			, std::shared_ptr<PacketMySQL> follower
 			, const std::string &payload
 			, uint32_t packetLength);
 
 	std::shared_ptr<PacketMySQL> ParseCommand(
 			const std::shared_ptr<SessionTCP> &session
+			, std::shared_ptr<PacketMySQL> follower
 			, const std::string &payload
 			, uint32_t packetLength);
 
 	std::shared_ptr<PacketMySQL> DefaultCase(
 			const std::shared_ptr<SessionTCP> &session
+			, std::shared_ptr<PacketMySQL> follower
 			, uint32_t packetLength);
 public:
 	ParserPacketMySQL();
@@ -48,7 +53,7 @@ public:
 	 * @param session Reference to TCP session
 	 * @return NULL or parsed chunk
 	 */
-	std::shared_ptr<PacketMySQL> Process(const std::shared_ptr<SessionTCP> &session);
+	std::shared_ptr<PacketMySQL> FollowerProcess(const std::shared_ptr<SessionTCP> &session, std::shared_ptr<PacketMySQL> follower);
 
 	/**
 	 * Returns unique ID for this Parser

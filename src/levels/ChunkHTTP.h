@@ -94,6 +94,12 @@ public:
 	 * Optional reference to HTTP response
 	 */
 	std::unique_ptr<HTTPResponse> Response;
+
+	/**
+	 * Flags advise last received chunk status
+	 */
+	bool LastIsRequest = false;
+	bool LastIsResponse = false;
 };
 
 #endif

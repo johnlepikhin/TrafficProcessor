@@ -85,15 +85,12 @@ bool isPrintable(const std::string &str) {
 
 std::shared_ptr<PacketMySQL> ParserPacketMySQL::DefaultCase(
 		const std::shared_ptr<SessionTCP> &session
+		, std::shared_ptr<PacketMySQL> follower
 		, uint32_t packetLength)
 {
 	if (session->Follower != nullptr) {
-		return (std::make_shared<PacketMySQL>(session->BaseData
-				, session->Payload
-				, session
-				, nullptr
-				, nullptr
-				, packetLength));
+		follower->PacketLength = packetLength;
+		return (follower);
 	} else {
 		return (std::shared_ptr<PacketMySQL>(nullptr));
 	}
@@ -101,6 +98,7 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::DefaultCase(
 
 std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseHandshakeResponse(
 		const std::shared_ptr<SessionTCP> &session
+		, std::shared_ptr<PacketMySQL> follower
 		, const std::string &payload
 		, uint32_t packetLength)
 {
@@ -165,26 +163,20 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseHandshakeResponse(
 
 		std::unique_ptr<MySQLRequest> req(new MySQLRequest(0));
 
-		PacketMySQL *r = new PacketMySQL(session->BaseData
-				, session->Payload
-				, session
-				, std::move(req)
-				, nullptr
-				, packetLength);
-		r->Username = username;
-		r->Database = database;
-		r->Charset = charset;
-		r->MaxPktLen = maxPktLen;
+		follower->Request = std::move(req);
+		follower->Username = username;
+		follower->Database = database;
+		follower->Charset = charset;
+		follower->MaxPktLen = maxPktLen;
 
-		session->Follower = this->AsFollower();
-
-		return (std::shared_ptr<PacketMySQL>(r));
+		return (follower);
 	}
 	return (std::shared_ptr<PacketMySQL>(nullptr));
 }
 
 std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseCommand(
 		const std::shared_ptr<SessionTCP> &session
+		, std::shared_ptr<PacketMySQL> follower
 		, const std::string &payload
 		, uint32_t packetLength)
 {
@@ -196,13 +188,9 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseCommand(
 			return (std::shared_ptr<PacketMySQL>(nullptr));
 
 		std::unique_ptr<MySQLRequest> req(new MySQLRequest(cmd));
-		PacketMySQL *r = new PacketMySQL(session->BaseData
-				, session->Payload
-				, session
-				, std::move(req)
-				, nullptr
-				, packetLength);
-		return (std::shared_ptr<PacketMySQL>(r));
+		follower->Request = std::move(req);
+		follower->PacketLength = packetLength;
+		return (follower);
 	} else if (cmd == 0x03) {
 		std::string query = payload.substr(1, payload.length()-1);
 
@@ -214,23 +202,18 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseCommand(
 			req->Query = query;
 			req->QueryType = util::toLower(queryType);
 
-			PacketMySQL *r = new PacketMySQL(session->BaseData
-					, session->Payload
-					, session
-					, std::move(req)
-					, nullptr
-					, packetLength);
+			follower->Request = std::move(req);
+			follower->PacketLength = packetLength;
 
-			session->Follower = this->AsFollower();
-
-			return (std::shared_ptr<PacketMySQL>(r));
+			return (follower);
 		}
 	}
-	return (DefaultCase(session, packetLength));
+	return (DefaultCase(session, follower, packetLength));
 }
 
 std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseClient(
 		const std::shared_ptr<SessionTCP> &session
+		, const std::shared_ptr<PacketMySQL> &follower
 		, const std::shared_ptr<EndPoint> &flow)
 {
 	if (flow->Payload.get() != nullptr && flow->Payload->CoveredSize) {
@@ -241,25 +224,26 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseClient(
 				if (!payload.empty()) {
 					std::shared_ptr<PacketMySQL> r;
 
-					r = ParseHandshakeResponse(session, payload, pktLen);
+					r = ParseHandshakeResponse(session, follower, payload, pktLen);
 					if (r != nullptr)
 						return (r);
 
-					return (ParseCommand(session, payload, pktLen));
+					return (ParseCommand(session, follower, payload, pktLen));
 				}
 			} catch (...) {
-				return (DefaultCase(session, pktLen));
+				return (DefaultCase(session, follower, pktLen));
 			}
-			return (DefaultCase(session, pktLen));
+			return (DefaultCase(session, follower, pktLen));
 		} catch (...) {
-			return (DefaultCase(session, 0));
+			return (DefaultCase(session, follower, 0));
 		}
 	}
-	return (DefaultCase(session, 0));
+	return (DefaultCase(session, follower, 0));
 }
 
 std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseServer(
 		const std::shared_ptr<SessionTCP> &session
+		, std::shared_ptr<PacketMySQL> follower
 		, const std::shared_ptr<EndPoint> &flow)
 {
 	if (flow->Payload.get() != nullptr && flow->Payload->CoveredSize) {
@@ -303,20 +287,12 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseServer(
 								|| (!(capFlags & 0x00080000) && payload[offset] != 0))
 							return (std::shared_ptr<PacketMySQL>(nullptr));
 
-						std::unique_ptr<MySQLResponse> req(new MySQLResponse(MySQL_AUTH));
+						follower->Response = std::unique_ptr<MySQLResponse>(new MySQLResponse(MySQL_AUTH));
+						follower->PacketLength = pktLen;
+						follower->ServerVersion = serverVersion;
+						follower->ConnectionID = connectionId;
 
-						PacketMySQL *r = new PacketMySQL(session->BaseData
-								, session->Payload
-								, session
-								, nullptr
-								, std::move(req)
-						, pktLen);
-						r->ServerVersion = serverVersion;
-						r->ConnectionID = connectionId;
-
-						session->Follower = this->AsFollower();
-
-						return (std::shared_ptr<PacketMySQL>(r));
+						return (follower);
 					} else if (session->Follower != nullptr) {
 						if (payload[0] == 0x00 || payload[0] == 0xfe) {
 							std::unique_ptr<MySQLResponse> resp(new MySQLResponse(MySQL_OK));
@@ -331,63 +307,64 @@ std::shared_ptr<PacketMySQL> ParserPacketMySQL::ParseServer(
 
 							resp->StatusFlags = (payload[offset] << 8) + (payload[offset+1]);
 
-							return (std::make_shared<PacketMySQL>(session->BaseData
-									, session->Payload
-									, session
-									, nullptr
-									, std::move(resp)
-							, pktLen));
+							follower->Response = std::move(resp);
+							follower->PacketLength = pktLen;
+
+							return (follower);
 						} else if (payload[0] == 0xff) {
 							std::unique_ptr<MySQLResponse> resp(new MySQLResponse(MySQL_ERROR));
 
 							uint32_t offset = 1;
 							resp->ErrorCode = (payload[offset] << 8) + (payload[offset+1]);
 
-							return (std::make_shared<PacketMySQL>(session->BaseData
-									, session->Payload
-									, session
-									, nullptr
-									, std::move(resp)
-							, pktLen));
+							follower->Response = std::move(resp);
+							follower->PacketLength = pktLen;
+
+							return (follower);
 						}
 					}
 
 				}
 			} catch (...) {
-				return (DefaultCase(session, pktLen));
+				return (DefaultCase(session, follower, pktLen));
 			}
-			return (DefaultCase(session, pktLen));
+			return (DefaultCase(session, follower, pktLen));
 		} catch (...) {
-			return (DefaultCase(session, 0));
+			return (DefaultCase(session, follower, 0));
 		}
 	}
-	return (DefaultCase(session, 0));
+	return (DefaultCase(session, follower, 0));
 }
 
-std::shared_ptr<PacketMySQL> ParserPacketMySQL::Process(const std::shared_ptr<SessionTCP> &session)
+std::shared_ptr<PacketMySQL> ParserPacketMySQL::FollowerProcess(const std::shared_ptr<SessionTCP> &session, std::shared_ptr<PacketMySQL> follower)
 {
-	std::shared_ptr<PacketMySQL> r = ParseClient(session, session->Client);
+	std::shared_ptr<PacketMySQL> chunk = (follower != nullptr)
+		? follower
+		: std::make_shared<PacketMySQL>(session->BaseData, session->Payload, session, nullptr, nullptr, 0);
+
+	std::shared_ptr<PacketMySQL> r = ParseClient(session, follower, session->Client);
 	if (r != nullptr)
 		return (r);
 
-	r = ParseServer(session, session->Client);
+	r = ParseServer(session, follower, session->Client);
 	if (r != nullptr) {
 		session->SwapFlows();
 		return (r);
 	}
 
-	r = ParseClient(session, session->Server);
+	r = ParseClient(session, follower, session->Server);
 	if (r != nullptr) {
 		session->SwapFlows();
 		return (r);
 	}
 
-	r = ParseServer(session, session->Server);
+	r = ParseServer(session, follower, session->Server);
 	return (r);
 }
 
 ParserPacketMySQL::ParserPacketMySQL()
-	: QueryCheckRe("^(select|update|delete|insert|show|set)\\s+", pcrecpp::RE_Options().set_caseless(true))
+	: TCPSessionFollowerHolder<PacketMySQL>()
+	, QueryCheckRe("^(select|update|delete|insert|show|set)\\s+", pcrecpp::RE_Options().set_caseless(true))
 {
 }
 

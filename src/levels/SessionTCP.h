@@ -7,6 +7,8 @@
 #include "ChunkTCP.h"
 #include "../types/PhantomQuilt.h"
 #include "../types/Processor.h"
+#include <functional>
+#include <vector>
 
 enum tcp_session_state {
 	TCP_INITIAL,
@@ -99,6 +101,8 @@ public:
 			, uint64_t sessionID
 			, bool isFuzzy);
 
+	~SessionTCP();
+
 	/**
 	 * Add TCP fragment to this session
 	 * @param chunk TCP fragment
@@ -146,10 +150,16 @@ public:
 	 * Unique ID of this session
 	 */
 	uint64_t SessionID; //-V122
+
 	/**
 	 * Optional protocol processor for this session
 	 */
 	Processor<SessionTCP, void> *Follower; //-V122
+
+	/**
+	 * List of functions to be called from session destructor
+	 */
+	std::vector<std::function<void(SessionTCP *session)> > OnDestroyHooks;
 };
 
 #endif /* SRC_LEVELS_SESSIONTCP_H_ */

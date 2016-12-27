@@ -290,3 +290,9 @@ void SessionTCP::AddChunk(const std::shared_ptr<ChunkTCP> &chunk
 			return;
 	}
 }
+
+SessionTCP::~SessionTCP() {
+	for (auto fn : OnDestroyHooks) {
+		fn(this);
+	}
+}

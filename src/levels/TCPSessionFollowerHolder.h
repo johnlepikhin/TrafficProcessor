@@ -13,7 +13,24 @@ private:
 	virtual std::shared_ptr<RESULT> FollowerProcess(const std::shared_ptr<SessionTCP> &session
 			, std::shared_ptr<RESULT> follower) = 0;
 public:
-	std::shared_ptr<RESULT> Process(const std::shared_ptr<SessionTCP> &session);
+	std::shared_ptr<RESULT> Process(const std::shared_ptr<SessionTCP> &session)
+	{
+		auto it = SessionsMap.find(session->SessionID);
+		if (it == SessionsMap.end()) {
+			std::shared_ptr<RESULT> r = FollowerProcess(session, std::shared_ptr<RESULT>(nullptr));
+			if (r != nullptr) {
+				session->Follower = this->AsFollower();
+				SessionsMap.emplace(session->SessionID, r);
+				session->OnDestroyHooks.push_back([this](SessionTCP *session) {
+					SessionsMap.erase(session->SessionID);
+				});
+			}
+			return (r);
+		}
+
+		return (FollowerProcess(session, it->second));
+	}
+
 	virtual ~TCPSessionFollowerHolder() {};
 };
 

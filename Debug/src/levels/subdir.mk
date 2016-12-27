@@ -32,8 +32,7 @@ CPP_SRCS += \
 ../src/levels/ParserSessionTCP.cpp \
 ../src/levels/ParserTCP.cpp \
 ../src/levels/ParserUDP.cpp \
-../src/levels/SessionTCP.cpp \
-../src/levels/TCPSessionFollowerHolder.cpp 
+../src/levels/SessionTCP.cpp 
 
 OBJS += \
 ./src/levels/ChunkEtherNet.o \
@@ -64,8 +63,7 @@ OBJS += \
 ./src/levels/ParserSessionTCP.o \
 ./src/levels/ParserTCP.o \
 ./src/levels/ParserUDP.o \
-./src/levels/SessionTCP.o \
-./src/levels/TCPSessionFollowerHolder.o 
+./src/levels/SessionTCP.o 
 
 CPP_DEPS += \
 ./src/levels/ChunkEtherNet.d \
@@ -96,8 +94,7 @@ CPP_DEPS += \
 ./src/levels/ParserSessionTCP.d \
 ./src/levels/ParserTCP.d \
 ./src/levels/ParserUDP.d \
-./src/levels/SessionTCP.d \
-./src/levels/TCPSessionFollowerHolder.d 
+./src/levels/SessionTCP.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

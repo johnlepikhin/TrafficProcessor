@@ -21,29 +21,29 @@ private:
 
 	std::shared_ptr<PacketMySQL> ParseClient(
 			const std::shared_ptr<SessionTCP> &session
-			, const std::shared_ptr<PacketMySQL> &follower
+			, const std::shared_ptr<PacketMySQL> chunk
 			, const std::shared_ptr<EndPoint> &flow);
 
 	std::shared_ptr<PacketMySQL> ParseServer(
 			const std::shared_ptr<SessionTCP> &session
-			, std::shared_ptr<PacketMySQL> follower
+			, std::shared_ptr<PacketMySQL> chunk
 			, const std::shared_ptr<EndPoint> &flow);
 
 	std::shared_ptr<PacketMySQL> ParseHandshakeResponse(
 			const std::shared_ptr<SessionTCP> &session
-			, std::shared_ptr<PacketMySQL> follower
+			, std::shared_ptr<PacketMySQL> chunk
 			, const std::string &payload
 			, uint32_t packetLength);
 
 	std::shared_ptr<PacketMySQL> ParseCommand(
 			const std::shared_ptr<SessionTCP> &session
-			, std::shared_ptr<PacketMySQL> follower
+			, std::shared_ptr<PacketMySQL> chunk
 			, const std::string &payload
 			, uint32_t packetLength);
 
 	std::shared_ptr<PacketMySQL> DefaultCase(
 			const std::shared_ptr<SessionTCP> &session
-			, std::shared_ptr<PacketMySQL> follower
+			, std::shared_ptr<PacketMySQL> chunk
 			, uint32_t packetLength);
 public:
 	ParserPacketMySQL();

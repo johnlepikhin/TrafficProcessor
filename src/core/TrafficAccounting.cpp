@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 #include "utils.h"
-#include <sparsed-ropes/Quilt.h>
+#include "../../../cpp-quilt-strings/src/Quilt.h"
 #include "ProcessorsCollection.h"
 #include "../levels/ParserEtherNet.h"
 #include "../levels/ParserEtherNetDIX.h"
@@ -18,28 +18,16 @@
 #include "../levels/ParserEtherNet802LLC.h"
 
 #include "../levels/ParserIPv4.h"
-#include "../levels/PrinterIPv4.h"
 
 #include "../levels/ParserIPv6.h"
-#include "../levels/PrinterIPv6.h"
 
-#include "../levels/PrinterPacketIPv4.h"
 #include "../levels/ParserPacketIPv4.h"
 
-#include "../levels/PrinterEtherNetDIX.h"
-#include "../levels/PrinterEtherNetRAW.h"
-#include "../levels/PrinterEtherNetSNAP.h"
-#include "../levels/PrinterEtherNet802LLC.h"
-
 #include "../levels/ParserTCP.h"
-#include "../levels/PrinterTCP.h"
 #include "../levels/ParserSessionTCP.h"
-#include "../levels/PrinterSessionTCP.h"
 
 #include "../levels/ParserUDP.h"
-#include "../levels/PrinterUDP.h"
 
-#include "../levels/LeafProcessor.h"
 #include "../levels/ParserHTTP.h"
 #include "../levels/ParserPacketMySQL.h"
 #include "../levels/ParserChunkSSL.h"
